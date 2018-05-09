@@ -5,15 +5,13 @@ version = '1.2.3'
 
 entry_points = {
     'openprocurement.auctions.core.plugins': [
-        'auctions.dgf.other = openprocurement.auctions.dgf.includeme:includeme_other',
-        'auctions.dgf.financial = openprocurement.auctions.dgf.includeme:includeme_financial'
+        'auctions.swiftsure = openprocurement.auctions.swiftsure.includeme:includeme',
     ],
     'openprocurement.api.migrations': [
-        'auctions.dgf.other = openprocurement.auctions.dgf.migration:migrate_data',
-        'auctions.dgf.financial = openprocurement.auctions.dgf.migration:migrate_data'
+        'auctions.swiftsure = openprocurement.auctions.swiftsure.migration:migrate_data',
     ],
     'openprocurement.tests': [
-        'auctions.dgf = openprocurement.auctions.dgf.tests.main:suite'
+        'auctions.swiftsure = openprocurement.auctions.swiftsure.tests.main:suite'
     ]
 }
 
@@ -29,7 +27,7 @@ docs_requires = requires + [
     'sphinxcontrib-httpdomain',
 ]
 
-setup(name='openprocurement.auctions.dgf',
+setup(name='openprocurement.auctions.swiftsure',
       version=version,
       description="",
       long_description=open("README.rst").read() + "\n" +
@@ -43,7 +41,7 @@ setup(name='openprocurement.auctions.dgf',
       author='Quintagroup, Ltd.',
       author_email='info@quintagroup.com',
       license='Apache License 2.0',
-      url='https://github.com/openprocurement/openprocurement.auctions.dgf',
+      url='https://github.com/openprocurement/openprocurement.auctions.swiftsure',
       packages=find_packages(exclude=['ez_setup']),
       namespace_packages=['openprocurement', 'openprocurement.auctions'],
       include_package_data=True,
