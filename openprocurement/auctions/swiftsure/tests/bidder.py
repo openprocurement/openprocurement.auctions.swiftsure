@@ -14,7 +14,6 @@ from openprocurement.auctions.core.tests.blanks.bidder_blanks import (
 )
 from openprocurement.auctions.swiftsure.tests.base import (
     BaseAuctionWebTest, test_features_auction_data,
-    test_financial_organization, test_financial_auction_data
 )
 from openprocurement.auctions.swiftsure.tests.blanks.bidder_blanks import (
     # AuctionBidderResourceTest
@@ -28,8 +27,6 @@ from openprocurement.auctions.swiftsure.tests.blanks.bidder_blanks import (
     features_bidder,
     # AuctionBidderDocumentResourceTest
     create_auction_bidder_document_nopending,
-    # FinancialAuctionBidderResourceTest
-    create_auction_bidder_invalid_additional_classification,
     # AuctionBidderDocumentWithDSResourceTest
     operate_bidder_document_json_invalid
 )
@@ -38,7 +35,7 @@ from openprocurement.auctions.swiftsure.tests.blanks.bidder_blanks import (
 class AuctionBidderResourceTest(BaseAuctionWebTest):
     initial_status = 'active.tendering'
 
-    test_financial_organization = test_financial_organization
+    test_financial_organization = None
     test_create_auction_bidder_invalid = snitch(create_auction_bidder_invalid)
     test_create_auction_bidder = snitch(create_auction_bidder)
     test_patch_auction_bidder = snitch(patch_auction_bidder)
@@ -64,12 +61,8 @@ class AuctionBidderDocumentResourceTest(BaseAuctionWebTest,
     def setUp(self):
         super(AuctionBidderDocumentResourceTest, self).setUp()
         # Create bid
-        if self.initial_organization == test_financial_organization:
-            response = self.app.post_json('/auctions/{}/bids'.format(
-                self.auction_id), {'data': {'tenderers': [self.initial_organization], "value": {"amount": 500}, 'qualified': True, 'eligible': True}})
-        else:
-            response = self.app.post_json('/auctions/{}/bids'.format(
-                self.auction_id), {'data': {'tenderers': [self.initial_organization], "value": {"amount": 500}, 'qualified': True}})
+        response = self.app.post_json('/auctions/{}/bids'.format(
+            self.auction_id), {'data': {'tenderers': [self.initial_organization], "value": {"amount": 500}, 'qualified': True}})
         bid = response.json['data']
         self.bid_id = bid['id']
         self.bid_token = response.json['access']['token']
@@ -86,12 +79,8 @@ class AuctionBidderDocumentWithDSResourceTest(BaseAuctionWebTest,
     def setUp(self):
         super(AuctionBidderDocumentWithDSResourceTest, self).setUp()
         # Create bid
-        if self.initial_organization == test_financial_organization:
-            response = self.app.post_json('/auctions/{}/bids'.format(
-                self.auction_id), {'data': {'tenderers': [self.initial_organization], "value": {"amount": 500}, 'qualified': True, 'eligible': True}})
-        else:
-            response = self.app.post_json('/auctions/{}/bids'.format(
-                self.auction_id), {'data': {'tenderers': [self.initial_organization], "value": {"amount": 500}, 'qualified': True}})
+        response = self.app.post_json('/auctions/{}/bids'.format(
+            self.auction_id), {'data': {'tenderers': [self.initial_organization], "value": {"amount": 500}, 'qualified': True}})
         bid = response.json['data']
         self.bid_id = bid['id']
         self.bid_token = response.json['access']['token']

@@ -86,7 +86,7 @@ def from1to2(registry):
     request = Request(registry)
     root = Root(request)
     procurement_method_types = get_procurement_method_types(
-        registry, ['sellout.english']
+        registry, ['selloutEnglish']
     )
     docs = []
     for i in results:
@@ -130,7 +130,7 @@ def from2to3(registry):
     for i in results:
         auction = i.doc
         procurement_method_types = get_procurement_method_types(
-            registry, ['sellout.english']
+            registry, ['selloutEnglish']
         )
 
         if auction['procurementMethodType'] not in procurement_method_types or auction['status'] != 'active.awarded' or 'contracts' not in auction:

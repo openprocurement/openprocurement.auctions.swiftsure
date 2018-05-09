@@ -4,11 +4,9 @@ from pyramid.interfaces import IRequest
 from openprocurement.auctions.swiftsure.models import (
     ISwiftsureAuction,
     SwiftsureAuction,
-    DGFFinancialAssets
 )
 from openprocurement.auctions.swiftsure.adapters import (
-    AuctionDGFOtherAssetsConfigurator,
-    AuctionDGFFinancialAssetsConfigurator
+    AuctionSwiftsureConfigurator,
 )
 from openprocurement.auctions.core.plugins.awarding.v3.adapters import (
     AwardingNextCheckV3
@@ -38,7 +36,7 @@ def includeme(config, plugin_config=None):
 
     # Register adapters
     config.registry.registerAdapter(
-        AuctionDGFOtherAssetsConfigurator,
+        AuctionSwiftsureConfigurator,
         (ISwiftsureAuction, IRequest),
         IContentConfigurator
     )

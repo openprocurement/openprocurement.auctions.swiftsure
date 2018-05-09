@@ -27,8 +27,7 @@ from openprocurement.auctions.core.plugins.awarding.v3.tests.award import (
 
 from openprocurement.auctions.swiftsure.tests.base import (
     BaseAuctionWebTest, test_bids,
-    test_lots, test_financial_auction_data,
-    test_financial_bids, test_financial_organization,
+    test_lots,
 )
 
 

@@ -10,7 +10,7 @@ from openprocurement.auctions.core.tests.blanks.question_blanks import (
 )
 
 from openprocurement.auctions.swiftsure.tests.base import (
-    BaseAuctionWebTest, test_lots, test_financial_auction_data, test_financial_organization
+    BaseAuctionWebTest, test_lots
 )
 
 

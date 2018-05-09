@@ -10,8 +10,6 @@ from openprocurement.auctions.core.tests.cancellation import (
 from openprocurement.auctions.swiftsure.tests.base import (
     BaseAuctionWebTest,
     test_lots, test_bids,
-    test_financial_auction_data,
-    test_financial_bids
 )
 
 

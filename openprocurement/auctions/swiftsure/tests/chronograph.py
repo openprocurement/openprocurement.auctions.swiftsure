@@ -35,9 +35,6 @@ from openprocurement.auctions.core.utils import get_now
 from openprocurement.auctions.swiftsure.tests.base import (
     test_lots,
     test_bids,
-    test_financial_auction_data,
-    test_financial_organization,
-    test_financial_bids,
     test_organization,
     BaseAuctionWebTest,
 )

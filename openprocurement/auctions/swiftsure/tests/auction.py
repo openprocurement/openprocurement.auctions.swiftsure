@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import unittest
-from datetime import timedelta
 from copy import deepcopy
 
 from openprocurement.auctions.core.utils import SANDBOX_MODE
@@ -23,8 +22,7 @@ from openprocurement.auctions.core.tests.blanks.auction_blanks import (
 from openprocurement.auctions.swiftsure.tests.base import (
     BaseAuctionWebTest, test_bids, test_lots,
     test_organization, test_features_auction_data,
-    test_financial_auction_data, test_financial_bids,
-    test_financial_organization, test_auction_data
+    test_auction_data
 )
 
 from openprocurement.auctions.swiftsure.tests.blanks.auction_blanks import (
@@ -156,29 +154,6 @@ class AuctionFeaturesAuctionResourceTest(BaseAuctionWebTest):
     test_get_auction_auction_features = snitch(get_auction_features_auction)
 
 
-class FinancialAuctionAuctionResourceTest(AuctionAuctionResourceTest):
-    initial_bids = test_financial_bids
-    initial_data = test_financial_auction_data
-
-
-class FinancialAuctionSameValueAuctionResourceTest(AuctionSameValueAuctionResourceTest):
-    initial_data = test_financial_auction_data
-    initial_bids = [
-        {
-            "tenderers": [
-                test_financial_organization
-            ],
-            "value": {
-                "amount": 469,
-                "currency": "UAH",
-                "valueAddedTaxIncluded": True
-            },
-            'qualified': True,
-            'eligible': True
-        }
-        for i in range(3)
-    ]
-
 @unittest.skipUnless(SANDBOX_MODE, u"Only in SANDBOX_MODE")
 class AuctionSubmissionMethodDetailsTest(BaseAuctionWebTest):
     initial_data = deepcopy(test_auction_data)
@@ -187,6 +162,7 @@ class AuctionSubmissionMethodDetailsTest(BaseAuctionWebTest):
 
     test_submission_method_details_no_auction = snitch(submission_method_details_no_auction)
     test_submission_method_details_fast_forward = snitch(submission_method_details_fast_forward)
+
 
 class AuctionAuctionResourceTestWithRegistry(AuctionAuctionResourceTest):
     registry = True

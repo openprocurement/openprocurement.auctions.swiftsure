@@ -1,22 +1,14 @@
 # -*- coding: utf-8 -*-
 import unittest
 
-from openprocurement.auctions.swiftsure.models import DGF_PLATFORM_LEGAL_DETAILS_FROM
 from openprocurement.auctions.core.constants import DGF_PLATFORM_LEGAL_DETAILS_FROM
 
-from openprocurement.auctions.core.tests.base import snitch
-
 from openprocurement.auctions.swiftsure.tests.base import (
-    BaseAuctionWebTest,  test_financial_auction_data
+    BaseAuctionWebTest
 )
 from openprocurement.auctions.core.tests.document import (
     AuctionDocumentResourceTestMixin,
     AuctionDocumentWithDSResourceTestMixin
-)
-from openprocurement.auctions.core.tests.blanks.document_blanks import (
-    # FinancialAuctionDocumentWithDSResourceTest
-    create_auction_document_vdr,
-    put_auction_document_vdr
 )
 
 

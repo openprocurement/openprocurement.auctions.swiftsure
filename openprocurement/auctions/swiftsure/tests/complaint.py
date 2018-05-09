@@ -5,7 +5,6 @@ from openprocurement.auctions.core.tests.base import snitch
 
 from openprocurement.auctions.swiftsure.tests.base import (
     BaseAuctionWebTest, test_lots,
-    test_financial_auction_data, test_financial_organization
 )
 from openprocurement.auctions.core.tests.complaint import (
     AuctionComplaintResourceTestMixin,

@@ -3,8 +3,6 @@ from copy import deepcopy
 
 from openprocurement.auctions.core.tests.base import JSON_RENDERER_ERROR
 
-from openprocurement.auctions.swiftsure.tests.base import test_financial_organization
-
 # AuctionBidderResourceTest
 
 
@@ -84,21 +82,12 @@ def create_auction_bidder_invalid(self):
     self.assertEqual(response.json['status'], 'error')
     self.assertIn({u"location": u"body", u"name": u"qualified", u"description": [u"This field is required."]},
                   response.json['errors'])
-    if self.initial_organization == test_financial_organization:
-        self.assertIn({u'description': [u'This field is required.'], u'location': u'body', u'name': u'eligible'},
-                      response.json['errors'])
-        self.assertIn({u'description': [
-            {u'additionalIdentifiers': [u'This field is required.'], u'contactPoint': [u'This field is required.'],
-             u'identifier': {u'scheme': [u'This field is required.'], u'id': [u'This field is required.']},
-             u'name': [u'This field is required.'], u'address': [u'This field is required.']}], u'location': u'body',
-                       u'name': u'tenderers'}, response.json['errors'])
-    else:
-        self.assertIn({u'description': [{u'contactPoint': [u'This field is required.'],
-                                         u'identifier': {u'scheme': [u'This field is required.'],
-                                                         u'id': [u'This field is required.']},
-                                         u'name': [u'This field is required.'],
-                                         u'address': [u'This field is required.']}], u'location': u'body',
-                       u'name': u'tenderers'}, response.json['errors'])
+    self.assertIn({u'description': [{u'contactPoint': [u'This field is required.'],
+                                     u'identifier': {u'scheme': [u'This field is required.'],
+                                                     u'id': [u'This field is required.']},
+                                     u'name': [u'This field is required.'],
+                                     u'address': [u'This field is required.']}], u'location': u'body',
+                   u'name': u'tenderers'}, response.json['errors'])
 
     response = self.app.post_json(request_path, {'data': {'tenderers': [{
         'name': 'name', 'identifier': {'uri': 'invalid_value'}}]}}, status=422)
@@ -107,43 +96,25 @@ def create_auction_bidder_invalid(self):
     self.assertEqual(response.json['status'], 'error')
     self.assertIn({u"location": u"body", u"name": u"qualified", u"description": [u"This field is required."]},
                   response.json['errors'])
-    if self.initial_organization == test_financial_organization:
-        self.assertIn({u'description': [u'This field is required.'], u'location': u'body', u'name': u'eligible'},
-                      response.json['errors'])
-        self.assertIn({u'description': [
-            {u'additionalIdentifiers': [u'This field is required.'], u'contactPoint': [u'This field is required.'],
-             u'identifier': {u'scheme': [u'This field is required.'], u'id': [u'This field is required.'],
-                             u'uri': [u'Not a well formed URL.']}, u'address': [u'This field is required.']}],
-                       u'location': u'body', u'name': u'tenderers'}, response.json['errors'])
-    else:
-        self.assertIn({u'description': [{u'contactPoint': [u'This field is required.'],
-                                         u'identifier': {u'scheme': [u'This field is required.'],
-                                                         u'id': [u'This field is required.'],
-                                                         u'uri': [u'Not a well formed URL.']},
-                                         u'address': [u'This field is required.']}], u'location': u'body',
-                       u'name': u'tenderers'}, response.json['errors'])
+    self.assertIn({u'description': [{u'contactPoint': [u'This field is required.'],
+                                     u'identifier': {u'scheme': [u'This field is required.'],
+                                                     u'id': [u'This field is required.'],
+                                                     u'uri': [u'Not a well formed URL.']},
+                                     u'address': [u'This field is required.']}], u'location': u'body',
+                   u'name': u'tenderers'}, response.json['errors'])
 
-    if self.initial_organization == test_financial_organization:
-        response = self.app.post_json(request_path, {
-            'data': {'tenderers': [self.initial_organization], 'qualified': True, 'eligible': True}}, status=422)
-    else:
-        response = self.app.post_json(request_path,
-                                      {'data': {'tenderers': [self.initial_organization], 'qualified': True}},
-                                      status=422)
+    response = self.app.post_json(request_path,
+                                  {'data': {'tenderers': [self.initial_organization], 'qualified': True}},
+                                  status=422)
     self.assertEqual(response.status, '422 Unprocessable Entity')
     self.assertEqual(response.content_type, 'application/json')
     self.assertEqual(response.json['status'], 'error')
     self.assertIn({u'description': [u'This field is required.'], u'location': u'body', u'name': u'value'},
                   response.json['errors'])
 
-    if self.initial_organization == test_financial_organization:
-        response = self.app.post_json(request_path, {
-            'data': {'tenderers': [self.initial_organization], "value": {"amount": 500, 'valueAddedTaxIncluded': False},
-                     'qualified': True, 'eligible': True}}, status=422)
-    else:
-        response = self.app.post_json(request_path, {
-            'data': {'tenderers': [self.initial_organization], "value": {"amount": 500, 'valueAddedTaxIncluded': False},
-                     'qualified': True}}, status=422)
+    response = self.app.post_json(request_path, {
+        'data': {'tenderers': [self.initial_organization], "value": {"amount": 500, 'valueAddedTaxIncluded': False},
+                 'qualified': True}}, status=422)
     self.assertEqual(response.status, '422 Unprocessable Entity')
     self.assertEqual(response.content_type, 'application/json')
     self.assertEqual(response.json['status'], 'error')
@@ -151,14 +122,9 @@ def create_auction_bidder_invalid(self):
         u'valueAddedTaxIncluded of bid should be identical to valueAddedTaxIncluded of value of auction'],
                    u'location': u'body', u'name': u'value'}, response.json['errors'])
 
-    if self.initial_organization == test_financial_organization:
-        response = self.app.post_json(request_path, {
-            'data': {'tenderers': [self.initial_organization], "value": {"amount": 500, 'currency': "USD"},
-                     'qualified': True, 'eligible': True}}, status=422)
-    else:
-        response = self.app.post_json(request_path, {
-            'data': {'tenderers': [self.initial_organization], "value": {"amount": 500, 'currency': "USD"},
-                     'qualified': True}}, status=422)
+    response = self.app.post_json(request_path, {
+        'data': {'tenderers': [self.initial_organization], "value": {"amount": 500, 'currency': "USD"},
+                 'qualified': True}}, status=422)
     self.assertEqual(response.status, '422 Unprocessable Entity')
     self.assertEqual(response.content_type, 'application/json')
     self.assertEqual(response.json['status'], 'error')
@@ -166,32 +132,17 @@ def create_auction_bidder_invalid(self):
         {u'description': [u'currency of bid should be identical to currency of value of auction'], u'location': u'body',
          u'name': u'value'}, response.json['errors'])
 
-    if self.initial_organization == test_financial_organization:
-        response = self.app.post_json(request_path, {
-            'data': {'tenderers': self.initial_organization, "value": {"amount": 500}, 'qualified': True,
-                     'eligible': True}}, status=422)
-    else:
-        response = self.app.post_json(request_path, {
-            'data': {'tenderers': self.initial_organization, "value": {"amount": 500}, 'qualified': True}}, status=422)
+    response = self.app.post_json(request_path, {
+        'data': {'tenderers': self.initial_organization, "value": {"amount": 500}, 'qualified': True}}, status=422)
     self.assertEqual(response.status, '422 Unprocessable Entity')
     self.assertEqual(response.content_type, 'application/json')
     self.assertEqual(response.json['status'], 'error')
-    if self.initial_organization == test_financial_organization:
-        self.assertIn(
-            {u'description': u"invalid literal for int() with base 10: 'additionalIdentifiers'", u'location': u'body',
-             u'name': u'data'}, response.json['errors'])
-    else:
-        self.assertIn({u'description': u"invalid literal for int() with base 10: 'contactPoint'", u'location': u'body',
-                       u'name': u'data'}, response.json['errors'])
+    self.assertIn({u'description': u"invalid literal for int() with base 10: 'contactPoint'", u'location': u'body',
+                   u'name': u'data'}, response.json['errors'])
 
-    if self.initial_organization == test_financial_organization:
-        response = self.app.post_json('/auctions/{}/bids'.format(
-            self.auction_id), {'data': {'tenderers': [self.initial_organization], "value": {"amount": 500}}},
-            status=422)
-    else:
-        response = self.app.post_json('/auctions/{}/bids'.format(
-            self.auction_id), {'data': {'tenderers': [self.initial_organization], "value": {"amount": 500}}},
-            status=422)
+    response = self.app.post_json('/auctions/{}/bids'.format(
+        self.auction_id), {'data': {'tenderers': [self.initial_organization], "value": {"amount": 500}}},
+        status=422)
     self.assertEqual(response.status, '422 Unprocessable Entity')
     self.assertEqual(response.content_type, 'application/json')
     self.assertEqual(response.json['status'], 'error')
@@ -200,16 +151,10 @@ def create_auction_bidder_invalid(self):
 
 
 def patch_auction_bidder(self):
-    if self.initial_organization == test_financial_organization:
-        response = self.app.post_json('/auctions/{}/bids'.format(
-            self.auction_id), {
-            'data': {'tenderers': [self.initial_organization], "status": "draft", "value": {"amount": 500},
-                     'qualified': True, 'eligible': True}})
-    else:
-        response = self.app.post_json('/auctions/{}/bids'.format(
-            self.auction_id), {
-            'data': {'tenderers': [self.initial_organization], "status": "draft", "value": {"amount": 500},
-                     'qualified': True}})
+    response = self.app.post_json('/auctions/{}/bids'.format(
+        self.auction_id), {
+        'data': {'tenderers': [self.initial_organization], "status": "draft", "value": {"amount": 500},
+                 'qualified': True}})
     self.assertEqual(response.status, '201 Created')
     self.assertEqual(response.content_type, 'application/json')
     bidder = response.json['data']
@@ -291,15 +236,9 @@ def patch_auction_bidder(self):
 
 
 def get_auction_bidder(self):
-    if self.initial_organization == test_financial_organization:
-        response = self.app.post_json('/auctions/{}/bids'.format(
-            self.auction_id), {
-            'data': {'tenderers': [self.initial_organization], "value": {"amount": 500}, 'qualified': True,
-                     'eligible': True}})
-    else:
-        response = self.app.post_json('/auctions/{}/bids'.format(
-            self.auction_id),
-            {'data': {'tenderers': [self.initial_organization], "value": {"amount": 500}, 'qualified': True}})
+    response = self.app.post_json('/auctions/{}/bids'.format(
+        self.auction_id),
+        {'data': {'tenderers': [self.initial_organization], "value": {"amount": 500}, 'qualified': True}})
     self.assertEqual(response.status, '201 Created')
     self.assertEqual(response.content_type, 'application/json')
     bidder = response.json['data']
@@ -352,15 +291,9 @@ def get_auction_bidder(self):
 
 
 def delete_auction_bidder(self):
-    if self.initial_organization == test_financial_organization:
-        response = self.app.post_json('/auctions/{}/bids'.format(
-            self.auction_id), {
-            'data': {'tenderers': [self.initial_organization], "value": {"amount": 500}, 'qualified': True,
-                     'eligible': True}})
-    else:
-        response = self.app.post_json('/auctions/{}/bids'.format(
-            self.auction_id),
-            {'data': {'tenderers': [self.initial_organization], "value": {"amount": 500}, 'qualified': True}})
+    response = self.app.post_json('/auctions/{}/bids'.format(
+        self.auction_id),
+        {'data': {'tenderers': [self.initial_organization], "value": {"amount": 500}, 'qualified': True}})
     self.assertEqual(response.status, '201 Created')
     self.assertEqual(response.content_type, 'application/json')
     bidder = response.json['data']
@@ -394,15 +327,9 @@ def delete_auction_bidder(self):
 
 
 def get_auction_auctioners(self):
-    if self.initial_organization == test_financial_organization:
-        response = self.app.post_json('/auctions/{}/bids'.format(
-            self.auction_id), {
-            'data': {'tenderers': [self.initial_organization], "value": {"amount": 500}, 'qualified': True,
-                     'eligible': True}})
-    else:
-        response = self.app.post_json('/auctions/{}/bids'.format(
-            self.auction_id),
-            {'data': {'tenderers': [self.initial_organization], "value": {"amount": 500}, 'qualified': True}})
+    response = self.app.post_json('/auctions/{}/bids'.format(
+        self.auction_id),
+        {'data': {'tenderers': [self.initial_organization], "value": {"amount": 500}, 'qualified': True}})
     self.assertEqual(response.status, '201 Created')
     self.assertEqual(response.content_type, 'application/json')
     bidder = response.json['data']
@@ -431,15 +358,9 @@ def get_auction_auctioners(self):
 
 
 def bid_administrator_change(self):
-    if self.initial_organization == test_financial_organization:
-        response = self.app.post_json('/auctions/{}/bids'.format(
-            self.auction_id), {
-            'data': {'tenderers': [self.initial_organization], "value": {"amount": 500}, 'qualified': True,
-                     'eligible': True}})
-    else:
-        response = self.app.post_json('/auctions/{}/bids'.format(
-            self.auction_id),
-            {'data': {'tenderers': [self.initial_organization], "value": {"amount": 500}, 'qualified': True}})
+    response = self.app.post_json('/auctions/{}/bids'.format(
+        self.auction_id),
+        {'data': {'tenderers': [self.initial_organization], "value": {"amount": 500}, 'qualified': True}})
     self.assertEqual(response.status, '201 Created')
     self.assertEqual(response.content_type, 'application/json')
     bidder = response.json['data']
@@ -509,15 +430,9 @@ def features_bidder(self):
 
 
 def create_auction_bidder_document_nopending(self):
-    if self.initial_organization == test_financial_organization:
-        response = self.app.post_json('/auctions/{}/bids'.format(
-            self.auction_id), {
-            'data': {'tenderers': [self.initial_organization], "value": {"amount": 500}, 'qualified': True,
-                     'eligible': True}})
-    else:
-        response = self.app.post_json('/auctions/{}/bids'.format(
-            self.auction_id),
-            {'data': {'tenderers': [self.initial_organization], "value": {"amount": 500}, 'qualified': True}})
+    response = self.app.post_json('/auctions/{}/bids'.format(
+        self.auction_id),
+        {'data': {'tenderers': [self.initial_organization], "value": {"amount": 500}, 'qualified': True}})
     bid = response.json['data']
     bid_id = bid['id']
 

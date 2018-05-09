@@ -7,8 +7,6 @@ from openprocurement.auctions.core.constants import DGF_ELIGIBILITY_CRITERIA
 from openprocurement.auctions.core.tests.base import JSON_RENDERER_ERROR
 from openprocurement.auctions.core.utils import get_now, SANDBOX_MODE, TZ
 
-from openprocurement.auctions.swiftsure.tests.base import test_financial_organization
-
 # AuctionTest
 
 
@@ -360,17 +358,10 @@ def create_auction(self):
     self.assertEqual(response.status, '201 Created')
     self.assertEqual(response.content_type, 'application/json')
     auction = response.json['data']
-    if self.initial_organization == test_financial_organization:
-        self.assertEqual(set(auction) - set(self.initial_data), set([
-            u'id', u'dateModified', u'auctionID', u'date', u'status', u'procurementMethod', 'documents',
-            u'awardCriteria', u'submissionMethod', u'next_check', u'owner', u'enquiryPeriod', u'tenderPeriod',
-            u'eligibilityCriteria_en', u'eligibilityCriteria', u'eligibilityCriteria_ru',
-        ]))
-    else:
-        self.assertEqual(set(auction) - set(self.initial_data), set([
-            u'id', u'dateModified', u'auctionID', u'date', u'status', u'procurementMethod', 'documents',
-            u'awardCriteria', u'submissionMethod', u'next_check', u'owner', u'enquiryPeriod', u'tenderPeriod',
-        ]))
+    self.assertEqual(set(auction) - set(self.initial_data), set([
+        u'id', u'dateModified', u'auctionID', u'date', u'status', u'procurementMethod', 'documents',
+        u'awardCriteria', u'submissionMethod', u'next_check', u'owner', u'enquiryPeriod', u'tenderPeriod',
+    ]))
     self.assertIn(auction['id'], response.headers['Location'])
 
     response = self.app.get('/auctions/{}'.format(auction['id']))
@@ -421,27 +412,17 @@ def first_bid_auction(self):
     self.set_status('active.tendering')
     # create bid
     self.app.authorization = ('Basic', ('broker', ''))
-    if self.initial_organization == test_financial_organization:
-        response = self.app.post_json('/auctions/{}/bids'.format(auction_id),
-                                      {'data': {'tenderers': [self.initial_organization], "value": {"amount": 450},
-                                                'qualified': True, 'eligible': True}})
-    else:
-        response = self.app.post_json('/auctions/{}/bids'.format(auction_id),
-                                      {'data': {'tenderers': [self.initial_organization], "value": {"amount": 450},
-                                                'qualified': True}})
+    response = self.app.post_json('/auctions/{}/bids'.format(auction_id),
+                                  {'data': {'tenderers': [self.initial_organization], "value": {"amount": 450},
+                                            'qualified': True}})
     bid_id = response.json['data']['id']
     bid_token = response.json['access']['token']
     bids_tokens = {bid_id: bid_token}
     # create second bid
     self.app.authorization = ('Basic', ('broker', ''))
-    if self.initial_organization == test_financial_organization:
-        response = self.app.post_json('/auctions/{}/bids'.format(auction_id),
-                                      {'data': {'tenderers': [self.initial_organization], "value": {"amount": 450},
-                                                'qualified': True, 'eligible': True}})
-    else:
-        response = self.app.post_json('/auctions/{}/bids'.format(auction_id),
-                                      {'data': {'tenderers': [self.initial_organization], "value": {"amount": 450},
-                                                'qualified': True}})
+    response = self.app.post_json('/auctions/{}/bids'.format(auction_id),
+                                  {'data': {'tenderers': [self.initial_organization], "value": {"amount": 450},
+                                            'qualified': True}})
     bids_tokens[response.json['data']['id']] = response.json['access']['token']
     # switch to active.auction
     self.set_status('active.auction')
@@ -649,26 +630,16 @@ def suspended_auction(self):
     self.set_status('active.tendering')
     # create bid
     self.app.authorization = ('Basic', ('broker', ''))
-    if self.initial_organization == test_financial_organization:
-        response = self.app.post_json('/auctions/{}/bids'.format(auction_id),
-                                      {'data': {'tenderers': [self.initial_organization], "value": {"amount": 450},
-                                                'qualified': True, 'eligible': True}})
-    else:
-        response = self.app.post_json('/auctions/{}/bids'.format(auction_id),
-                                      {'data': {'tenderers': [self.initial_organization], "value": {"amount": 450},
-                                                'qualified': True}})
+    response = self.app.post_json('/auctions/{}/bids'.format(auction_id),
+                                  {'data': {'tenderers': [self.initial_organization], "value": {"amount": 450},
+                                            'qualified': True}})
     bid_id = response.json['data']['id']
     bid_token = response.json['access']['token']
     # create second bid
     self.app.authorization = ('Basic', ('broker', ''))
-    if self.initial_organization == test_financial_organization:
-        response = self.app.post_json('/auctions/{}/bids'.format(auction_id),
-                                      {'data': {'tenderers': [self.initial_organization], "value": {"amount": 450},
-                                                'qualified': True, 'eligible': True}})
-    else:
-        response = self.app.post_json('/auctions/{}/bids'.format(auction_id),
-                                      {'data': {'tenderers': [self.initial_organization], "value": {"amount": 450},
-                                                'qualified': True}})
+    response = self.app.post_json('/auctions/{}/bids'.format(auction_id),
+                                  {'data': {'tenderers': [self.initial_organization], "value": {"amount": 450},
+                                            'qualified': True}})
 
     authorization = self.app.authorization
     self.app.authorization = ('Basic', ('administrator', ''))

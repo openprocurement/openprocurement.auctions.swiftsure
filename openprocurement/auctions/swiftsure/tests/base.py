@@ -17,7 +17,6 @@ from openprocurement.auctions.core.tests.base import (
 
 from openprocurement.auctions.swiftsure.constants import (
     DEFAULT_PROCUREMENT_METHOD_TYPE,
-    DEFAULT_PROCUREMENT_METHOD_TYPE_FINANCIAL
 )
 
 now = datetime.now()

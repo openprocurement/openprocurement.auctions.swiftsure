@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 import unittest
 from copy import deepcopy
-from datetime import timedelta, time
-from uuid import uuid4
-from iso8601 import parse_date
 
 from openprocurement.auctions.core.tests.base import snitch
 from openprocurement.auctions.core.tests.tender import (
@@ -18,18 +15,16 @@ from openprocurement.auctions.core.tests.blanks.tender_blanks import (
     auction_features,
     # AuctionProcessTest
     invalid_auction_conditions,
-    one_valid_bid_auction,
-    one_invalid_bid_auction,
 )
 from openprocurement.auctions.core.utils import get_now
 
 from openprocurement.auctions.swiftsure.models import (
-    SwiftsureAuction, DGFFinancialAssets, DGF_ID_REQUIRED_FROM
+    SwiftsureAuction, DGF_ID_REQUIRED_FROM
 )
 from openprocurement.auctions.swiftsure.tests.base import (
-    test_auction_data, test_financial_auction_data, test_organization,
-    test_financial_organization, BaseWebTest, BaseAuctionWebTest,
-    test_auction_data_with_schema, test_financial_auction_data_with_schema
+    test_auction_data, test_organization,
+    BaseWebTest, BaseAuctionWebTest,
+    test_auction_data_with_schema
 )
 from openprocurement.auctions.swiftsure.tests.blanks.tender_blanks import (
     # AuctionTest
@@ -44,8 +39,6 @@ from openprocurement.auctions.swiftsure.tests.blanks.tender_blanks import (
     # AuctionProcessTest
     first_bid_auction,
     suspended_auction,
-    # FinancialAuctionResourceTest
-    create_auction_generated_financial
 )
 
 
@@ -77,7 +70,7 @@ class AuctionResourceTest(BaseWebTest, AuctionResourceTestMixin, DgfInsiderResou
 
 
 class AuctionProcessTest(BaseAuctionWebTest):
-    test_financial_organization = test_financial_organization
+    test_financial_organization = None
 
     #setUp = BaseWebTest.setUp
     def setUp(self):

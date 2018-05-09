@@ -110,7 +110,7 @@ class Auction(BaseAuction):
     """Data regarding auction process - publicly inviting prospective contractors to submit bids for evaluation and selecting a winner or winners."""
     class Options:
         roles = dgf_auction_roles
-    _procedure_type = "sellout.english"
+    _procedure_type = "selloutEnglish"
     awards = ListType(ModelType(Award), default=list())
     bids = ListType(ModelType(Bid), default=list())  # A list of all the companies who entered submissions for the auction.
     cancellations = ListType(ModelType(Cancellation), default=list())
