@@ -13,12 +13,9 @@ from schematics.types import (
 )
 from schematics.types.compound import ModelType
 from schematics.types.serializable import serializable
-from urlparse import urlparse, parse_qs
-from string import hexdigits
 from zope.interface import implementer
 
 from openprocurement.auctions.core.constants import (
-    DGF_ELIGIBILITY_CRITERIA,
     DGF_PLATFORM_LEGAL_DETAILS,
     DGF_PLATFORM_LEGAL_DETAILS_FROM,
     DGF_ID_REQUIRED_FROM,
@@ -45,7 +42,9 @@ from openprocurement.auctions.core.models import (
     validate_items_uniq,
     calc_auction_end_time,
     validate_not_available,
-    FinancialOrganization
+    Guarantee,
+    BankAccount,
+    AuctionParameters
 )
 from openprocurement.auctions.core.plugins.awarding.v3.models import (
     Award
@@ -130,6 +129,9 @@ class Auction(BaseAuction):
     lots = ListType(ModelType(Lot), default=list(), validators=[validate_lots_uniq, validate_not_available])
     items = ListType(ModelType(Item), default=list(), validators=[validate_items_uniq])
     suspended = BooleanType()
+    registrationFee = ModelType(Guarantee)
+    bankAccount = ModelType(BankAccount)
+    auctionParameters = ModelType(AuctionParameters)
 
     def __acl__(self):
         return [
