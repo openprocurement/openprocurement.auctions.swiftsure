@@ -10,5 +10,5 @@ from openprocurement.auctions.core.plugins.awarding.v3.adapters import (
 
 class AuctionSwiftsureConfigurator(AuctionConfigurator,
                                    AwardingV3ConfiguratorMixin):
-    name = 'Auction Dgf Configurator'
+    name = 'Auction Swiftsure Configurator'
     model = SwiftsureAuction
