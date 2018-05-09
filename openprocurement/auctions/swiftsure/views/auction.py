@@ -15,10 +15,10 @@ from openprocurement.auctions.core.views.mixins import AuctionAuctionResource
 from openprocurement.auctions.swiftsure.utils import invalidate_bids_under_threshold
 
 
-@opresource(name='selloutEnglish:Auction Auction',
+@opresource(name='swiftsure:Auction Auction',
             collection_path='/auctions/{auction_id}/auction',
             path='/auctions/{auction_id}/auction/{auction_lot_id}',
-            auctionsprocurementMethodType="selloutEnglish",
+            auctionsprocurementMethodType="swiftsure",
             description="auction auction data")
 class AuctionAuctionResource(AuctionAuctionResource):
 

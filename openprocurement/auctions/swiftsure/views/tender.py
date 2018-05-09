@@ -16,9 +16,9 @@ from openprocurement.auctions.swiftsure.utils import (
 )
 
 
-@opresource(name='selloutEnglish:Auction',
+@opresource(name='swiftsure:Auction',
             path='/auctions/{auction_id}',
-            auctionsprocurementMethodType="selloutEnglish",
+            auctionsprocurementMethodType="swiftsure",
             description="Open Contracting compatible data exchange format. See http://ocds.open-contracting.org/standard/r/master/#auction for more info")
 class AuctionResource(AuctionResource):
 

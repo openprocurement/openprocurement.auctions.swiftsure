@@ -17,10 +17,10 @@ from openprocurement.auctions.core.validation import (
 from openprocurement.auctions.core.views.mixins import AuctionComplaintDocumentResource
 
 
-@opresource(name='selloutEnglish:Auction Complaint Documents',
+@opresource(name='swiftsure:Auction Complaint Documents',
             collection_path='/auctions/{auction_id}/complaints/{complaint_id}/documents',
             path='/auctions/{auction_id}/complaints/{complaint_id}/documents/{document_id}',
-            auctionsprocurementMethodType="selloutEnglish",
+            auctionsprocurementMethodType="swiftsure",
             description="Auction complaint documents")
 class AuctionComplaintDocumentResource(AuctionComplaintDocumentResource):
 

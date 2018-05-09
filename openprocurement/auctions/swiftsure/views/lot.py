@@ -14,10 +14,10 @@ from openprocurement.auctions.core.validation import (
 from openprocurement.auctions.core.views.mixins import AuctionLotResource
 
 
-@opresource(name='selloutEnglish:Auction Lots',
+@opresource(name='swiftsure:Auction Lots',
             collection_path='/auctions/{auction_id}/lots',
             path='/auctions/{auction_id}/lots/{lot_id}',
-            auctionsprocurementMethodType="selloutEnglish",
+            auctionsprocurementMethodType="swiftsure",
             description="Auction lots")
 class AuctionLotResource(AuctionLotResource):
 

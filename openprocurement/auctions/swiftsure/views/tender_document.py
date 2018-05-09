@@ -17,10 +17,10 @@ from openprocurement.auctions.core.validation import (
 from openprocurement.auctions.core.views.mixins import AuctionDocumentResource
 
 
-@opresource(name='selloutEnglish:Auction Documents',
+@opresource(name='swiftsure:Auction Documents',
             collection_path='/auctions/{auction_id}/documents',
             path='/auctions/{auction_id}/documents/{document_id}',
-            auctionsprocurementMethodType="selloutEnglish",
+            auctionsprocurementMethodType="swiftsure",
             description="Auction related binary files (PDFs, etc.)")
 class AuctionDocumentResource(AuctionDocumentResource):
 

@@ -4,4 +4,4 @@ VIEW_LOCATIONS = [
     "openprocurement.auctions.swiftsure.views",
 ]
 
-DEFAULT_PROCUREMENT_METHOD_TYPE = "exampleSelloutEnglish"
+DEFAULT_PROCUREMENT_METHOD_TYPE = "exampleSwiftsure"

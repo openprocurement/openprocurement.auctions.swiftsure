@@ -3,10 +3,10 @@ from openprocurement.auctions.core.utils import opresource
 from openprocurement.auctions.core.views.mixins import AuctionCancellationResource
 
 
-@opresource(name='selloutEnglish:Auction Cancellations',
+@opresource(name='swiftsure:Auction Cancellations',
             collection_path='/auctions/{auction_id}/cancellations',
             path='/auctions/{auction_id}/cancellations/{cancellation_id}',
-            auctionsprocurementMethodType="selloutEnglish",
+            auctionsprocurementMethodType="swiftsure",
             description="Auction cancellations")
 class AuctionCancellationResource(AuctionCancellationResource):
 
