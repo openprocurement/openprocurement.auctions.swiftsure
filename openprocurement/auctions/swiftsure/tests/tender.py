@@ -16,10 +16,9 @@ from openprocurement.auctions.core.tests.blanks.tender_blanks import (
     # AuctionProcessTest
     invalid_auction_conditions,
 )
-from openprocurement.auctions.core.utils import get_now
 
 from openprocurement.auctions.swiftsure.models import (
-    SwiftsureAuction, DGF_ID_REQUIRED_FROM
+    SwiftsureAuction
 )
 from openprocurement.auctions.swiftsure.tests.base import (
     test_auction_data, test_organization,
@@ -32,7 +31,6 @@ from openprocurement.auctions.swiftsure.tests.blanks.tender_blanks import (
     edit_role,
     # AuctionResourceTest
     create_auction_invalid,
-    required_dgf_id,
     create_auction_auctionPeriod,
     create_auction_generated,
     create_auction,
@@ -57,10 +55,6 @@ class AuctionResourceTest(BaseWebTest, AuctionResourceTestMixin, DgfInsiderResou
     initial_organization = test_organization
 
     test_create_auction_invalid = snitch(create_auction_invalid)
-    test_required_dgf_id = unittest.skipIf(
-        get_now() < DGF_ID_REQUIRED_FROM,
-        "Can`t create auction without dgfID only from {}".format(DGF_ID_REQUIRED_FROM),
-    )(snitch(required_dgf_id))
     test_create_auction_auctionPeriod = snitch(create_auction_auctionPeriod)
     test_create_auction_generated = snitch(create_auction_generated)
     test_create_auction = snitch(create_auction)

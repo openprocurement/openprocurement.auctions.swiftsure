@@ -12,7 +12,7 @@ from openprocurement.auctions.core.utils import (
 from openprocurement.auctions.core.tests.base import (
     BaseWebTest as CoreBaseWebTest,
     BaseAuctionWebTest as CoreBaseAuctionWebTest,
-    test_organization, test_auction_data, base_test_bids
+    test_organization, test_procuringEntity, base_test_bids
 )
 
 from openprocurement.auctions.swiftsure.constants import (
@@ -20,7 +20,45 @@ from openprocurement.auctions.swiftsure.constants import (
 )
 
 now = datetime.now()
-test_auction_data['procurementMethodType'] = DEFAULT_PROCUREMENT_METHOD_TYPE
+test_auction_data = {
+    "title": u"футляри до державних нагород",
+    "tenderAttempts": 1,
+    "procuringEntity": test_procuringEntity,
+    "value": {
+        "amount": 100,
+        "currency": u"UAH"
+    },
+    "minimalStep": {
+        "amount": 35,
+        "currency": u"UAH"
+    },
+    "items": [
+        {
+            "description": u"Земля для військовослужбовців",
+            "classification": {
+                "scheme": u"CAV",
+                "id": u"06000000-2",
+                "description": u"Земельні ділянки"
+            },
+            "unit": {
+                "name": u"item",
+                "code": u"44617100-9"
+            },
+            "quantity": 5,
+            "address": {
+                "countryName": u"Україна",
+                "postalCode": "79000",
+                "region": u"м. Київ",
+                "locality": u"м. Київ",
+                "streetAddress": u"вул. Банкова 1"
+            }
+        }
+    ],
+    "auctionPeriod": {
+        "startDate": (now.date() + timedelta(days=14)).isoformat()
+    },
+    "procurementMethodType": DEFAULT_PROCUREMENT_METHOD_TYPE
+}
 if SANDBOX_MODE:
     test_auction_data['procurementMethodDetails'] = 'quick, accelerator=1440'
     test_auction_data['submissionMethodDetails'] = 'test submissionMethodDetails'
@@ -141,7 +179,7 @@ test_features = [
 
 class BaseWebTest(CoreBaseWebTest):
 
-    """Base Web Test to test openprocurement.auctions.dgf.
+    """Base Web Test to test openprocurement.auctions.swiftsure.
 
     It setups the database before each test and delete it after.
     """

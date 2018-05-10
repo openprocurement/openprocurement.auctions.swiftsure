@@ -13,13 +13,13 @@ from openprocurement.auctions.core.utils import get_now, SANDBOX_MODE, TZ
 def create_role(self):
     fields = set([
         'awardCriteriaDetails', 'awardCriteriaDetails_en', 'awardCriteriaDetails_ru',
-        'description', 'description_en', 'description_ru', 'dgfID', 'tenderAttempts',
+        'description', 'description_en', 'description_ru', 'tenderAttempts',
         'features', 'guarantee', 'hasEnquiries', 'items', 'lots', 'minimalStep', 'mode',
         'procurementMethodRationale', 'procurementMethodRationale_en', 'procurementMethodRationale_ru',
         'procurementMethodType', 'procuringEntity', 'merchandisingObject',
         'submissionMethodDetails', 'submissionMethodDetails_en', 'submissionMethodDetails_ru',
         'title', 'title_en', 'title_ru', 'value', 'auctionPeriod',
-        'dgfDecisionDate', 'dgfDecisionID', 'registrationFee', 'bankAccount', 'auctionParameters'
+        'registrationFee', 'bankAccount', 'auctionParameters'
     ])
     if SANDBOX_MODE:
         fields.add('procurementMethodDetails')
@@ -29,7 +29,7 @@ def create_role(self):
 def edit_role(self):
     fields = set([
         'features', 'hasEnquiries', 'description', 'description_en', 'description_ru',
-        'title', 'title_en', 'title_ru', 'dgfID', 'dgfDecisionDate', 'dgfDecisionID', 'tenderAttempts',
+        'title', 'title_en', 'title_ru', 'tenderAttempts',
         'merchandisingObject',
     ])
     if SANDBOX_MODE:
@@ -281,25 +281,6 @@ def create_auction_invalid(self):
     self.assertIn({u'description': [u'This field is required.'], u'location': u'body', u'name': u'items'}, response.json['errors'])
 
 
-def required_dgf_id(self):
-    data = self.initial_data.copy()
-    del data['dgfID']
-    response = self.app.post_json('/auctions', {'data': data}, status=422)
-    self.assertEqual(response.status, '422 Unprocessable Entity')
-    self.assertEqual(response.content_type, 'application/json')
-    self.assertEqual(response.json['status'], 'error')
-    self.assertEqual(response.json['errors'],
-                     [{"location": "body", "name": "dgfID", "description": ["This field is required."]}])
-
-    data['dgfID'] = self.initial_data['dgfID']
-    response = self.app.post_json('/auctions', {'data': data})
-    self.assertEqual(response.status, '201 Created')
-    self.assertEqual(response.content_type, 'application/json')
-    auction = response.json['data']
-    self.assertIn('dgfID', auction)
-    self.assertEqual(data['dgfID'], auction['dgfID'])
-
-
 def create_auction_auctionPeriod(self):
     data = self.initial_data.copy()
     # tenderPeriod = data.pop('tenderPeriod')
@@ -340,9 +321,9 @@ def create_auction_generated(self):
             auction.pop(key)
     self.assertEqual(set(auction), set([
         u'procurementMethodType', u'id', u'date', u'dateModified', u'auctionID', u'status', u'enquiryPeriod',
-        u'tenderPeriod', u'minimalStep', u'items', u'value', u'procuringEntity', u'next_check', u'dgfID',
+        u'tenderPeriod', u'minimalStep', u'items', u'value', u'procuringEntity', u'next_check',
         u'procurementMethod', u'awardCriteria', u'submissionMethod', u'title', u'owner', u'auctionPeriod',
-        u'dgfDecisionDate', u'dgfDecisionID', u'documents', u'tenderAttempts',
+        u'tenderAttempts',
     ]))
     self.assertNotEqual(data['id'], auction['id'])
     self.assertNotEqual(data['doc_id'], auction['id'])
@@ -359,7 +340,7 @@ def create_auction(self):
     self.assertEqual(response.content_type, 'application/json')
     auction = response.json['data']
     self.assertEqual(set(auction) - set(self.initial_data), set([
-        u'id', u'dateModified', u'auctionID', u'date', u'status', u'procurementMethod', 'documents',
+        u'id', u'dateModified', u'auctionID', u'date', u'status', u'procurementMethod',
         u'awardCriteria', u'submissionMethod', u'next_check', u'owner', u'enquiryPeriod', u'tenderPeriod',
     ]))
     self.assertIn(auction['id'], response.headers['Location'])
@@ -805,10 +786,10 @@ def create_auction_generated_financial(self):
             auction.pop(key)
     self.assertEqual(set(auction), set([
         u'procurementMethodType', u'id', u'date', u'dateModified', u'auctionID', u'status', u'enquiryPeriod',
-        u'tenderPeriod', u'minimalStep', u'items', u'value', u'procuringEntity', u'next_check', u'dgfID',
+        u'tenderPeriod', u'minimalStep', u'items', u'value', u'procuringEntity', u'next_check',
         u'procurementMethod', u'awardCriteria', u'submissionMethod', u'title', u'owner', u'auctionPeriod',
         u'eligibilityCriteria', u'eligibilityCriteria_en', u'eligibilityCriteria_ru', 'documents',
-        u'dgfDecisionDate', u'dgfDecisionID', u'tenderAttempts',
+        u'tenderAttempts',
     ]))
     self.assertNotEqual(data['id'], auction['id'])
     self.assertNotEqual(data['doc_id'], auction['id'])
