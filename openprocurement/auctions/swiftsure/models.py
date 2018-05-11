@@ -7,7 +7,6 @@ from schematics.transforms import whitelist
 from schematics.types import (
     StringType,
     IntType,
-    DateType,
     MD5Type,
     BooleanType
 )
@@ -15,12 +14,6 @@ from schematics.types.compound import ModelType
 from schematics.types.serializable import serializable
 from zope.interface import implementer
 
-from openprocurement.auctions.core.constants import (
-    DGF_PLATFORM_LEGAL_DETAILS,
-    DGF_PLATFORM_LEGAL_DETAILS_FROM,
-    DGF_ID_REQUIRED_FROM,
-    DGF_DECISION_REQUIRED_FROM,
-)
 from openprocurement.auctions.core.includeme import IAwardingNextCheck
 from openprocurement.auctions.core.models import (
     ListType,
@@ -101,7 +94,7 @@ class AuctionAuctionPeriod(Period):
 
 
 class ISwiftsureAuction(IAuction):
-    """Marker interface for Dgf auctions"""
+    """Marker interface for Swiftsure auctions"""
 
 
 @implementer(ISwiftsureAuction)
@@ -115,10 +108,7 @@ class Auction(BaseAuction):
     cancellations = ListType(ModelType(Cancellation), default=list())
     complaints = ListType(ComplaintModelType(Complaint), default=list())
     contracts = ListType(ModelType(Contract), default=list())
-    dgfID = StringType()
     merchandisingObject = MD5Type()
-    dgfDecisionID = StringType()
-    dgfDecisionDate = DateType()
     documents = ListType(ModelType(Document), default=list())  # All documents and attachments related to the auction.
     enquiryPeriod = ModelType(Period)  # The period during which enquiries may be made and will be answered.
     tenderPeriod = ModelType(Period)  # The period when the auction is open for submissions. The end date is the closing date for auction submissions.
@@ -173,31 +163,10 @@ class Auction(BaseAuction):
         if self.lots:
             for lot in self.lots:
                 lot.date = now
-        self.documents.append(type(self).documents.model_class(DGF_PLATFORM_LEGAL_DETAILS))
-
-    def validate_documents(self, data, docs):
-        if (data.get('revisions')[0].date if data.get('revisions') else get_now()) > DGF_PLATFORM_LEGAL_DETAILS_FROM and \
-                (docs and docs[0].documentType != 'x_dgfPlatformLegalDetails' or any([i.documentType == 'x_dgfPlatformLegalDetails' for i in docs[1:]])):
-            raise ValidationError(u"First document should be document with x_dgfPlatformLegalDetails documentType")
 
     def validate_value(self, data, value):
         if value.currency != u'UAH':
             raise ValidationError(u"currency should be only UAH")
-
-    def validate_dgfID(self, data, dgfID):
-        if not dgfID and data['status'] not in ['draft', 'pending.verification', 'invalid']:
-            if (data.get('revisions')[0].date if data.get('revisions') else get_now()) > DGF_ID_REQUIRED_FROM:
-                raise ValidationError(u'This field is required.')
-
-    def validate_dgfDecisionID(self, data, dgfDecisionID):
-        if not dgfDecisionID:
-            if (data.get('revisions')[0].date if data.get('revisions') else get_now()) > DGF_DECISION_REQUIRED_FROM:
-                raise ValidationError(u'This field is required.')
-
-    def validate_dgfDecisionDate(self, data, dgfDecisionDate):
-        if not dgfDecisionDate:
-            if (data.get('revisions')[0].date if data.get('revisions') else get_now()) > DGF_DECISION_REQUIRED_FROM:
-                raise ValidationError(u'This field is required.')
 
     def validate_merchandisingObject(self, data, merchandisingObject):
         if data['status'] == 'pending.verification' and not merchandisingObject:
