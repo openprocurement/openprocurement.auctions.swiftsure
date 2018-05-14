@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
-from openprocurement.auctions.core.adapters import AuctionConfigurator
+from openprocurement.auctions.core.adapters import (
+    AuctionConfigurator,
+    AuctionManagerAdapter
+)
 from openprocurement.auctions.swiftsure.models import (
     SwiftsureAuction,
 )
@@ -12,3 +15,12 @@ class AuctionSwiftsureConfigurator(AuctionConfigurator,
                                    AwardingV3ConfiguratorMixin):
     name = 'Auction Swiftsure Configurator'
     model = SwiftsureAuction
+
+
+class AuctionSwiftsureManagerAdapter(AuctionManagerAdapter):
+
+    def create_auction(self, request):
+        pass
+
+    def change_auction(self, request):
+        pass

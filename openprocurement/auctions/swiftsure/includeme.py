@@ -1,12 +1,14 @@
 import logging
 
 from pyramid.interfaces import IRequest
+from openprocurement.auctions.core.interfaces import IAuctionManager
 from openprocurement.auctions.swiftsure.models import (
     ISwiftsureAuction,
     SwiftsureAuction,
 )
 from openprocurement.auctions.swiftsure.adapters import (
     AuctionSwiftsureConfigurator,
+    AuctionSwiftsureManagerAdapter
 )
 from openprocurement.auctions.core.plugins.awarding.v3.adapters import (
     AwardingNextCheckV3
@@ -39,6 +41,11 @@ def includeme(config, plugin_config=None):
         AuctionSwiftsureConfigurator,
         (ISwiftsureAuction, IRequest),
         IContentConfigurator
+    )
+    config.registry.registerAdapter(
+        AuctionSwiftsureManagerAdapter,
+        (ISwiftsureAuction,),
+        IAuctionManager
     )
     config.registry.registerAdapter(
         AwardingNextCheckV3,
