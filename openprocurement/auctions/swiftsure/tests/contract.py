@@ -58,6 +58,7 @@ class AuctionContractDocumentResourceTest(BaseAuctionWebTest, AuctionContractDoc
     #initial_data = auction_data
     initial_status = 'active.auction'
     initial_bids = test_bids
+    docservice = True
 
     def setUp(self):
         super(AuctionContractDocumentResourceTest, self).setUp()
@@ -84,6 +85,7 @@ class Auction2LotContractDocumentResourceTest(
 class AuctionContractProlongationResourceTest(BaseAuctionWebTest, AuctionContractProlongationResourceTestMixin):
     initial_status = 'active.auction'
     initial_bids = test_bids
+    docservice = True
 
     def setUp(self):
         super(AuctionContractProlongationResourceTest, self).setUp()
