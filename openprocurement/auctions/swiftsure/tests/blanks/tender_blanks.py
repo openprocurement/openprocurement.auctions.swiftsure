@@ -341,7 +341,7 @@ def create_auction(self):
     auction = response.json['data']
     self.assertEqual(set(auction) - set(self.initial_data), set([
         u'id', u'dateModified', u'auctionID', u'date', u'status', u'procurementMethod', u'minNumberOfQualifiedBids',
-        u'awardCriteria', u'submissionMethod', u'next_check', u'owner', u'enquiryPeriod', u'tenderPeriod', u'minNumberOfQualifiedBids'
+        u'awardCriteria', u'submissionMethod', u'next_check', u'owner', u'enquiryPeriod', u'tenderPeriod',
     ]))
     self.assertIn(auction['id'], response.headers['Location'])
 
@@ -375,6 +375,34 @@ def create_auction(self):
     self.assertIn('guarantee', data)
     self.assertEqual(data['guarantee']['amount'], 100500)
     self.assertEqual(data['guarantee']['currency'], "USD")
+
+    auction_data['registrationFee'] = {"amount": 100500, "currency": "USD"}
+    response = self.app.post_json('/auctions', {'data': auction_data})
+    self.assertEqual(response.status, '201 Created')
+    self.assertEqual(response.content_type, 'application/json')
+    data = response.json['data']
+    self.assertIn('registrationFee', data)
+    self.assertEqual(data['registrationFee']['amount'], 100500)
+    self.assertEqual(data['registrationFee']['currency'], "USD")
+
+    auction_data['bankAccount'] = {
+        "accountIdentification": [{
+            'scheme': 'UA-MFO',
+            'id': '111',
+            'description': 'test'
+        }],
+        "bankName": "test"
+    }
+    response = self.app.post_json('/auctions', {'data': auction_data})
+    self.assertEqual(response.status, '201 Created')
+    self.assertEqual(response.content_type, 'application/json')
+    data = response.json['data']
+    self.assertIn('bankAccount', data)
+    self.assertEqual(data['bankAccount']['accountIdentification'][0]['scheme'], 'UA-MFO')
+    self.assertEqual(data['bankAccount']['accountIdentification'][0]['id'], '111')
+    self.assertEqual(data['bankAccount']['accountIdentification'][0]['description'], 'test')
+    self.assertEqual(data['bankAccount']['bankName'], 'test')
+
 
 # AuctionProcessTest
 
