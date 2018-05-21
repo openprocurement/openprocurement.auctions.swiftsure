@@ -27,10 +27,13 @@ def check_bids(request):
         if not set([i.status for i in auction.lots]).difference(set(['unsuccessful', 'cancelled'])):
             auction.status = 'unsuccessful'
     else:
-        if auction.numberOfBids < 2:
-            if auction.auctionPeriod and auction.auctionPeriod.startDate:
+        if auction.auctionPeriod:
+            if auction.numberOfBids < auction.minNumberOfQualifiedBids:
                 auction.auctionPeriod.startDate = None
-            auction.status = 'unsuccessful'
+                auction.status = 'unsuccessful'
+            elif auction.numberOfBids == 1:
+                auction.auctionPeriod.startDate = None
+                request.content_configurator.start_awarding()
 
 
 def check_status(request):
@@ -48,8 +51,6 @@ def check_status(request):
         auction.status = 'active.auction'
         remove_draft_bids(request)
         check_bids(request)
-        if auction.numberOfBids < 2 and auction.auctionPeriod:
-            auction.auctionPeriod.startDate = None
         return
     elif auction.lots and auction.status == 'active.tendering' and auction.tenderPeriod.endDate <= now:
         LOGGER.info('Switched auction {} to {}'.format(auction['id'], 'active.auction'),

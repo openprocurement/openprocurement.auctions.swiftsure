@@ -19,7 +19,7 @@ def create_role(self):
         'procurementMethodType', 'procuringEntity', 'merchandisingObject',
         'submissionMethodDetails', 'submissionMethodDetails_en', 'submissionMethodDetails_ru',
         'title', 'title_en', 'title_ru', 'value', 'auctionPeriod',
-        'registrationFee', 'bankAccount', 'auctionParameters'
+        'registrationFee', 'bankAccount', 'auctionParameters', u'minNumberOfQualifiedBids'
     ])
     if SANDBOX_MODE:
         fields.add('procurementMethodDetails')
@@ -323,7 +323,7 @@ def create_auction_generated(self):
         u'procurementMethodType', u'id', u'date', u'dateModified', u'auctionID', u'status', u'enquiryPeriod',
         u'tenderPeriod', u'minimalStep', u'items', u'value', u'procuringEntity', u'next_check',
         u'procurementMethod', u'awardCriteria', u'submissionMethod', u'title', u'owner', u'auctionPeriod',
-        u'tenderAttempts',
+        u'tenderAttempts', u'minNumberOfQualifiedBids'
     ]))
     self.assertNotEqual(data['id'], auction['id'])
     self.assertNotEqual(data['doc_id'], auction['id'])
@@ -340,7 +340,7 @@ def create_auction(self):
     self.assertEqual(response.content_type, 'application/json')
     auction = response.json['data']
     self.assertEqual(set(auction) - set(self.initial_data), set([
-        u'id', u'dateModified', u'auctionID', u'date', u'status', u'procurementMethod',
+        u'id', u'dateModified', u'auctionID', u'date', u'status', u'procurementMethod', u'minNumberOfQualifiedBids',
         u'awardCriteria', u'submissionMethod', u'next_check', u'owner', u'enquiryPeriod', u'tenderPeriod',
     ]))
     self.assertIn(auction['id'], response.headers['Location'])
@@ -376,7 +376,153 @@ def create_auction(self):
     self.assertEqual(data['guarantee']['amount'], 100500)
     self.assertEqual(data['guarantee']['currency'], "USD")
 
+    auction_data['registrationFee'] = {"amount": 100500, "currency": "USD"}
+    response = self.app.post_json('/auctions', {'data': auction_data})
+    self.assertEqual(response.status, '201 Created')
+    self.assertEqual(response.content_type, 'application/json')
+    data = response.json['data']
+    self.assertIn('registrationFee', data)
+    self.assertEqual(data['registrationFee']['amount'], 100500)
+    self.assertEqual(data['registrationFee']['currency'], "USD")
+
+    auction_data['bankAccount'] = {
+        "accountIdentification": [{
+            'scheme': 'UA-MFO',
+            'id': '111',
+            'description': 'test'
+        }],
+        "bankName": "test"
+    }
+    response = self.app.post_json('/auctions', {'data': auction_data})
+    self.assertEqual(response.status, '201 Created')
+    self.assertEqual(response.content_type, 'application/json')
+    data = response.json['data']
+    self.assertIn('bankAccount', data)
+    self.assertEqual(data['bankAccount']['accountIdentification'][0]['scheme'], 'UA-MFO')
+    self.assertEqual(data['bankAccount']['accountIdentification'][0]['id'], '111')
+    self.assertEqual(data['bankAccount']['accountIdentification'][0]['description'], 'test')
+    self.assertEqual(data['bankAccount']['bankName'], 'test')
+
+
 # AuctionProcessTest
+
+
+def one_valid_bid_auction(self):
+    self.app.authorization = ('Basic', ('broker', ''))
+    # empty auctions listing
+    response = self.app.get('/auctions')
+    self.assertEqual(response.json['data'], [])
+    # create auction
+
+    data = deepcopy(self.initial_data)
+    data['minNumberOfQualifiedBids'] = 1
+
+    response = self.app.post_json('/auctions',
+                                  {"data": data})
+    auction_id = self.auction_id = response.json['data']['id']
+    owner_token = response.json['access']['token']
+    # switch to active.tendering
+    response = self.set_status('active.tendering', {"auctionPeriod": {"startDate": (get_now() + timedelta(days=10)).isoformat()}})
+    self.assertIn("auctionPeriod", response.json['data'])
+    # create bid
+    self.app.authorization = ('Basic', ('broker', ''))
+    response = self.app.post_json('/auctions/{}/bids'.format(auction_id),
+                                  {'data': {'tenderers': [self.initial_organization], "value": {"amount": 500}, 'qualified': True}})
+    # switch to active.qualification
+    self.set_status('active.auction', {'status': 'active.tendering'})
+    self.app.authorization = ('Basic', ('chronograph', ''))
+    response = self.app.patch_json('/auctions/{}'.format(auction_id), {"data": {"id": auction_id}})
+    self.assertNotIn('auctionPeriod', response.json['data'])
+    # get awards
+    self.app.authorization = ('Basic', ('broker', ''))
+    response = self.app.get('/auctions/{}/awards?acc_token={}'.format(auction_id, owner_token))
+    # get pending award
+    award_id = [i['id'] for i in response.json['data'] if i['status'] == 'pending'][0]
+    award_date = [i['date'] for i in response.json['data'] if i['status'] == 'pending'][0]
+    response = self.app.post('/auctions/{}/awards/{}/documents?acc_token={}'.format(
+        self.auction_id, award_id, owner_token), upload_files=[('file', 'auction_protocol.pdf', 'content')])
+    self.assertEqual(response.status, '201 Created')
+    self.assertEqual(response.content_type, 'application/json')
+    doc_id = response.json["data"]['id']
+    self.assertIn(doc_id, response.headers['Location'])
+    self.assertEqual('auction_protocol.pdf', response.json["data"]["title"])
+    response = self.app.patch_json('/auctions/{}/awards/{}/documents/{}?acc_token={}'.format(self.auction_id, award_id, doc_id, owner_token), {"data": {
+        "description": "auction protocol",
+        "documentType": 'auctionProtocol'
+    }})
+    self.assertEqual(response.status, '200 OK')
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertEqual(response.json["data"]["documentType"], 'auctionProtocol')
+    self.assertEqual(response.json["data"]["author"], 'auction_owner')
+
+    # set award as active
+    response = self.app.patch_json('/auctions/{}/awards/{}?acc_token={}'.format(auction_id, award_id, owner_token), {"data": {"status": "active"}})
+    self.assertNotEqual(response.json['data']['date'], award_date)
+    # set award as active
+    self.app.patch_json('/auctions/{}/awards/{}?acc_token={}'.format(auction_id, award_id, owner_token), {"data": {"status": "active"}})
+    # get contract id
+
+    response = self.app.get('/auctions/{}'.format(auction_id))
+    contract_id = response.json['data']['contracts'][-1]['id']
+
+    # create auction contract document for test
+    response = self.app.post(
+        '/auctions/{}/contracts/{}/documents?acc_token={}'.format(auction_id, contract_id, owner_token),
+        upload_files=[('file', 'name.doc', 'content')], status=201)
+    self.assertEqual(response.status, '201 Created')
+    self.assertEqual(response.content_type, 'application/json')
+
+    # after stand slill period
+    self.app.authorization = ('Basic', ('chronograph', ''))
+    self.set_status('complete', {'status': 'active.awarded'})
+    # time travel
+    auction = self.db.get(auction_id)
+    for i in auction.get('awards', []):
+        i['complaintPeriod']['endDate'] = i['complaintPeriod']['startDate']
+    self.db.save(auction)
+    # sign contract
+    self.app.authorization = ('Basic', ('broker', ''))
+    self.app.patch_json('/auctions/{}/contracts/{}?acc_token={}'.format(auction_id, contract_id, owner_token), {"data": {"status": "active"}})
+    # check status
+    self.app.authorization = ('Basic', ('broker', ''))
+    response = self.app.get('/auctions/{}'.format(auction_id))
+    self.assertEqual(response.json['data']['status'], 'complete')
+
+
+def one_invalid_bid_auction(self):
+    self.app.authorization = ('Basic', ('broker', ''))
+    # empty auctions listing
+    response = self.app.get('/auctions')
+    self.assertEqual(response.json['data'], [])
+    # create auction
+    data = deepcopy(self.initial_data)
+    data['minNumberOfQualifiedBids'] = 1
+
+    response = self.app.post_json('/auctions',
+                                  {"data": data})
+    auction_id = self.auction_id = response.json['data']['id']
+    owner_token = response.json['access']['token']
+    # switch to active.tendering
+    self.set_status('active.tendering')
+    # create bid
+    self.app.authorization = ('Basic', ('broker', ''))
+    response = self.app.post_json('/auctions/{}/bids'.format(auction_id),
+                                  {'data': {'tenderers': [self.initial_organization], "value": {"amount": 450}, 'qualified': True}})
+    # switch to active.qualification
+    self.set_status('active.auction', {"auctionPeriod": {"startDate": None}, 'status': 'active.tendering'})
+    self.app.authorization = ('Basic', ('chronograph', ''))
+    response = self.app.patch_json('/auctions/{}'.format(auction_id), {"data": {"id": auction_id}})
+    # get awards
+    self.app.authorization = ('Basic', ('broker', ''))
+    response = self.app.get('/auctions/{}/awards?acc_token={}'.format(auction_id, owner_token))
+    # get pending award
+    award_id = [i['id'] for i in response.json['data'] if i['status'] == 'pending'][0]
+    # set award as unsuccessful
+    response = self.app.patch_json('/auctions/{}/awards/{}?acc_token={}'.format(auction_id, award_id, owner_token),
+                                   {"data": {"status": "unsuccessful"}})
+
+    response = self.app.get('/auctions/{}'.format(auction_id))
+    self.assertEqual(response.json['data']['status'], 'unsuccessful')
 
 
 def first_bid_auction(self):
