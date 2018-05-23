@@ -125,6 +125,9 @@ class SwiftsureAuction(BaseAuction):
     minNumberOfQualifiedBids = IntType(choices=[1], default=1)
     transfer_token = StringType()
 
+    create_accreditation = 3
+    edit_accreditation = 4
+
     def __acl__(self):
         return [
             (Allow, '{}_{}'.format(self.owner, self.owner_token), 'edit_auction'),
