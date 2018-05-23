@@ -39,7 +39,7 @@ class AuctionComplaintResource(AuctionComplaintResource):
         else:
             complaint.status = 'draft'
         complaint.complaintID = '{}.{}{}'.format(auction.auctionID, self.server_id, sum([len(i.complaints) for i in auction.awards], len(auction.complaints)) + 1)
-        acc = set_ownership(complaint, self.request)
+        set_ownership(complaint, self.request)
         auction.complaints.append(complaint)
         if save_auction(self.request):
             self.LOGGER.info('Created auction complaint {}'.format(complaint.id),
@@ -47,7 +47,12 @@ class AuctionComplaintResource(AuctionComplaintResource):
             self.request.response.status = 201
             route = self.request.matched_route.name.replace("collection_", "")
             self.request.response.headers['Location'] = self.request.current_route_url(_route_name=route, complaint_id=complaint.id, _query={})
-            return {'data': complaint.serialize(auction.status), 'access': acc}
+            return {
+                'data': complaint.serialize(auction.status),
+                'access': {
+                    'token': complaint.owner_token
+                }
+            }
 
     @json_view(content_type="application/json", validators=(validate_patch_complaint_data,), permission='edit_complaint')
     def patch(self):

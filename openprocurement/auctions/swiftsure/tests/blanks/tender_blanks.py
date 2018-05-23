@@ -280,6 +280,23 @@ def create_auction_invalid(self):
     self.assertEqual(response.json['status'], 'error')
     self.assertIn({u'description': [u'This field is required.'], u'location': u'body', u'name': u'items'}, response.json['errors'])
 
+    # accreditaion level checks
+
+    brokers = ['broker1', 'broker2', 'broker4']
+    for broker in brokers:
+        self.app.authorization = ('Basic', (broker, ''))
+
+        auction_data = deepcopy(self.initial_data)
+        response = self.app.post_json(request_path, {'data': auction_data}, status=403)
+        self.assertEqual(response.status, '403 Forbidden')
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json['status'], 'error')
+        self.assertEqual(response.json['errors'], [
+            {u'description': u'Broker Accreditation level does not permit auction creation',
+             u'location': u'body',
+             u'name': u'accreditation'}
+        ])
+
 
 def create_auction_auctionPeriod(self):
     data = self.initial_data.copy()
@@ -408,7 +425,7 @@ def create_auction(self):
 
 
 def one_valid_bid_auction(self):
-    self.app.authorization = ('Basic', ('broker', ''))
+    self.app.authorization = ('Basic', ('concierge', ''))
     # empty auctions listing
     response = self.app.get('/auctions')
     self.assertEqual(response.json['data'], [])
@@ -421,6 +438,13 @@ def one_valid_bid_auction(self):
                                   {"data": data})
     auction_id = self.auction_id = response.json['data']['id']
     owner_token = response.json['access']['token']
+
+    # Ownership change
+    # TODO: replace when transfer_token is fully implemented
+    auction = self.db.get(auction_id)
+    auction['owner'] = 'broker'
+    self.db.save(auction)
+
     # switch to active.tendering
     response = self.set_status('active.tendering', {"auctionPeriod": {"startDate": (get_now() + timedelta(days=10)).isoformat()}})
     self.assertIn("auctionPeriod", response.json['data'])
@@ -490,7 +514,7 @@ def one_valid_bid_auction(self):
 
 
 def one_invalid_bid_auction(self):
-    self.app.authorization = ('Basic', ('broker', ''))
+    self.app.authorization = ('Basic', ('concierge', ''))
     # empty auctions listing
     response = self.app.get('/auctions')
     self.assertEqual(response.json['data'], [])
@@ -502,6 +526,13 @@ def one_invalid_bid_auction(self):
                                   {"data": data})
     auction_id = self.auction_id = response.json['data']['id']
     owner_token = response.json['access']['token']
+
+    # Ownership change
+    # TODO: replace when transfer_token is fully implemented
+    auction = self.db.get(auction_id)
+    auction['owner'] = 'broker'
+    self.db.save(auction)
+
     # switch to active.tendering
     self.set_status('active.tendering')
     # create bid
@@ -526,7 +557,7 @@ def one_invalid_bid_auction(self):
 
 
 def first_bid_auction(self):
-    self.app.authorization = ('Basic', ('broker', ''))
+    self.app.authorization = ('Basic', ('concierge', ''))
     # empty auctions listing
     response = self.app.get('/auctions')
     self.assertEqual(response.json['data'], [])
@@ -535,6 +566,13 @@ def first_bid_auction(self):
                                   {"data": self.initial_data})
     auction_id = self.auction_id = response.json['data']['id']
     owner_token = response.json['access']['token']
+
+    # Ownership change
+    # TODO: replace when transfer_token is fully implemented
+    auction = self.db.get(auction_id)
+    auction['owner'] = 'broker'
+    self.db.save(auction)
+
     # switch to active.tendering
     self.set_status('active.tendering')
     # create bid
@@ -717,7 +755,7 @@ def first_bid_auction(self):
 
 
 def suspended_auction(self):
-    self.app.authorization = ('Basic', ('broker', ''))
+    self.app.authorization = ('Basic', ('concierge', ''))
     # empty auctions listing
     response = self.app.get('/auctions')
     self.assertEqual(response.json['data'], [])
@@ -729,6 +767,12 @@ def suspended_auction(self):
     auction_id = self.auction_id = response.json['data']['id']
     owner_token = response.json['access']['token']
     self.assertNotIn('suspended', response.json['data'])
+
+    # Ownership change
+    # TODO: replace when transfer_token is fully implemented
+    auction = self.db.get(auction_id)
+    auction['owner'] = 'broker'
+    self.db.save(auction)
 
     response = self.app.patch_json('/auctions/{}'.format(auction_id), {"data": {"suspended": True}}, status=403)
     self.assertEqual(response.status, '403 Forbidden')
@@ -915,32 +959,3 @@ def suspended_auction(self):
     self.app.authorization = ('Basic', ('broker', ''))
     response = self.app.get('/auctions/{}'.format(auction_id))
     self.assertEqual(response.json['data']['status'], 'complete')
-
-# FinancialAuctionResourceTest
-
-
-def create_auction_generated_financial(self):
-    data = self.initial_data.copy()
-    #del data['awardPeriod']
-    data.update({'id': 'hash', 'doc_id': 'hash2', 'auctionID': 'hash3'})
-    response = self.app.post_json('/auctions', {'data': data})
-    self.assertEqual(response.status, '201 Created')
-    self.assertEqual(response.content_type, 'application/json')
-    auction = response.json['data']
-    for key in ['procurementMethodDetails', 'submissionMethodDetails']:
-        if key in auction:
-            auction.pop(key)
-    self.assertEqual(set(auction), set([
-        u'procurementMethodType', u'id', u'date', u'dateModified', u'auctionID', u'status', u'enquiryPeriod',
-        u'tenderPeriod', u'minimalStep', u'items', u'value', u'procuringEntity', u'next_check',
-        u'procurementMethod', u'awardCriteria', u'submissionMethod', u'title', u'owner', u'auctionPeriod',
-        u'eligibilityCriteria', u'eligibilityCriteria_en', u'eligibilityCriteria_ru', 'documents',
-        u'tenderAttempts',
-    ]))
-    self.assertNotEqual(data['id'], auction['id'])
-    self.assertNotEqual(data['doc_id'], auction['id'])
-    self.assertNotEqual(data['auctionID'], auction['auctionID'])
-
-    self.assertEqual(auction['eligibilityCriteria'], DGF_ELIGIBILITY_CRITERIA['ua'])
-    self.assertEqual(auction['eligibilityCriteria_en'], DGF_ELIGIBILITY_CRITERIA['en'])
-    self.assertEqual(auction['eligibilityCriteria_ru'], DGF_ELIGIBILITY_CRITERIA['ru'])
