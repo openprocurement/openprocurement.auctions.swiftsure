@@ -11,7 +11,4 @@
 Introduction
 ============
 
-openprocurement.auctions.dgf repository contains code for Deposit Guarantee Fund auctions.
-
-Documentation can be found here http://dgf.api-docs.openprocurement.org/uk/latest/
-
+openprocurement.auctions.swiftsure repository contains code regarding the procedures within the Small-Scale Privatization.

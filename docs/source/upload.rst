@@ -12,8 +12,7 @@ Upload document with registration
 
 #. Add document in API:
 
-    .. include:: tutorial/upload-auction-notice.http
-        :code:
+.............................
 
 #. :ref:`Upload document in document service <documentservice:upload-document>`.
 
@@ -24,5 +23,4 @@ Upload document without registration
 
 #. Add document in API:
 
-    .. include:: tutorial/upload-auction-notice.http
-        :code:
+.............................
