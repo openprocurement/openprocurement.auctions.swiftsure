@@ -8,13 +8,13 @@ The Overall Small-Scale Privatization Process
 =============================================
 
 .. image:: SSP.png
-    :scale: 100%
+    :scale: 33%
 
 Procedure Workflow for 1 Submitted Bid
 ======================================
 
 .. image:: 1_bid.png
-    :scale: 100%
+    :scale: 75%
 
 Status Workflow
 ---------------
@@ -67,7 +67,7 @@ Procedure Workflow for 2 Submitted Bids or More
 ================================================
 
 .. image:: 2_bids.png
-    :scale: 100%
+    :scale: 75%
 
 Status Workflow
 ---------------
