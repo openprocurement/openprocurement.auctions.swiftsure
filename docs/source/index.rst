@@ -8,8 +8,8 @@
 .. meta::
     :google-site-verification: kmqHGqhpzgef4t5OVKoQCPa5v-CK14HOLmVrZV2QgmQ
 
-Welcome to openprocurement.auctions.dgf's documentation!
-========================================================
+Welcome to openprocurement.auctions.swiftsure documentation!
+============================================================
 
 Please report any problems or suggestions for improvement either via the
 `mailing list <http://groups.google.com/group/open-procurement-general>`_ or
@@ -22,6 +22,7 @@ Contents:
    :maxdepth: 2
 
    overview
+   procedure_workflow
    standard/index
    upload
    award_workflow
@@ -37,21 +38,7 @@ Contents:
 * :ref:`Performance recommendations <openprocurementapi:performance>`
 * :ref:`API in cluster mode <openprocurementapi:cluster>`
 
-..
-   auctions
-   procuring
-   bidding
-   meat
-   lots
-   qualification
-   questions
-   complaints
-   reference
-
 Indices and tables
 ==================
 
 * :ref:`genindex`
-* :ref:`search`
-
-.. * :ref:`modindex`

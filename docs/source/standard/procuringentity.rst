@@ -12,19 +12,19 @@ Schema
 ------
 
 :name:
-    string, multilingual
+    string, multilingual, optional
 
     |ocdsDescription|
     The common name of the organization.
 
 :identifier:
-    :ref:`Identifier`
+    :ref:`Identifier`, required
 
     |ocdsDescription|
     The primary identifier for this organization.
 
 :additionalIdentifiers:
-    List of :ref:`identifier` objects
+    List of :ref:`identifier` objects, optional
 
 :address:
     :ref:`Address`, required
@@ -33,9 +33,9 @@ Schema
     :ref:`ContactPoint`, required
 
 :kind:
-    string
+    string, optional
     
-    Type of organizer
+    Type of the organizer.
 
     Possible values:
         - ``general`` - Organizer (general)

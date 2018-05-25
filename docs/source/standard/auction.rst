@@ -11,200 +11,181 @@ Schema
 ------
 
 :title:
-   string, multilingual, read-only
+  string, multilingual, required
 
-   Auction number in the Deposit Guarantee Fund.
+  The name of the auction, displayed in listings. 
+  Originates from `lot.title`.
 
 :description:
-   string, multilingual
+  string, multilingual, required
 
-   Detailed auction description.
+  Detailed auction description. 
+  Originates from `lot.description`.
 
 :auctionID:
-   string, auto-generated, read-only
+  string, auto-generated, read-only
 
-   The auction identifier to refer auction to in "paper" documentation. 
+  The auction identifier to refer to in "paper" documentation. 
 
-   |ocdsDescription|
-   AuctionID should always be the same as the OCID. It is included to make the flattened data structure more convenient.
-   
-:dgfID:
-    string, required
-    
-    Identification number of the auction (also referred to as `lot`) in the XLS of Deposit Guarantee Fund.
+  |ocdsDescription|
+  AuctionID should always be the same as the OCID. It is included to make the flattened data structure more convenient.
     
 :procurementMethodType:
-    string, required
+  string, required
     
-    Auction announcement. 
-    Possible values:
-    
-    * ``dgfOtherAssets`` - sale of the insolvent bank property
-    * ``dgfFinancialAssets`` - sale of the creditor claim right
-
-   
+  Type of the procedure within the auction announcement. 
+  Originates from `lot.auctions.procurementMethodType`.
+     
 :procuringEntity:
-   :ref:`ProcuringEntity`, required
+  :ref:`ProcuringEntity`, required
 
-   Organization conducting the auction.
+  Organization conducting the auction.
+  Originates from `lot.lotCustodian`.
    
-
-   |ocdsDescription|
-   The entity managing the procurement, which may be different from the buyer who is paying / using the items being procured.
+  |ocdsDescription|
+  The entity managing the procurement, which may be different from the buyer who is paying / using the items being procured.
 
 :tenderAttempts:
-    integer
+  integer, required
 
-    The number which represents what time (from 1 up to 8) tender is taking place.
+  The number which represents what time auction is taking place.
+  Originates from `lot.auctions.tenderAttempts`
 
 :value:
-   :ref:`value`, required
+  :ref:`value`, required
 
-   Auction starting price. Bids lower than ``value`` will be rejected.
+  Auction starting price. Originates from `lots.auctions.value`. 
+  Bids lower than ``value`` will be rejected.
 
-   |ocdsDescription|
-   The total estimated value of the procurement.
+  |ocdsDescription|
+  The total estimated value of the procurement.
 
 :guarantee:
-    :ref:`Guarantee`
+  :ref:`Guarantee`, required
 
-    Bid guarantee
+  Bid guarantee. Originates from `lot.auctions.guarantee`.
+
+:registrationFee:
+  :ref:`Guarantee`, required
+
+  Bid registration fee. Originates from `lot.auctions.registrationFee`.
+
+:bankAccount:
+  `bankAccount <http://lotsloki.api-docs.registry.ea2.openprocurement.io/en/latest/standard/auction.html#bank-account>`_, optional
+
+  Details which uniquely identify a bank account, and are used when making or receiving a payment.
+  Originates from `lot.auctions.bankAccount`.
 
 :items:
-   list of :ref:`item` objects, required
+  list of :ref:`item` objects, required
 
-   List that contains single item being sold. 
+  List that contains single item being sold. Originates from `lots.items`.
 
-   |ocdsDescription|
-   The goods and services to be purchased, broken into line items wherever possible. Items should not be duplicated, but a quantity of 2 specified instead.
-
-:features:
-   list of :ref:`Feature` objects
-
-   Features of auction.
+  |ocdsDescription|
+  The goods and services to be purchased, broken into line items wherever possible. Items should not be duplicated, but a quantity of 2 specified instead.
 
 :documents:
-   List of :ref:`document` objects
+  List of :ref:`document` objects
  
-   |ocdsDescription|
-   All documents and attachments related to the auction.
+  |ocdsDescription|
+  All documents and attachments related to the auction.
 
 :questions:
-   List of :ref:`question` objects
+  List of :ref:`question` objects, optional
 
-   Questions to ``procuringEntity`` and answers to them.
+  Questions to `procuringEntity` and answers to them.
 
 :complaints:
-   List of :ref:`complaint` objects
+  List of :ref:`complaint` objects, optional
 
-   Complaints to auction conditions and their resolutions.
+  Complaints to auction conditions and their resolutions.
 
 :bids:
-   List of :ref:`bid` objects
+  List of :ref:`bid` objects
 
-   A list of all bids placed in the auction with information about participants, their proposals and other qualification documentation.
+  A list of all bids placed in the auction with information about participants, their proposals and other qualification documentation.
 
-   |ocdsDescription|
-   A list of all the companies who entered submissions for the auction.
+  |ocdsDescription|
+  A list of all the companies who entered submissions for the auction.
 
 :minimalStep:
-   :ref:`value`, required
+  :ref:`value`, required
 
-   Auction step (increment). Validation rules:
-
-   * `amount` should be greater than `Auction.value.amount`
-   * `currency` should either be absent or match `Auction.value.currency`
-   * `valueAddedTaxIncluded` should either be absent or match `Auction.value.valueAddedTaxIncluded`
+  Auction step (increment). Originates from `lot.auctions.minimalStep`.
 
 :awards:
-    List of :ref:`award` objects
+  List of :ref:`award` objects
 
-    All qualifications (disqualifications and awards).
+  All qualifications (disqualifications and awards).
 
 :contracts:
-    List of :ref:`Contract` objects
+  List of :ref:`Contract` objects
 
 :enquiryPeriod:
-   :ref:`period`
+  :ref:`period`, auto-generated
 
-   Period when questions are allowed.
+  Period when questions are allowed.
 
-   |ocdsDescription|
-   The period during which enquiries may be made and will be answered.
+  |ocdsDescription|
+  The period during which enquiries may be made and will be answered.
 
 :tenderPeriod:
-   :ref:`period`
+  :ref:`period`, auto-generated
 
-   Period when bids can be submitted.
+  Period when bids can be submitted.
 
-   |ocdsDescription|
-   The period when the auction is open for submissions. The end date is the closing date for auction submissions.
+  |ocdsDescription|
+  The period when the auction is open for submissions. The end date is the closing date for auction submissions.
 
 :auctionPeriod:
-   :ref:`period`, required
+  :ref:`period`, auto-generated
 
-   Period when Auction is conducted. `startDate` should be provided.
+  Period when Auction is conducted. `startDate` originates from `lot.auctions.auctionPeriod.startDate .
 
 :auctionUrl:
-    url
+  url, auto-generated
 
-    A web address where auction is accessible for view.
+  A web address where auction is accessible for view.
 
 :awardPeriod:
-   :ref:`period`, read-only
+  :ref:`period`, auto-generated
 
-   Awarding process period.
+  Awarding process period.
 
-   |ocdsDescription|
-   The date or period on which an award is anticipated to be made.
+  |ocdsDescription|
+  The date or period on which an award is anticipated to be made.
 
 :status:
-   string
+  string, reuired
 
-   :`active.tendering`:
-       Tendering period (tendering)
-   :`active.auction`:
-       Auction period (auction)
-   :`active.qualification`:
-       Winner qualification (qualification)
-   :`active.awarded`:
-       Standstill period (standstill)
-   :`unsuccessful`:
-       Unsuccessful auction (unsuccessful)
-   :`complete`:
-       Complete auction (complete)
-   :`cancelled`:
-       Cancelled auction (cancelled)
+  :`pending.activation`:
+      Procedure activation
+  :`active.tendering`:
+      Tendering period (tendering)
+  :`active.auction`:
+      Auction period (auction)
+  :`active.qualification`:
+      Winner qualification (qualification)
+  :`active.awarded`:
+      Contract signing
+  :`unsuccessful`:
+      Unsuccessful auction (unsuccessful)
+  :`complete`:
+      Complete auction (complete)
+  :`cancelled`:
+      Cancelled auction (cancelled)
 
-   Auction status.
-
-:eligibilityCriteria:
-    string, read-only
-    
-    Required for `dgfFinancialAssets` procedure.
-    
-    This field is multilingual: 
-    
-    * Ukrainian by default - До участі допускаються лише ліцензовані фінансові установи.
-    
-    * ``eligibilityCriteria_ru`` (Russian) - К участию допускаются только лицензированные финансовые учреждения.
-    
-    * ``eligibilityCriteria_en`` (English) - Only licensed financial institutions are eligible to participate.
-    
-.. :lots:
-   List of :ref:`lot` objects.
-
-   Contains all auction lots.
+  Status of the procedure.
 
 :cancellations:
-   List of :ref:`cancellation` objects.
+  List of :ref:`cancellation` objects.
 
-   Contains 1 object with `active` status in case of cancelled Auction.
+  Contains 1 object with `active` status in case of cancelled Auction.
 
-   The :ref:`cancellation` object describes the reason of auction cancellation and contains accompanying
-   documents  if there are any.
+  The :ref:`cancellation` object describes the reason of auction cancellation and contains accompanying
+  documents  if there are any.
 
 :revisions:
-   List of :ref:`revision` objects, auto-generated
+  List of :ref:`revision` objects, auto-generated
 
-   Historical changes to `Auction` object properties.
+  Historical changes to `Auction` object properties.

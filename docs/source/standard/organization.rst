@@ -12,21 +12,23 @@ Schema
 ------
 
 :name:
-    string, multilingual
+  string, multilingual, optional
     
-    Name of the organization.
+  Name of the organization.
     
 :identifier:
-    :ref:`Identifier`
+  :ref:`Identifier`, required
     
-    The primary identifier for this organization. 
+  The primary identifier for this organization. 
     
 :additionalIdentifiers:
-    List of :ref:`identifier` objects
+  List of :ref:`identifier` objects, optional
+
 :address:
-    :ref:`Address`, required
+  :ref:`Address`, required
+
 :contactPoint:
-    :ref:`ContactPoint`, required
+  :ref:`ContactPoint`, required
 
 
 .. index:: Company, id
@@ -40,13 +42,13 @@ Schema
 ------
 
 :scheme:
-   string
+  string
 
-   |ocdsDescription|
-   Organization identifiers be drawn from an existing identification scheme. 
-   This field is used to indicate the scheme or codelist in which the
-   identifier will be found.  This value should be drawn from the
-   Organization Identifier Scheme.
+  |ocdsDescription|
+  Organization identifiers be drawn from an existing identification scheme. 
+  This field is used to indicate the scheme or codelist in which the
+  identifier will be found.  This value should be drawn from the
+  Organization Identifier Scheme.
 
 :id:
    string, required

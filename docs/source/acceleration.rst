@@ -5,7 +5,7 @@ Acceleration mode for sandbox
 
 If you want to experiment with auctions, you can use acceleration mode and start your auction name with "TESTING".
 
-Acceleration mode was developed to enable `dgfOtherAssets` procedure testing in the sandbox and to reduce time frames of this procedure. 
+Acceleration mode was developed to enable `sellout.endlish` procedure testing in the sandbox and to reduce time frames of this procedure. 
 
 To enable acceleration mode you will need to:
     * add additional parameter `mode` with a value ``test``;
@@ -14,8 +14,7 @@ To enable acceleration mode you will need to:
 
 **This mode will work only in the sandbox**.
 
-.. include:: tutorial/auction-post-acceleration.http
-   :code:
+.............................
 
 Synchronization
 ~~~~~~~~~~~~~~~
@@ -26,4 +25,4 @@ Synchronization
 
 * If you synchronize via ``/auctions?mode=all``, then you will get all auctions.
 
-* Auction mode can be set only on auction creation, it can not be set later.
+* Auction mode can be set only on lot creation (lots.auctions) phase, it can not be set later.
