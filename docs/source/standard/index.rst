@@ -20,7 +20,6 @@ areas that were not covered by it.
    question
    complaint
    contract
-   prolongation
    util
    cancellation
    procuringentity

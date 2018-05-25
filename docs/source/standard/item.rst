@@ -20,8 +20,6 @@ Schema
     |ocdsDescription|
     A description of the goods, services to be provided.
     
-    Brief description of property (for ``dgfOtherAssets``) or asset(s) (for ``dgfFinancialAssets``).
-    
 :classification:
     :ref:`Classification`
 
@@ -32,13 +30,6 @@ Schema
 
     It is required for `classification.scheme` to be `CAV`. The
     `classification.id` should be valid CAV code.
-
-:schema_properties:
-    :ref:`SchemaProperties`
-    
-    |ocdsDescription| 
-    A detailed specification of the fields and data structures 
-    to use when publishing contracting data.
 
 :additionalClassifications:
     List of :ref:`Classification` objects
@@ -67,7 +58,7 @@ Schema
 :address:
     :ref:`Address`
 
-    Address, where property (for ``dgfOtherAssets``) or asset(s) (for ``dgfFinancialAssets``) is located.
+    Address, where asset(s) is located.
 
 :location:
     dictionary

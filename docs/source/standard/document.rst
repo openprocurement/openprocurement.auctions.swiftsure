@@ -40,11 +40,9 @@ Schema
 
       Information on bidders or participants, their validation documents and any procedural exemptions for which they qualify.
 
-    * `virtualDataRoom` - **Virtual Data Room** (available only for the `dgfFinancialAssets` procedure, see :ref:`fintutorial`)
-
     * `illustration` - **Illustrations**
 
-    * `x_dgfPublicAssetCertificate` - **Public Asset Certificate**
+    * `x_PublicAssetCertificate` - **Public Asset Certificate**
 
       Information about the auction. It is a link to the Public Asset Certificate.
 
@@ -56,13 +54,11 @@ Schema
 
       A non-disclosure agreement between a participant and a bank/Deposit Guarantee Fund.
 
-    * `x_dgfPlatformLegalDetails` - **Platform Legal Details**
+    * `x_PlatformLegalDetails` - **Platform Legal Details**
 
       Place and application forms for participation in the auction as well as bank details for transferring guarantee deposits.
-
+      
     * `x_dgfAssetFamiliarization` - **Asset Familiarization**
-
-      Goods examination procedure rules / Asset familiarization procedure in data room. Contains information on where and when a given document can be examined offline.
 
 
     Possible values for :ref:`award`
@@ -90,8 +86,6 @@ Schema
     * `qualificationDocuments` - **Qualification documents**
 
     * `eligibilityDocuments` - **Eligibility documents**
-
-    * `financialLicense` - **License** (available only for the `dgfFinancialAssets` procedure, see :ref:`fintutorial`)
 
     * `auctionProtocol` - **Auction protocol**
 

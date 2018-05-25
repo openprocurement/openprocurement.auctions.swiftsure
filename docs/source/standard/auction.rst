@@ -189,3 +189,28 @@ Schema
   List of :ref:`revision` objects, auto-generated
 
   Historical changes to `Auction` object properties.
+  
+:merchandisingObject:
+  string, auto-generated, read-only
+  
+  Lot's id.
+  
+.. _Auction Parameters:
+  
+Auction Parameters
+====
+
+Schema
+------
+
+:type:	
+    string, auto-generated, read-only
+
+    Type of the auction.
+
+:dutchSteps:	
+    integer, optional
+
+    Number of steps within the dutch part of the insider auction.
+
+    Possible values are [1; 99]. Defaul value is 99.
