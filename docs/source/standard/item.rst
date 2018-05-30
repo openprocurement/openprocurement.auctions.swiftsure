@@ -58,7 +58,7 @@ Schema
 :address:
     :ref:`Address`
 
-    Address, where asset(s) is located.
+    Address, where item is located.
 
 :location:
     dictionary

@@ -10,17 +10,9 @@ Auction
 Schema
 ------
 
-:title:
-  string, multilingual, required
-
-  The name of the auction, displayed in listings. 
-  Originates from `lot.title`.
-
-:description:
-  string, multilingual, required
-
-  Detailed auction description. 
-  Originates from `lot.description`.
+:id:
+  string, auto-generated, read-only
+  Originates from 'lot.auctions.id'
 
 :auctionID:
   string, auto-generated, read-only
@@ -29,11 +21,29 @@ Schema
 
   |ocdsDescription|
   AuctionID should always be the same as the OCID. It is included to make the flattened data structure more convenient.
+  
+:title:
+  string, multilingual, required
+
+  The name of the auction, displayed in listings. 
+  Originates from `lot.title`.
+ 
+:description:
+  string, multilingual, required
+
+  Detailed auction description. 
+  Originates from `lot.description`.
     
 :procurementMethodType:
-  string, required
+  string, auto-generated, required
     
-  Type of the procedure within the auction announcement. 
+  Type of the procedure within the auction announcement. Possible values:
+
+   :sellout.english: 
+    - procedure with the open ascending price auction;
+   :sellout.insider: 
+    - procedure with the insider auction.
+   
   Originates from `lot.auctions.procurementMethodType`.
      
 :procuringEntity:
@@ -48,30 +58,35 @@ Schema
 :tenderAttempts:
   integer, required
 
-  The number which represents what time auction is taking place.
+  The number which represents what time (from 1 up to 3) procedure with a current lot takes place
   Originates from `lot.auctions.tenderAttempts`
 
 :value:
   :ref:`value`, required
 
-  Auction starting price. Originates from `lots.auctions.value`. 
-  Bids lower than ``value`` will be rejected.
+  Total available budget of the 1st auction. Bids lower than ``value`` will be rejected.
+
+  Auction.value for 2nd and 3rd auctions within the privatization cycle will be calculated as half of the auction.value provided.
 
   |ocdsDescription|
   The total estimated value of the procurement.
+  
+  Originates from `lots.auctions.value`. 
 
 :guarantee:
   :ref:`Guarantee`, required
 
-  Bid guarantee. Originates from `lot.auctions.guarantee`.
+  Bid guarantee. Lots.auctions.guarantee for 2nd and 3rd auctions within the privatization cycle will be calculated automatically.
+  Originates from `lot.auctions.guarantee`.
 
 :registrationFee:
   :ref:`Guarantee`, required
 
-  Bid registration fee. Originates from `lot.auctions.registrationFee`.
+  Bid registration fee. Lots.auctions.registrationFee for 2nd and 3rd auctions within the privatization cycle will be calculated automatically.
+  Originates from `lot.auctions.registrationFee`.
 
 :bankAccount:
-  `bankAccount <http://lotsloki.api-docs.registry.ea2.openprocurement.io/en/latest/standard/auction.html#bank-account>`_, optional
+  :ref:`bankAccount` , optional
 
   Details which uniquely identify a bank account, and are used when making or receiving a payment.
   Originates from `lot.auctions.bankAccount`.
@@ -214,3 +229,39 @@ Schema
     Number of steps within the dutch part of the insider auction.
 
     Possible values are [1; 99]. Defaul value is 99.
+
+.. _Bank Account:
+  
+Bank Account
+====
+
+Schema
+------
+
+:description:
+  string, multilingual, optional
+
+  Additional information that has to be noted from the Organizator’s point.
+  
+  Originates from `lot.auctions.bankAccount.description`
+  
+:bankName:	
+  string, required
+
+  Name of the bank.
+  Originates from `lot.auctions.bankAccount.bankName`
+  
+:accountIdentification:
+  Array of :ref:`classification`, required
+
+  Major data on the account details of the state entity selling a lot, to facilitate payments at the end of the process.
+
+  Most frequently used are:
+
+  * 'UA-EDR';
+  * 'UA-MFO';
+  * 'accountNumber'.
+
+  Originates from `lot.auctions.bankAccount.accountIdentification`
+
+    
