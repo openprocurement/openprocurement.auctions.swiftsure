@@ -36,7 +36,8 @@ from openprocurement.auctions.swiftsure.tests.blanks.tender_blanks import (
     create_auction,
     # AuctionProcessTest
     one_valid_bid_auction,
-    one_invalid_bid_auction,
+    one_invalid_bid_auction_manual,
+    one_invalid_bid_auction_automatic,
     first_bid_auction,
     suspended_auction,
 )
@@ -74,7 +75,8 @@ class AuctionProcessTest(BaseAuctionWebTest):
 
     test_invalid_auction_conditions = unittest.skip("option not available")(snitch(invalid_auction_conditions))
     test_one_valid_bid_auction = snitch(one_valid_bid_auction)
-    test_one_invalid_bid_auction = snitch(one_invalid_bid_auction)
+    test_one_invalid_bid_auction_manual = snitch(one_invalid_bid_auction_manual)
+    test_one_invalid_bid_auction_automatic = snitch(one_invalid_bid_auction_automatic)
     test_first_bid_auction = snitch(first_bid_auction)
     test_suspended_auction = snitch(suspended_auction)
 

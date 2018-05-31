@@ -13,6 +13,7 @@ PROLONGATION = {
     'datePublished': get_now().isoformat(),
 }
 
+
 def create_award(test_case):
     # Create award
     authorization = test_case.app.authorization
@@ -81,13 +82,6 @@ def create_award(test_case):
             test_case.auction_id,
             test_case.award_id
         ),
-        {"data": {"status": "pending"}}
-    )
-    test_case.app.patch_json(
-        '/auctions/{}/awards/{}'.format(
-            test_case.auction_id,
-            test_case.award_id
-        ),
         {"data": {"status": "active"}}
     )
     get_auction_response = test_case.app.get(
@@ -97,6 +91,7 @@ def create_award(test_case):
     )
     test_case.award_contract_id = get_auction_response.\
         json['data']['contracts'][0]['id']
+
 
 def create_prolongation(test_case, test_case_attr):
     """Create prolongation and place it's id into test_case arrtibute
