@@ -39,10 +39,10 @@ from openprocurement.auctions.core.models import (
     BankAccount,
     AuctionParameters
 )
-from openprocurement.auctions.core.plugins.awarding.v3.models import (
+from openprocurement.auctions.core.plugins.awarding.v3_1.models import (
     Award
 )
-from openprocurement.auctions.core.plugins.contracting.v3.models import (
+from openprocurement.auctions.core.plugins.contracting.v3_1.models import (
     Contract,
 )
 from openprocurement.auctions.core.utils import (
@@ -226,4 +226,3 @@ class SwiftsureAuction(BaseAuction):
                     elif complaint.status == 'answered' and complaint.dateAnswered:
                         checks.append(calculate_business_date(complaint.dateAnswered, AUCTIONS_COMPLAINT_STAND_STILL_TIME, self))
         return min(checks).isoformat() if checks else None
-
