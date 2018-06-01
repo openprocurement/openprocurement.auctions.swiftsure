@@ -8,12 +8,14 @@
 Item
 ====
 
+Originates from `lots.items`.
+
 Schema
 ------
 
 :id:
     string, auto-generated
-
+    
 :description:
     string, multilingual, required
 
@@ -24,24 +26,21 @@ Schema
     :ref:`Classification`
 
     |ocdsDescription|
-    The primary classification for the item. See the
-    `itemClassificationScheme` to identify preferred classification lists,
-    including CAV and GSIN.
+    OpenContracting Description: The primary classification for the item. See the itemClassificationScheme to identify preferred classification lists, including CPV and GSIN.
 
-    It is required for `classification.scheme` to be `CAV`. The
-    `classification.id` should be valid CAV code.
+    It is required for `classification.scheme` to be `CAV-PS` or `CPV`. The `classification.id` should be valid `CAV-PS` or `CPV` code.
 
 :additionalClassifications:
     List of :ref:`Classification` objects
-
+    
     |ocdsDescription|
     An array of additional classifications for the item. See the
     `itemClassificationScheme` codelist for common options to use in OCDS. 
     This may also be used to present codes from an internal classification
     scheme.
 
-    It is required to have at least one item with `ДКПП` as `scheme`.
-
+    It is required to have at least one item with `CPVS`  or `DK018`  as `scheme`.
+    
 :unit:
     :ref:`Unit`
 
@@ -50,7 +49,7 @@ Schema
     Made up of a unit name, and the value of a single unit.
 
 :quantity:
-    integer
+    decimal, required
 
     |ocdsDescription|
     The number of units required
@@ -73,12 +72,51 @@ Schema
         string, optional, usually not used
 
     `location` usually takes precedence over `address` if both are present.
+    
+:Registration Details:
+
+    :ref:`Registration Details`, required
 
 .. :relatedLot:
     string
 
     ID of related :ref:`lot`.
 
+.. _Registration Details:
+
+Registration Details
+==============
+
+Schema
+------
+
+:status:	
+    
+    string, required
+
+    Possible values are:
+
+    *- `unknown`:	default value;
+    
+    *- `registering`:	item is still registering;
+    
+    *- `complete`:   item has already been registered.
+    
+:registrationID:	
+
+    string, optional
+
+    The document identifier to refer to in the paper documentation.
+
+    Available for mentioning in status: complete.
+
+:registrationDate:
+    
+    :ref:`Date`, optional
+    
+    OpenContracting Description: The date on which the document was first published.
+
+    Available for mentioning in status: complete.
 
 .. _Classification:
 

@@ -12,8 +12,7 @@ Schema
 
 :id:
   string, auto-generated, read-only
-  Originates from 'lot.auctions.id'
-
+  
 :auctionID:
   string, auto-generated, read-only
 
@@ -22,86 +21,119 @@ Schema
   |ocdsDescription|
   AuctionID should always be the same as the OCID. It is included to make the flattened data structure more convenient.
   
+:merchandisingObject:
+  string, auto-generated, read-only
+
+  Originates from `lots.id`.
+  
+  Lot's id.
+
 :title:
   string, multilingual, required
 
+  Originates from `lots.title`.
+
   The name of the auction, displayed in listings. 
-  Originates from `lot.title`.
  
 :description:
   string, multilingual, required
 
+  Originates from `lots.description`.
+  
   Detailed auction description. 
-  Originates from `lot.description`.
-    
+  
 :procurementMethodType:
   string, auto-generated, required
-    
-  Type of the procedure within the auction announcement. Possible values:
+  
+  Originates from `lots.auctions.procurementMethodType`.
+  
+  Type of the procedure within the auction announcement. The only type is english. 
 
-   :sellout.english: 
-    - procedure with the open ascending price auction;
-   :sellout.insider: 
-    - procedure with the insider auction.
-   
-  Originates from `lot.auctions.procurementMethodType`.
-     
+:procurementMethodDetails:
+  string, auto-generated
+  
+  Originates from `lots.auctions.procurementMethodDetails`.
+
+  Parameter that accelerates auction periods. Set quick, accelerator=1440 as text value for procurementMethodDetails for the time frames to be reduced in 1440 times.
+
+:submissionMethodDetails:
+  
+  string, auto-generated
+  
+  Originates from `lots.auctions.submissionMethodDetails`.
+
+  Parameter that works only with mode = “test” and speeds up auction start date.
+
+  Possible values are:
+
+  * -`quick(mode:no-auction)`;
+  * -`quick(mode:fast-forward)`.
+
+
 :procuringEntity:
   :ref:`ProcuringEntity`, required
 
+  Originates from `lots.lotCustodian`.
+  
   Organization conducting the auction.
-  Originates from `lot.lotCustodian`.
-   
+
   |ocdsDescription|
   The entity managing the procurement, which may be different from the buyer who is paying / using the items being procured.
 
 :tenderAttempts:
   integer, required
 
-  The number which represents what time (from 1 up to 3) procedure with a current lot takes place
-  Originates from `lot.auctions.tenderAttempts`
+  Originates from `lots.auctions.tenderAttempts`.
+
+  The number which represents what time (from 1 up to 3) procedure with a current lot takes place.
 
 :value:
   :ref:`value`, required
 
+  Originates from `lots.auctions.value`. 
+
+  
   Total available budget of the 1st auction. Bids lower than ``value`` will be rejected.
 
-  Auction.value for 2nd and 3rd auctions within the privatization cycle will be calculated as half of the auction.value provided.
+  Auction.value for 2nd auction within the privatization cycle will be calculated as half of the auction.value provided.
 
   |ocdsDescription|
   The total estimated value of the procurement.
   
-  Originates from `lots.auctions.value`. 
-
 :guarantee:
   :ref:`Guarantee`, required
 
-  Bid guarantee. Lots.auctions.guarantee for 2nd and 3rd auctions within the privatization cycle will be calculated automatically.
-  Originates from `lot.auctions.guarantee`.
+  Originates from `lots.auctions.guarantee`.
+
+  Bid guarantee. Lots.auctions.guarantee for 2nd auction within the privatization cycle will be calculated automatically.
 
 :registrationFee:
   :ref:`Guarantee`, required
 
-  Bid registration fee. Lots.auctions.registrationFee for 2nd and 3rd auctions within the privatization cycle will be calculated automatically.
-  Originates from `lot.auctions.registrationFee`.
+  Originates from `lots.auctions.registrationFee`.
+    
+  Bid registration fee. Lots.auctions.registrationFee for 2nd auction within the privatization cycle will be calculated automatically.
 
 :bankAccount:
-  :ref:`bankAccount` , optional
+  :ref:`Bank Account`, optional
+
+  Originates from `lots.auctions.bankAccount`.
 
   Details which uniquely identify a bank account, and are used when making or receiving a payment.
-  Originates from `lot.auctions.bankAccount`.
 
 :items:
   list of :ref:`item` objects, required
 
-  List that contains single item being sold. Originates from `lots.items`.
+  Originates from `lots.items`.
+  
+  List that contains single item being sold.
 
   |ocdsDescription|
   The goods and services to be purchased, broken into line items wherever possible. Items should not be duplicated, but a quantity of 2 specified instead.
 
 :documents:
-  List of :ref:`document` objects
- 
+  Array of :ref:`document` objects, optional
+
   |ocdsDescription|
   All documents and attachments related to the auction.
 
@@ -116,8 +148,8 @@ Schema
   Complaints to auction conditions and their resolutions.
 
 :bids:
-  List of :ref:`bid` objects
-
+  List of :ref:`bid` objects, optional (required when process to be succsessful)
+  
   A list of all bids placed in the auction with information about participants, their proposals and other qualification documentation.
 
   |ocdsDescription|
@@ -126,7 +158,7 @@ Schema
 :minimalStep:
   :ref:`value`, required
 
-  Auction step (increment). Originates from `lot.auctions.minimalStep`.
+  Auction step (increment). Originates from `lots.auctions.minimalStep`.
 
 :awards:
   List of :ref:`award` objects
@@ -155,7 +187,7 @@ Schema
 :auctionPeriod:
   :ref:`period`, auto-generated
 
-  Period when Auction is conducted. `startDate` originates from `lot.auctions.auctionPeriod.startDate .
+  Period when Auction is conducted. `startDate` originates from `lots.auctions.auctionPeriod.startDate` .
 
 :auctionUrl:
   url, auto-generated
@@ -174,26 +206,26 @@ Schema
   string, reuired
 
   :`pending.activation`:
-      Procedure activation
+  Procedure activation
   :`active.tendering`:
-      Tendering period (tendering)
+  Tendering period (tendering)
   :`active.auction`:
-      Auction period (auction)
+  Auction period (auction)
   :`active.qualification`:
-      Winner qualification (qualification)
+  Winner qualification (qualification)
   :`active.awarded`:
-      Contract signing
+  Contract signing
   :`unsuccessful`:
-      Unsuccessful auction (unsuccessful)
+  Unsuccessful auction (unsuccessful)
   :`complete`:
-      Complete auction (complete)
+  Complete auction (complete)
   :`cancelled`:
-      Cancelled auction (cancelled)
+  Cancelled auction (cancelled)
 
   Status of the procedure.
 
 :cancellations:
-  List of :ref:`cancellation` objects.
+  Array of :ref:`cancellation` objects, optional
 
   Contains 1 object with `active` status in case of cancelled Auction.
 
@@ -204,11 +236,6 @@ Schema
   List of :ref:`revision` objects, auto-generated
 
   Historical changes to `Auction` object properties.
-  
-:merchandisingObject:
-  string, auto-generated, read-only
-  
-  Lot's id.
   
 .. _Auction Parameters:
   
@@ -241,15 +268,15 @@ Schema
 :description:
   string, multilingual, optional
 
-  Additional information that has to be noted from the Organizator’s point.
+  Additional information that has to be noted from the Organizer point.
   
-  Originates from `lot.auctions.bankAccount.description`
+  Originates from `lots.auctions.bankAccount.description`
   
 :bankName:	
   string, required
 
   Name of the bank.
-  Originates from `lot.auctions.bankAccount.bankName`
+  Originates from `lots.auctions.bankAccount.bankName`
   
 :accountIdentification:
   Array of :ref:`classification`, required
@@ -262,6 +289,6 @@ Schema
   * 'UA-MFO';
   * 'accountNumber'.
 
-  Originates from `lot.auctions.bankAccount.accountIdentification`
+  Originates from `lots.auctions.bankAccount.accountIdentification`
 
     
