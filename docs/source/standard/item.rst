@@ -23,15 +23,15 @@ Schema
     A description of the goods, services to be provided.
     
 :classification:
-    :ref:`Classification`
+    Array of :ref:`Classification`, required
 
     |ocdsDescription|
-    OpenContracting Description: The primary classification for the item. See the itemClassificationScheme to identify preferred classification lists, including CPV and GSIN.
+    The primary classification for the item. See the itemClassificationScheme to identify preferred classification lists, including CPV and GSIN.
 
     It is required for `classification.scheme` to be `CAV-PS` or `CPV`. The `classification.id` should be valid `CAV-PS` or `CPV` code.
 
 :additionalClassifications:
-    List of :ref:`Classification` objects
+    Array of :ref:`Classification` objects, optional
     
     |ocdsDescription|
     An array of additional classifications for the item. See the
@@ -42,7 +42,7 @@ Schema
     It is required to have at least one item with `CPVS`  or `DK018`  as `scheme`.
     
 :unit:
-    :ref:`Unit`
+    :ref:`Unit`, required
 
     |ocdsDescription| 
     Description of the unit which the good comes in e.g.  hours, kilograms. 
@@ -72,20 +72,20 @@ Schema
         string, optional, usually not used
 
     `location` usually takes precedence over `address` if both are present.
-    
-:Registration Details:
-
-    :ref:`Registration Details`, required
 
 .. :relatedLot:
     string
 
     ID of related :ref:`lot`.
+    
+:Registration Details:
+
+    :ref:`Registration Details`, required
 
 .. _Registration Details:
 
 Registration Details
-==============
+====================
 
 Schema
 ------
@@ -96,11 +96,11 @@ Schema
 
     Possible values are:
 
-    *- `unknown`:	default value;
+    * - `unknown`:	default value;
     
-    *- `registering`:	item is still registering;
+    * - `registering`:	item is still registering;
     
-    *- `complete`:   item has already been registered.
+    * - `complete`:   item has already been registered.
     
 :registrationID:	
 

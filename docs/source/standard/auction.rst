@@ -19,14 +19,14 @@ Schema
   The auction identifier to refer to in "paper" documentation. 
 
   |ocdsDescription|
-  AuctionID should always be the same as the OCID. It is included to make the flattened data structure more convenient.
-  
+  It is included to make the flattened data structure more convenient.
+ 
 :merchandisingObject:
   string, auto-generated, read-only
 
   Originates from `lots.id`.
   
-  Lot's id.
+  Id of lot for sale within the auction.
 
 :title:
   string, multilingual, required
@@ -47,10 +47,10 @@ Schema
   
   Originates from `lots.auctions.procurementMethodType`.
   
-  Type of the procedure within the auction announcement. The only type is english. 
+  Type of the procedure within the auction announcement. The given value is sellout.english. 
 
 :procurementMethodDetails:
-  string, auto-generated
+  string, auto-generated, optional
   
   Originates from `lots.auctions.procurementMethodDetails`.
 
@@ -58,7 +58,7 @@ Schema
 
 :submissionMethodDetails:
   
-  string, auto-generated
+  string, auto-generated, optional
   
   Originates from `lots.auctions.submissionMethodDetails`.
 
@@ -95,8 +95,6 @@ Schema
   
   Total available budget of the 1st auction. Bids lower than ``value`` will be rejected.
 
-  Auction.value for 2nd auction within the privatization cycle will be calculated as half of the auction.value provided.
-
   |ocdsDescription|
   The total estimated value of the procurement.
   
@@ -105,14 +103,14 @@ Schema
 
   Originates from `lots.auctions.guarantee`.
 
-  Bid guarantee. Lots.auctions.guarantee for 2nd auction within the privatization cycle will be calculated automatically.
+  Bid guarantee.
 
 :registrationFee:
   :ref:`Guarantee`, required
 
   Originates from `lots.auctions.registrationFee`.
     
-  Bid registration fee. Lots.auctions.registrationFee for 2nd auction within the privatization cycle will be calculated automatically.
+  Bid registration fee.
 
 :bankAccount:
   :ref:`Bank Account`, optional
@@ -122,7 +120,7 @@ Schema
   Details which uniquely identify a bank account, and are used when making or receiving a payment.
 
 :items:
-  list of :ref:`item` objects, required
+  Array of :ref:`item` objects, required
 
   Originates from `lots.items`.
   
@@ -148,7 +146,7 @@ Schema
   Complaints to auction conditions and their resolutions.
 
 :bids:
-  List of :ref:`bid` objects, optional (required when process to be succsessful)
+  Array of :ref:`bid` objects, optional (required for the process to be succsessful)
   
   A list of all bids placed in the auction with information about participants, their proposals and other qualification documentation.
 
@@ -161,7 +159,7 @@ Schema
   Auction step (increment). Originates from `lots.auctions.minimalStep`.
 
 :awards:
-  List of :ref:`award` objects
+  Array of :ref:`award` objects
 
   All qualifications (disqualifications and awards).
 
