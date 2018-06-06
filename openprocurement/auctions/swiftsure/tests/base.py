@@ -36,8 +36,8 @@ test_auction_data = {
         {
             "description": u"Земля для військовослужбовців",
             "classification": {
-                "scheme": u"CAV",
-                "id": u"06000000-2",
+                "scheme": u"CPV",
+                "id": u"66113000-5",
                 "description": u"Земельні ділянки"
             },
             "unit": {
@@ -62,25 +62,6 @@ test_auction_data = {
 if SANDBOX_MODE:
     test_auction_data['procurementMethodDetails'] = 'quick, accelerator=1440'
     test_auction_data['submissionMethodDetails'] = 'test submissionMethodDetails'
-
-schema_properties = {
-    "code": "06000000-2",
-    "version": "001",
-    "properties": {
-        "region": "Вінницька область",
-        "district": "м.Вінниця",
-        "cadastral_number": "1",
-        "area": 1,
-        "forms_of_land_ownership": ["державна"],
-        "co_owners": False,
-        "availability_of_utilities": True,
-        "current_use": True
-   }
- }
-
-test_auction_data_with_schema = deepcopy(test_auction_data)
-test_auction_data_with_schema['items'][0]['classification']['id'] = schema_properties['code']
-test_auction_data_with_schema['items'][0]['schema_properties'] = schema_properties
 
 test_features_auction_data = test_auction_data.copy()
 test_features_item = test_features_auction_data['items'][0].copy()

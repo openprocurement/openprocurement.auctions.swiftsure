@@ -22,7 +22,7 @@ from openprocurement.auctions.core.models import (
     Auction as BaseAuction,
     Bid as BaseBid,
     dgfCancellation as Cancellation,
-    dgfItem as Item,
+    SwiftsureItem as Item,
     dgfDocument as Document,
     dgfComplaint as Complaint,
     Feature,
