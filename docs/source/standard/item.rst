@@ -8,58 +8,48 @@
 Item
 ====
 
+Originates from `lots.items`.
+
 Schema
 ------
 
 :id:
     string, auto-generated
-
+    
 :description:
     string, multilingual, required
 
     |ocdsDescription|
     A description of the goods, services to be provided.
     
-    Brief description of property (for ``dgfOtherAssets``) or asset(s) (for ``dgfFinancialAssets``).
-    
 :classification:
-    :ref:`Classification`
+    Array of :ref:`Classification`, required
 
     |ocdsDescription|
-    The primary classification for the item. See the
-    `itemClassificationScheme` to identify preferred classification lists,
-    including CAV and GSIN.
+    The primary classification for the item. See the itemClassificationScheme to identify preferred classification lists, including CPV and GSIN.
 
-    It is required for `classification.scheme` to be `CAV`. The
-    `classification.id` should be valid CAV code.
-
-:schema_properties:
-    :ref:`SchemaProperties`
-    
-    |ocdsDescription| 
-    A detailed specification of the fields and data structures 
-    to use when publishing contracting data.
+    It is required for `classification.scheme` to be `CAV-PS` or `CPV`. The `classification.id` should be valid `CAV-PS` or `CPV` code.
 
 :additionalClassifications:
-    List of :ref:`Classification` objects
-
+    Array of :ref:`Classification` objects, optional
+    
     |ocdsDescription|
     An array of additional classifications for the item. See the
     `itemClassificationScheme` codelist for common options to use in OCDS. 
     This may also be used to present codes from an internal classification
     scheme.
 
-    It is required to have at least one item with `ДКПП` as `scheme`.
-
+    It is required to have at least one item with `CPVS`  or `DK018`  as `scheme`.
+    
 :unit:
-    :ref:`Unit`
+    :ref:`Unit`, required
 
     |ocdsDescription| 
     Description of the unit which the good comes in e.g.  hours, kilograms. 
     Made up of a unit name, and the value of a single unit.
 
 :quantity:
-    integer
+    decimal, required
 
     |ocdsDescription|
     The number of units required
@@ -67,7 +57,7 @@ Schema
 :address:
     :ref:`Address`
 
-    Address, where property (for ``dgfOtherAssets``) or asset(s) (for ``dgfFinancialAssets``) is located.
+    Address, where item is located.
 
 :location:
     dictionary
@@ -87,7 +77,46 @@ Schema
     string
 
     ID of related :ref:`lot`.
+    
+:Registration Details:
 
+    :ref:`Registration Details`, required
+
+.. _Registration Details:
+
+Registration Details
+====================
+
+Schema
+------
+
+:status:	
+    
+    string, required
+
+    Possible values are:
+
+    * - `unknown`:	default value;
+    
+    * - `registering`:	item is still registering;
+    
+    * - `complete`:   item has already been registered.
+    
+:registrationID:	
+
+    string, optional
+
+    The document identifier to refer to in the paper documentation.
+
+    Available for mentioning in status: complete.
+
+:registrationDate:
+    
+    :ref:`Date`, optional
+    
+    OpenContracting Description: The date on which the document was first published.
+
+    Available for mentioning in status: complete.
 
 .. _Classification:
 
