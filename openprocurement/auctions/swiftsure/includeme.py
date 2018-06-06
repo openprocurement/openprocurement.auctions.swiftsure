@@ -10,8 +10,8 @@ from openprocurement.auctions.swiftsure.adapters import (
     AuctionSwiftsureConfigurator,
     AuctionSwiftsureManagerAdapter
 )
-from openprocurement.auctions.core.plugins.awarding.v3.adapters import (
-    AwardingNextCheckV3
+from openprocurement.auctions.core.plugins.awarding.v3_1.adapters import (
+    AwardingNextCheckV3_1
 )
 from openprocurement.auctions.core.includeme import (
     IContentConfigurator,
@@ -48,7 +48,7 @@ def includeme(config, plugin_config=None):
         IAuctionManager
     )
     config.registry.registerAdapter(
-        AwardingNextCheckV3,
+        AwardingNextCheckV3_1,
         (ISwiftsureAuction,),
         IAwardingNextCheck
     )

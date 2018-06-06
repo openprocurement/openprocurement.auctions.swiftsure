@@ -6,13 +6,13 @@ from openprocurement.auctions.core.adapters import (
 from openprocurement.auctions.swiftsure.models import (
     SwiftsureAuction,
 )
-from openprocurement.auctions.core.plugins.awarding.v3.adapters import (
-    AwardingV3ConfiguratorMixin
+from openprocurement.auctions.core.plugins.awarding.v3_1.adapters import (
+    AwardingV3_1ConfiguratorMixin
 )
 
 
 class AuctionSwiftsureConfigurator(AuctionConfigurator,
-                                   AwardingV3ConfiguratorMixin):
+                                   AwardingV3_1ConfiguratorMixin):
     name = 'Auction Swiftsure Configurator'
     model = SwiftsureAuction
 

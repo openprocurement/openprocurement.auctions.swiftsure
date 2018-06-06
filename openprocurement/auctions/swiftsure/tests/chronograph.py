@@ -4,10 +4,7 @@ from datetime import timedelta
 
 
 from openprocurement.auctions.core.tests.base import snitch
-from openprocurement.auctions.core.tests.chronograph import (
-    AuctionContractSwitchTestMixin
-)
-from openprocurement.auctions.core.plugins.awarding.v3.tests.chronograph import (
+from openprocurement.auctions.core.tests.plugins.awarding.v3_1.tests.chronograph import (
     AuctionAwardSwitchResourceTestMixin,
     AuctionDontSwitchSuspendedAuctionResourceTestMixin,
 )
@@ -24,11 +21,14 @@ from openprocurement.auctions.core.tests.blanks.chronograph_blanks import (
     switch_to_complaint_award,
     # AuctionDontSwitchSuspendedAuction2ResourceTest
     switch_suspended_auction_to_auction,
+    contract_signing_period_switch_to_complete,
 )
-from openprocurement.auctions.core.plugins.awarding.v3.tests.blanks.chronograph_blanks import (
+from openprocurement.auctions.core.tests.plugins.awarding.v3_1.tests.blanks.chronograph_blanks import (
     # AuctionAwardSwitch2ResourceTest
     switch_verification_to_unsuccessful_2,
     switch_active_to_unsuccessful_2,
+    # AuctionAwardSwitchResourceTest
+    switch_admission_to_unsuccessful
 )
 from openprocurement.auctions.core.utils import get_now
 
@@ -88,12 +88,12 @@ class AuctionAuctionPeriodResourceTest(BaseAuctionWebTest):
     test_reset_auction_period = snitch(reset_auction_period)
 
 
-class AuctionAwardSwitchResourceTest(BaseAuctionWebTest, AuctionAwardSwitchResourceTestMixin):
+class AuctionAward2BidsSwitchResourceTest(BaseAuctionWebTest, AuctionAwardSwitchResourceTestMixin):
     initial_status = 'active.auction'
     initial_bids = test_bids
 
     def setUp(self):
-        super(AuctionAwardSwitchResourceTest, self).setUp()
+        super(AuctionAward2BidsSwitchResourceTest, self).setUp()
         authorization = self.app.authorization
         self.app.authorization = ('Basic', ('auction', ''))
         now = get_now()
@@ -120,6 +120,30 @@ class AuctionAwardSwitchResourceTest(BaseAuctionWebTest, AuctionAwardSwitchResou
         self.app.authorization = authorization
 
 
+class AuctionAward1BidSwitchResourceTest(BaseAuctionWebTest):
+    initial_status = 'active.tendering'
+    initial_bids = [test_bids[0]]
+
+    def setUp(self):
+        super(AuctionAward1BidSwitchResourceTest, self).setUp()
+        authorization = self.app.authorization
+        self.set_status('active.auction', {'status': 'active.tendering'})
+        self.app.authorization = ('Basic', ('chronograph', ''))
+        response = self.app.patch_json(
+            '/auctions/{}'.format(self.auction_id),
+            {'data': {'id': self.auction_id}}
+        )
+        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json['data']['status'], 'active.qualification')
+        auction = response.json['data']
+        self.award_id = auction['awards'][0]['id']
+        self.app.authorization = authorization
+
+    test_switch_admission_to_unsuccessful = snitch(switch_admission_to_unsuccessful)
+
+
+@unittest.skip("option not available")
 class AuctionAwardSwitch2ResourceTest(BaseAuctionWebTest):
     initial_status = 'active.auction'
     initial_bids = [
@@ -212,7 +236,7 @@ class AuctionDontSwitchSuspendedAuction2ResourceTest(BaseAuctionWebTest):
 
     test_switch_suspended_auction_to_auction = snitch(switch_suspended_auction_to_auction)
 
-
+@unittest.skip("option not available")
 class AuctionDontSwitchSuspendedAuctionResourceTest(BaseAuctionWebTest,
                                                     AuctionDontSwitchSuspendedAuctionResourceTestMixin):
     initial_status = 'active.auction'
@@ -246,16 +270,17 @@ class AuctionDontSwitchSuspendedAuctionResourceTest(BaseAuctionWebTest,
         self.app.authorization = authorization
 
 
-class AuctionContractSwitchResourceTest(
-    BaseAuctionWebTest,
-    AuctionContractSwitchTestMixin
-):
+class AuctionContractSwitchResourceTest(BaseAuctionWebTest,):
     initial_status = 'active.auction'
     initial_bids = test_bids
     def setUp(self):
         super(AuctionContractSwitchResourceTest, self).setUp()
         fixtures.create_award(self)
         self.contract_id = self.award_contract_id # use autocreated contract
+
+    test_contract_signing_period_switch_to_complete = snitch(
+        contract_signing_period_switch_to_complete
+    )
 
 
 def suite():
@@ -267,7 +292,7 @@ def suite():
     tests.addTest(unittest.makeSuite(AuctionLotSwitchAuctionResourceTest))
     tests.addTest(unittest.makeSuite(AuctionLotSwitchUnsuccessfulResourceTest))
     tests.addTest(unittest.makeSuite(AuctionAuctionPeriodResourceTest))
-    tests.addTest(unittest.makeSuite(AuctionAwardSwitchResourceTest))
+    tests.addTest(unittest.makeSuite(AuctionAward2BidsSwitchResourceTest))
     tests.addTest(unittest.makeSuite(AuctionAwardSwitch2ResourceTest))
     tests.addTest(unittest.makeSuite(AuctionLotAuctionPeriodResourceTest))
     tests.addTest(unittest.makeSuite(AuctionComplaintSwitchResourceTest))

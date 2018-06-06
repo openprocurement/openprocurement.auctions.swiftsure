@@ -450,7 +450,7 @@ def one_valid_bid_auction(self):
     self.assertIn("auctionPeriod", response.json['data'])
     # create bid
     self.app.authorization = ('Basic', ('broker', ''))
-    response = self.app.post_json('/auctions/{}/bids'.format(auction_id),
+    self.app.post_json('/auctions/{}/bids'.format(auction_id),
                                   {'data': {'tenderers': [self.initial_organization], "value": {"amount": 500}, 'qualified': True}})
     # switch to active.qualification
     self.set_status('active.auction', {'status': 'active.tendering'})
@@ -460,9 +460,33 @@ def one_valid_bid_auction(self):
     # get awards
     self.app.authorization = ('Basic', ('broker', ''))
     response = self.app.get('/auctions/{}/awards?acc_token={}'.format(auction_id, owner_token))
-    # get pending award
-    award_id = [i['id'] for i in response.json['data'] if i['status'] == 'pending'][0]
-    award_date = [i['date'] for i in response.json['data'] if i['status'] == 'pending'][0]
+    # get pending.admission award
+    award_id = [i['id'] for i in response.json['data'] if i['status'] == 'pending.admission'][0]
+    award_date = [i['date'] for i in response.json['data'] if i['status'] == 'pending.admission'][0]
+    # uploading admission protocol
+    response = self.app.post('/auctions/{}/awards/{}/documents?acc_token={}'.format(
+        self.auction_id, award_id, owner_token), upload_files=[('file', 'admission_protocol.pdf', 'content')])
+    self.assertEqual(response.status, '201 Created')
+    self.assertEqual(response.content_type, 'application/json')
+    doc_id = response.json["data"]['id']
+    self.assertIn(doc_id, response.headers['Location'])
+    self.assertEqual('admission_protocol.pdf', response.json["data"]["title"])
+    response = self.app.patch_json('/auctions/{}/awards/{}/documents/{}?acc_token={}'.format(self.auction_id, award_id, doc_id, owner_token), {"data": {
+        "description": "admission protocol",
+        "documentType": 'admissionProtocol'
+    }})
+    self.assertEqual(response.status, '200 OK')
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertEqual(response.json["data"]["documentType"], 'admissionProtocol')
+    self.assertEqual(response.json["data"]["author"], 'auction_owner')
+
+    # set award as pending
+    response = self.app.patch_json('/auctions/{}/awards/{}?acc_token={}'.format(auction_id, award_id, owner_token),
+                                   {"data": {"status": "pending"}})
+    self.assertNotEqual(response.json['data']['date'], award_date)
+    award_date = response.json['data']['date']
+
+    # uploading auction protocol
     response = self.app.post('/auctions/{}/awards/{}/documents?acc_token={}'.format(
         self.auction_id, award_id, owner_token), upload_files=[('file', 'auction_protocol.pdf', 'content')])
     self.assertEqual(response.status, '201 Created')
@@ -482,10 +506,8 @@ def one_valid_bid_auction(self):
     # set award as active
     response = self.app.patch_json('/auctions/{}/awards/{}?acc_token={}'.format(auction_id, award_id, owner_token), {"data": {"status": "active"}})
     self.assertNotEqual(response.json['data']['date'], award_date)
-    # set award as active
-    self.app.patch_json('/auctions/{}/awards/{}?acc_token={}'.format(auction_id, award_id, owner_token), {"data": {"status": "active"}})
-    # get contract id
 
+    # get contract id
     response = self.app.get('/auctions/{}'.format(auction_id))
     contract_id = response.json['data']['contracts'][-1]['id']
 
@@ -496,24 +518,41 @@ def one_valid_bid_auction(self):
     self.assertEqual(response.status, '201 Created')
     self.assertEqual(response.content_type, 'application/json')
 
-    # after stand slill period
-    self.app.authorization = ('Basic', ('chronograph', ''))
-    self.set_status('complete', {'status': 'active.awarded'})
-    # time travel
-    auction = self.db.get(auction_id)
-    for i in auction.get('awards', []):
-        i['complaintPeriod']['endDate'] = i['complaintPeriod']['startDate']
-    self.db.save(auction)
-    # sign contract
-    self.app.authorization = ('Basic', ('broker', ''))
+    # signing contract
+    # uploading contract
+    response = self.app.post('/auctions/{}/contracts/{}/documents?acc_token={}'.format(
+        self.auction_id, contract_id, owner_token), upload_files=[('file', 'contract_signed.pdf', 'content')])
+    self.assertEqual(response.status, '201 Created')
+    self.assertEqual(response.content_type, 'application/json')
+    doc_id = response.json["data"]['id']
+    self.assertIn(doc_id, response.headers['Location'])
+    self.assertEqual('contract_signed.pdf', response.json["data"]["title"])
+    response = self.app.patch_json(
+        '/auctions/{}/contracts/{}/documents/{}?acc_token={}'.format(self.auction_id, contract_id, doc_id, owner_token),
+        {"data": {
+            "description": "contract signed",
+            "documentType": 'contractSigned'
+        }})
+    self.assertEqual(response.status, '200 OK')
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertEqual(response.json["data"]["documentType"], 'contractSigned')
+
+    # setting dateSigned field
+    signature_date = get_now().isoformat()
+    response = self.app.patch_json('/auctions/{}/contracts/{}?acc_token={}'.format(
+        self.auction_id, contract_id, owner_token
+    ), {"data": {"dateSigned": signature_date}})
+    self.assertEqual(response.status, '200 OK')
+
+    # set contract as active
     self.app.patch_json('/auctions/{}/contracts/{}?acc_token={}'.format(auction_id, contract_id, owner_token), {"data": {"status": "active"}})
+
     # check status
-    self.app.authorization = ('Basic', ('broker', ''))
     response = self.app.get('/auctions/{}'.format(auction_id))
     self.assertEqual(response.json['data']['status'], 'complete')
 
 
-def one_invalid_bid_auction(self):
+def one_invalid_bid_auction_manual(self):
     self.app.authorization = ('Basic', ('concierge', ''))
     # empty auctions listing
     response = self.app.get('/auctions')
@@ -547,10 +586,101 @@ def one_invalid_bid_auction(self):
     self.app.authorization = ('Basic', ('broker', ''))
     response = self.app.get('/auctions/{}/awards?acc_token={}'.format(auction_id, owner_token))
     # get pending award
-    award_id = [i['id'] for i in response.json['data'] if i['status'] == 'pending'][0]
+    award_id = [i['id'] for i in response.json['data'] if i['status'] == 'pending.admission'][0]
+
+    # uploading rejection protocol
+    response = self.app.post(
+        '/auctions/{}/awards/{}/documents?acc_token={}'.format(
+            self.auction_id, award_id, owner_token
+        ), upload_files=[('file', 'rejection_protocol.pdf', 'content')])
+    self.assertEqual(response.status, '201 Created')
+    self.assertEqual(response.content_type, 'application/json')
+    doc_id = response.json["data"]['id']
+    self.assertIn(doc_id, response.headers['Location'])
+    self.assertEqual(
+        'rejection_protocol.pdf', response.json["data"]["title"]
+    )
+
+    response = self.app.patch_json(
+        '/auctions/{}/awards/{}/documents/{}?acc_token={}'.format(
+            self.auction_id, award_id, doc_id, owner_token
+        ),
+        {"data": {
+            "description": "rejection protocol",
+            "documentType": 'rejectionProtocol'
+        }})
+
+    self.assertEqual(response.status, '200 OK')
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertEqual(doc_id, response.json["data"]["id"])
+    self.assertIn("documentType", response.json["data"])
+    self.assertEqual(
+        response.json["data"]["documentType"], 'rejectionProtocol'
+    )
+
     # set award as unsuccessful
     response = self.app.patch_json('/auctions/{}/awards/{}?acc_token={}'.format(auction_id, award_id, owner_token),
                                    {"data": {"status": "unsuccessful"}})
+
+    response = self.app.get('/auctions/{}'.format(auction_id))
+    self.assertEqual(response.json['data']['status'], 'unsuccessful')
+
+
+def one_invalid_bid_auction_automatic(self):
+    self.app.authorization = ('Basic', ('concierge', ''))
+    # empty auctions listing
+    response = self.app.get('/auctions')
+    self.assertEqual(response.json['data'], [])
+    # create auction
+    data = deepcopy(self.initial_data)
+    data['minNumberOfQualifiedBids'] = 1
+
+    response = self.app.post_json('/auctions',
+                                  {"data": data})
+    auction_id = self.auction_id = response.json['data']['id']
+    owner_token = response.json['access']['token']
+
+    # Ownership change
+    # TODO: replace when transfer_token is fully implemented
+    auction = self.db.get(auction_id)
+    auction['owner'] = 'broker'
+    self.db.save(auction)
+
+    # switch to active.tendering
+    self.set_status('active.tendering')
+    # create bid
+    self.app.authorization = ('Basic', ('broker', ''))
+    response = self.app.post_json('/auctions/{}/bids'.format(auction_id),
+                                  {'data': {'tenderers': [self.initial_organization], "value": {"amount": 450}, 'qualified': True}})
+    # switch to active.qualification
+    self.set_status('active.auction', {"auctionPeriod": {"startDate": None}, 'status': 'active.tendering'})
+    self.app.authorization = ('Basic', ('chronograph', ''))
+    response = self.app.patch_json('/auctions/{}'.format(auction_id), {"data": {"id": auction_id}})
+    # get awards
+    self.app.authorization = ('Basic', ('broker', ''))
+    response = self.app.get('/auctions/{}/awards?acc_token={}'.format(auction_id, owner_token))
+    # get pending award
+    award_id = [i['id'] for i in response.json['data'] if i['status'] == 'pending.admission'][0]
+
+    # time travel
+    auction = self.db.get(self.auction_id)
+    auction['awards'][0]['admissionPeriod']['endDate'] = get_now().isoformat()
+    self.db.save(auction)
+
+    self.app.authorization = ('Basic', ('chronograph', ''))
+    response = self.app.patch_json(
+        '/auctions/{}'.format(auction_id), {"data": {"id": auction_id}}
+    )
+    self.assertEqual(response.status, '200 OK')
+    self.assertEqual(response.content_type, 'application/json')
+
+    # get awards
+    self.app.authorization = ('Basic', ('broker', ''))
+    response = self.app.get('/auctions/{}/awards?acc_token={}'.format(auction_id, owner_token))
+    self.assertEqual(response.status, '200 OK')
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertEqual(len(response.json['data']), 1)
+    self.assertEqual(response.json['data'][0]['status'], 'unsuccessful')
 
     response = self.app.get('/auctions/{}'.format(auction_id))
     self.assertEqual(response.json['data']['status'], 'unsuccessful')
@@ -644,9 +774,44 @@ def first_bid_auction(self):
     self.assertEqual(response.content_type, 'application/json')
     self.assertEqual(response.json["data"]["documentType"], 'auctionProtocol')
     self.assertEqual(response.json["data"]["author"], 'auction_owner')
+
     # set award as unsuccessful
+    # upload rejection protocol
+    response = self.app.post(
+        '/auctions/{}/awards/{}/documents?acc_token={}'.format(
+            self.auction_id, award_id, owner_token
+        ), upload_files=[('file', 'rejection_protocol.pdf', 'content')])
+    self.assertEqual(response.status, '201 Created')
+    self.assertEqual(response.content_type, 'application/json')
+    doc_id = response.json["data"]['id']
+    self.assertIn(doc_id, response.headers['Location'])
+    self.assertEqual(
+        'rejection_protocol.pdf', response.json["data"]["title"]
+    )
+
+    response = self.app.patch_json(
+        '/auctions/{}/awards/{}/documents/{}?acc_token={}'.format(
+            self.auction_id, award_id, doc_id, owner_token
+        ),
+        {"data": {
+            "description": "rejection protocol",
+            "documentType": 'rejectionProtocol'
+        }})
+
+    self.assertEqual(response.status, '200 OK')
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertEqual(doc_id, response.json["data"]["id"])
+    self.assertIn("documentType", response.json["data"])
+    self.assertEqual(
+        response.json["data"]["documentType"], 'rejectionProtocol'
+    )
+
     response = self.app.patch_json('/auctions/{}/awards/{}?acc_token={}'.format(auction_id, award_id, owner_token),
                                    {"data": {"status": "unsuccessful"}})
+    self.assertEqual(response.status, '200 OK')
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertEqual(response.json['data']['status'], 'unsuccessful')
+
     # get awards
     self.app.authorization = ('Basic', ('broker', ''))
     response = self.app.get('/auctions/{}/awards?acc_token={}'.format(auction_id, owner_token))
@@ -712,14 +877,30 @@ def first_bid_auction(self):
     self.assertEqual(response.content_type, 'application/json')
     doc_id = response.json["data"]['id']
     self.assertIn(doc_id, response.headers['Location'])
-    # after stand slill period
-    self.app.authorization = ('Basic', ('chronograph', ''))
-    self.set_status('complete', {'status': 'active.awarded'})
-    # time travel
-    auction = self.db.get(auction_id)
-    for i in auction.get('awards', []):
-        i['complaintPeriod']['endDate'] = i['complaintPeriod']['startDate']
-    self.db.save(auction)
+
+    response = self.app.patch_json(
+        '/auctions/{}/contracts/{}/documents/{}?acc_token={}'.format(
+            self.auction_id, contract_id, doc_id, owner_token
+        ),
+        {"data": {
+            "description": 'contract signed',
+            "documentType": 'contractSigned'
+        }})
+    self.assertEqual(response.status, '200 OK')
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertEqual(doc_id, response.json["data"]["id"])
+    self.assertIn("documentType", response.json["data"])
+    self.assertEqual(
+        response.json["data"]["documentType"], 'contractSigned'
+    )
+
+    # setting dateSigned field
+    signature_date = get_now().isoformat()
+    response = self.app.patch_json('/auctions/{}/contracts/{}?acc_token={}'.format(
+        self.auction_id, contract_id, owner_token
+    ), {"data": {"dateSigned": signature_date}})
+    self.assertEqual(response.status, '200 OK')
+
     # sign contract
     self.app.authorization = ('Basic', ('broker', ''))
     self.app.patch_json('/auctions/{}/contracts/{}?acc_token={}'.format(auction_id, contract_id, owner_token),
@@ -879,8 +1060,44 @@ def suspended_auction(self):
 
     self.app.authorization = authorization
     # set award as unsuccessful
-    response = self.app.patch_json('/auctions/{}/awards/{}?acc_token={}'.format(auction_id, award_id, owner_token),
-                                   {"data": {"status": "unsuccessful"}})
+
+    # upload rejection protocol
+    response = self.app.post(
+        '/auctions/{}/awards/{}/documents?acc_token={}'.format(
+            self.auction_id, award_id, owner_token
+        ), upload_files=[('file', 'rejection_protocol.pdf', 'content')])
+    self.assertEqual(response.status, '201 Created')
+    self.assertEqual(response.content_type, 'application/json')
+    doc_id = response.json["data"]['id']
+    self.assertIn(doc_id, response.headers['Location'])
+    self.assertEqual(
+        'rejection_protocol.pdf', response.json["data"]["title"]
+    )
+
+    response = self.app.patch_json(
+        '/auctions/{}/awards/{}/documents/{}?acc_token={}'.format(
+            self.auction_id, award_id, doc_id, owner_token
+        ),
+        {"data": {
+            "description": "rejection protocol",
+            "documentType": 'rejectionProtocol'
+        }})
+    self.assertEqual(response.status, '200 OK')
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertEqual(doc_id, response.json["data"]["id"])
+    self.assertIn("documentType", response.json["data"])
+    self.assertEqual(
+        response.json["data"]["documentType"], 'rejectionProtocol'
+    )
+
+    response = self.app.patch_json(
+        '/auctions/{}/awards/{}?acc_token={}'.format(
+            auction_id, award_id, owner_token
+        ), {"data": {"status": "unsuccessful"}})
+    self.assertEqual(response.status, '200 OK')
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertEqual(response.json['data']['status'], 'unsuccessful')
+
     # get awards
     self.app.authorization = ('Basic', ('broker', ''))
     response = self.app.get('/auctions/{}/awards?acc_token={}'.format(auction_id, owner_token))
@@ -890,16 +1107,26 @@ def suspended_auction(self):
 
     self.app.authorization = ('Basic', ('broker', ''))
     response = self.app.get('/auctions/{}/awards?acc_token={}'.format(auction_id, owner_token))
+
     # get pending award
     award_id = [i['id'] for i in response.json['data'] if i['status'] == 'pending'][0]
 
+    # uploading auction protocol
     response = self.app.post('/auctions/{}/awards/{}/documents?acc_token={}'.format(
         self.auction_id, award_id, owner_token), upload_files=[('file', 'auction_protocol.pdf', 'content')])
     doc_id = response.json["data"]['id']
 
     response = self.app.patch_json(
-        '/auctions/{}/awards/{}/documents/{}?acc_token={}'.format(auction_id, award_id, doc_id, owner_token),
-        {"data": {"documentType": 'auctionProtocol'}})
+        '/auctions/{}/awards/{}/documents/{}?acc_token={}'.format(
+            auction_id, award_id, doc_id, owner_token
+        ), {"data": {"documentType": 'auctionProtocol'}})
+    self.assertEqual(response.status, '200 OK')
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertEqual(doc_id, response.json["data"]["id"])
+    self.assertIn("documentType", response.json["data"])
+    self.assertEqual(
+        response.json["data"]["documentType"], 'auctionProtocol'
+    )
 
     authorization = self.app.authorization
     self.app.authorization = ('Basic', ('administrator', ''))
@@ -943,14 +1170,30 @@ def suspended_auction(self):
     self.assertEqual(response.content_type, 'application/json')
     doc_id = response.json["data"]['id']
     self.assertIn(doc_id, response.headers['Location'])
-    # after stand slill period
-    self.app.authorization = ('Basic', ('chronograph', ''))
-    self.set_status('complete', {'status': 'active.awarded'})
-    # time travel
-    auction = self.db.get(auction_id)
-    for i in auction.get('awards', []):
-        i['complaintPeriod']['endDate'] = i['complaintPeriod']['startDate']
-    self.db.save(auction)
+
+    response = self.app.patch_json(
+        '/auctions/{}/contracts/{}/documents/{}?acc_token={}'.format(
+            self.auction_id, contract_id, doc_id, owner_token
+        ),
+        {"data": {
+            "description": 'contract signed',
+            "documentType": 'contractSigned'
+        }})
+    self.assertEqual(response.status, '200 OK')
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertEqual(doc_id, response.json["data"]["id"])
+    self.assertIn("documentType", response.json["data"])
+    self.assertEqual(
+        response.json["data"]["documentType"], 'contractSigned'
+    )
+
+    # setting dateSigned field
+    signature_date = get_now().isoformat()
+    response = self.app.patch_json('/auctions/{}/contracts/{}?acc_token={}'.format(
+        self.auction_id, contract_id, owner_token
+    ), {"data": {"dateSigned": signature_date}})
+    self.assertEqual(response.status, '200 OK')
+
     # sign contract
     self.app.authorization = ('Basic', ('broker', ''))
     self.app.patch_json('/auctions/{}/contracts/{}?acc_token={}'.format(auction_id, contract_id, owner_token),
