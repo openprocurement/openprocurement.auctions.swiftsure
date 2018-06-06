@@ -34,28 +34,28 @@ Schema
 :merchandisingObject:
   string, read-only
 
-  Originates from `lots.id`.
+  Originates from `lot.id <http://lotsloki.api-docs.registry.ea2.openprocurement.io/en/latest/standard/Lot.html>`_
   
   The identifier of a lot, which is to be privatized, within the Registry.
 
 :title:
   string, multilingual, read-only
 
-  Originates from `lots.title`.
+  Originates from `lot.title <http://lotsloki.api-docs.registry.ea2.openprocurement.io/en/latest/standard/Lot.html>`_.
 
   The name of the auction, displayed in listings. 
  
 :description:
   string, multilingual, read-only
 
-  Originates from `lots.description`.
+  Originates from `lot.description <http://lotsloki.api-docs.registry.ea2.openprocurement.io/en/latest/standard/Lot.html>`_.
   
   Detailed auction description. 
 
 :tenderAttempts:
   integer, read-only
 
-  Originates from `lots.auctions.tenderAttempts`.
+  Originates from `auction.tenderAttempts <http://lotsloki.api-docs.registry.ea2.openprocurement.io/en/latest/standard/auction.html>`_.
 
   The number which represents what time procedure with a current lot takes place.
 
@@ -67,14 +67,14 @@ Schema
 :procurementMethodType:
   string, read-only
   
-  Originates from `lots.auctions.procurementMethodType`.
+  Originates from `auction.procurementMethodType <http://lotsloki.api-docs.registry.ea2.openprocurement.io/en/latest/standard/auction.html>`_.
   
   Type of the procedure within the auction announcement. The given value is sellout.english. 
 
 :procurementMethodDetails:
   string, read-only
   
-  Originates from `lots.auctions.procurementMethodDetails`.
+  Originates from `auction.procurementMethodDetails <http://lotsloki.api-docs.registry.ea2.openprocurement.io/en/latest/standard/auction.html>`_.
 
   Parameter that accelerates auction periods. Set quick, accelerator=1440 as text value for procurementMethodDetails for the time frames to be reduced in 1440 times.
 
@@ -87,14 +87,14 @@ Schema
   
   string, read-only
   
-  Originates from `lots.auctions.submissionMethodDetails`.
+  Originates from `auction.submissionMethodDetails <http://lotsloki.api-docs.registry.ea2.openprocurement.io/en/latest/standard/auction.html>`_.
 
   Parameter that works only with mode = “test” and speeds up auction start date.
 
 :procuringEntity:
   :ref:`ProcuringEntity`, read-only
 
-  Originates from `lots.lotCustodian`.
+  Originates from `lot.lotCustodian <http://lotsloki.api-docs.registry.ea2.openprocurement.io/en/latest/standard/organization.html>`_.
   
   Organization conducting the auction.
 
@@ -104,12 +104,14 @@ Schema
 :auctionParameters:
   :ref:`Auction_Parameters`, read-only
 
+   Originates from `auction.auctionParameters <http://lotsloki.api-docs.registry.ea2.openprocurement.io/en/latest/standard/auction.html>`_.
+
   The parameters that indicates the major specifications of the procedure.
 
 :value:
   :ref:`value`, read-only
 
-  Originates from `lots.auctions.value`. 
+  Originates from `auction.value <http://lotsloki.api-docs.registry.ea2.openprocurement.io/en/latest/standard/auction.html>`_. 
   
   Total available budget of the 1st auction. Bids lower than ``value`` will be rejected.
 
@@ -117,35 +119,37 @@ Schema
   The total estimated value of the procurement.
 
 :minimalStep:
-  :ref:`value`, auto-generated, read-only
+  :ref:`value`, read-only
 
-  Auction step (increment). Originates from `lots.auctions.minimalStep`.
+  Originates from `auction.minimalStep <http://lotsloki.api-docs.registry.ea2.openprocurement.io/en/latest/standard/auction.html>`_.
+
+  Auction step (increment). 
   
 :guarantee:
   :ref:`Guarantee`, read-only
 
-  Originates from `lots.auctions.guarantee`.
+  Originates from `auction.guarantee <http://lotsloki.api-docs.registry.ea2.openprocurement.io/en/latest/standard/auction.html>`_.
 
   The assumption of responsibility for payment of performance of some obligation if the liable party fails to perform to expectations.
 
 :registrationFee:
   :ref:`Guarantee`, read-only
 
-  Originates from `lots.auctions.registrationFee`.
+  Originates from `auction.registrationFee <http://lotsloki.api-docs.registry.ea2.openprocurement.io/en/latest/standard/auction.html>`_.
 
   The sum of money required to enroll on an official register. The given value is 17.
 
 :bankAccount:
   :ref:`Bank_Account`, read-only
 
-  Originates from `lots.auctions.bankAccount`.
+  Originates from `auction.bankAccount <http://lotsloki.api-docs.registry.ea2.openprocurement.io/en/latest/standard/auction.html#bank-account>`_.
 
   Details which uniquely identify a bank account, and are used when making or receiving a payment.
 
 :items:
   Array of :ref:`item` objects, read-only
 
-  Originates from `lots.items`.
+  Originates from `lot.items <http://lotsloki.api-docs.registry.ea2.openprocurement.io/en/latest/standard/item.html>`_.
   
   List that contains single item being sold.
 
@@ -247,7 +251,7 @@ Schema
 :auctionPeriod:
   :ref:`period`, auto-generated, read-only
 
-  Period when Auction is conducted. `startDate` originates from `lots.auctions.auctionPeriod.startDate` .
+  Period when Auction is conducted. `startDate` originates from `auction.auctionPeriod.startDate <http://lotsloki.api-docs.registry.ea2.openprocurement.io/en/latest/standard/auction.html>`_.
 
 :awardPeriod:
   :ref:`period`, auto-generated, read-only
@@ -284,13 +288,10 @@ Schema
 
   Additional information that has to be noted from the Organizer point.
   
-  Originates from `lots.auctions.bankAccount.description`
-  
 :bankName:	
   string, required
 
   Name of the bank.
-  Originates from `lots.auctions.bankAccount.bankName`
   
 :accountIdentification:
   Array of :ref:`classification`, required
@@ -302,7 +303,5 @@ Schema
   * 'UA-EDR';
   * 'UA-MFO';
   * 'accountNumber'.
-
-  Originates from `lots.auctions.bankAccount.accountIdentification`
 
     
