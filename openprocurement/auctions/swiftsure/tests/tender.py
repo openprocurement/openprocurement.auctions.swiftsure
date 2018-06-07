@@ -72,6 +72,34 @@ class AuctionProcessTest(BaseAuctionWebTest):
     def setUp(self):
         super(AuctionProcessTest.__bases__[0], self).setUp()
 
+    def change_ownership(self, auction_id, used_transfer_token):
+
+        response = self.app.post_json('/transfers', {"data": {}})
+        self.assertEqual(response.status, '201 Created')
+        self.assertEqual(response.content_type, 'application/json')
+
+        transfer = response.json
+
+        req_data = {"data": {"id": transfer['data']['id'],
+                             'transfer': used_transfer_token}}
+        response = self.app.post_json(
+            '/auctions/{}/ownership'.format(auction_id), req_data
+        )
+        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(
+            response.json['data']['owner'], self.app.authorization[1][0]
+        )
+
+        response = self.app.get('/transfers/{}'.format(transfer['data']['id']))
+        self.assertIn('usedFor', response.json['data'])
+        self.assertEqual(
+            '/auctions/{}'.format(auction_id), response.json['data']['usedFor']
+        )
+        owner_token = transfer['access']['token']
+
+        return owner_token
+
     test_invalid_auction_conditions = unittest.skip("option not available")(snitch(invalid_auction_conditions))
     test_one_valid_bid_auction = snitch(one_valid_bid_auction)
     test_one_invalid_bid_auction_manual = snitch(one_invalid_bid_auction_manual)
