@@ -437,13 +437,11 @@ def one_valid_bid_auction(self):
     response = self.app.post_json('/auctions',
                                   {"data": data})
     auction_id = self.auction_id = response.json['data']['id']
-    owner_token = response.json['access']['token']
+    transfer_token = response.json['access']['transfer']
 
-    # Ownership change
-    # TODO: replace when transfer_token is fully implemented
-    auction = self.db.get(auction_id)
-    auction['owner'] = 'broker'
-    self.db.save(auction)
+    # ownership change
+    self.app.authorization = ('Basic', ('broker3', ''))
+    owner_token = self.change_ownership(auction_id, transfer_token)
 
     # switch to active.tendering
     response = self.set_status('active.tendering', {"auctionPeriod": {"startDate": (get_now() + timedelta(days=10)).isoformat()}})
@@ -458,7 +456,7 @@ def one_valid_bid_auction(self):
     response = self.app.patch_json('/auctions/{}'.format(auction_id), {"data": {"id": auction_id}})
     self.assertNotIn('auctionPeriod', response.json['data'])
     # get awards
-    self.app.authorization = ('Basic', ('broker', ''))
+    self.app.authorization = ('Basic', ('broker3', ''))
     response = self.app.get('/auctions/{}/awards?acc_token={}'.format(auction_id, owner_token))
     # get pending.admission award
     award_id = [i['id'] for i in response.json['data'] if i['status'] == 'pending.admission'][0]
@@ -564,13 +562,11 @@ def one_invalid_bid_auction_manual(self):
     response = self.app.post_json('/auctions',
                                   {"data": data})
     auction_id = self.auction_id = response.json['data']['id']
-    owner_token = response.json['access']['token']
+    transfer_token = response.json['access']['transfer']
 
-    # Ownership change
-    # TODO: replace when transfer_token is fully implemented
-    auction = self.db.get(auction_id)
-    auction['owner'] = 'broker'
-    self.db.save(auction)
+    # ownership change
+    self.app.authorization = ('Basic', ('broker3', ''))
+    owner_token = self.change_ownership(auction_id, transfer_token)
 
     # switch to active.tendering
     self.set_status('active.tendering')
@@ -583,7 +579,7 @@ def one_invalid_bid_auction_manual(self):
     self.app.authorization = ('Basic', ('chronograph', ''))
     response = self.app.patch_json('/auctions/{}'.format(auction_id), {"data": {"id": auction_id}})
     # get awards
-    self.app.authorization = ('Basic', ('broker', ''))
+    self.app.authorization = ('Basic', ('broker3', ''))
     response = self.app.get('/auctions/{}/awards?acc_token={}'.format(auction_id, owner_token))
     # get pending award
     award_id = [i['id'] for i in response.json['data'] if i['status'] == 'pending.admission'][0]
@@ -638,13 +634,11 @@ def one_invalid_bid_auction_automatic(self):
     response = self.app.post_json('/auctions',
                                   {"data": data})
     auction_id = self.auction_id = response.json['data']['id']
-    owner_token = response.json['access']['token']
+    transfer_token = response.json['access']['transfer']
 
-    # Ownership change
-    # TODO: replace when transfer_token is fully implemented
-    auction = self.db.get(auction_id)
-    auction['owner'] = 'broker'
-    self.db.save(auction)
+    # ownership change
+    self.app.authorization = ('Basic', ('broker3', ''))
+    owner_token = self.change_ownership(auction_id, transfer_token)
 
     # switch to active.tendering
     self.set_status('active.tendering')
@@ -657,7 +651,7 @@ def one_invalid_bid_auction_automatic(self):
     self.app.authorization = ('Basic', ('chronograph', ''))
     response = self.app.patch_json('/auctions/{}'.format(auction_id), {"data": {"id": auction_id}})
     # get awards
-    self.app.authorization = ('Basic', ('broker', ''))
+    self.app.authorization = ('Basic', ('broker3', ''))
     response = self.app.get('/auctions/{}/awards?acc_token={}'.format(auction_id, owner_token))
     # get pending award
     award_id = [i['id'] for i in response.json['data'] if i['status'] == 'pending.admission'][0]
@@ -695,13 +689,11 @@ def first_bid_auction(self):
     response = self.app.post_json('/auctions',
                                   {"data": self.initial_data})
     auction_id = self.auction_id = response.json['data']['id']
-    owner_token = response.json['access']['token']
+    transfer_token = response.json['access']['transfer']
 
-    # Ownership change
-    # TODO: replace when transfer_token is fully implemented
-    auction = self.db.get(auction_id)
-    auction['owner'] = 'broker'
-    self.db.save(auction)
+    # ownership change
+    self.app.authorization = ('Basic', ('broker3', ''))
+    owner_token = self.change_ownership(auction_id, transfer_token)
 
     # switch to active.tendering
     self.set_status('active.tendering')
@@ -751,13 +743,12 @@ def first_bid_auction(self):
     response = self.app.post_json('/auctions/{}/auction'.format(auction_id),
                                   {'data': {'bids': auction_bids_data}})
     # get awards
-    self.app.authorization = ('Basic', ('broker', ''))
+    self.app.authorization = ('Basic', ('broker3', ''))
     response = self.app.get('/auctions/{}/awards?acc_token={}'.format(auction_id, owner_token))
     # get pending award
     award = [i for i in response.json['data'] if i['status'] == 'pending'][0]
     award_id = award['id']
     # Upload auction protocol
-    self.app.authorization = ('Basic', ('broker', ''))
     response = self.app.post('/auctions/{}/awards/{}/documents?acc_token={}'.format(
         self.auction_id, award_id, owner_token), upload_files=[('file', 'auction_protocol.pdf', 'content')])
     self.assertEqual(response.status, '201 Created')
@@ -813,7 +804,7 @@ def first_bid_auction(self):
     self.assertEqual(response.json['data']['status'], 'unsuccessful')
 
     # get awards
-    self.app.authorization = ('Basic', ('broker', ''))
+    self.app.authorization = ('Basic', ('broker3', ''))
     response = self.app.get('/auctions/{}/awards?acc_token={}'.format(auction_id, owner_token))
     # get pending award
     award2 = [i for i in response.json['data'] if i['status'] == 'pending'][0]
@@ -840,13 +831,12 @@ def first_bid_auction(self):
     #     "status": "resolved"
     # }})
     # get awards
-    self.app.authorization = ('Basic', ('broker', ''))
+    self.app.authorization = ('Basic', ('broker3', ''))
     response = self.app.get('/auctions/{}/awards?acc_token={}'.format(auction_id, owner_token))
     # get pending award
     award = [i for i in response.json['data'] if i['status'] == 'pending'][0]
     award_id = award['id']
     # Upload auction protocol
-    self.app.authorization = ('Basic', ('broker', ''))
     response = self.app.post('/auctions/{}/awards/{}/documents?acc_token={}'.format(
         self.auction_id, award_id, owner_token), upload_files=[('file', 'auction_protocol.pdf', 'content')])
     self.assertEqual(response.status, '201 Created')
@@ -902,11 +892,9 @@ def first_bid_auction(self):
     self.assertEqual(response.status, '200 OK')
 
     # sign contract
-    self.app.authorization = ('Basic', ('broker', ''))
     self.app.patch_json('/auctions/{}/contracts/{}?acc_token={}'.format(auction_id, contract_id, owner_token),
                         {"data": {"status": "active"}})
     # check status
-    self.app.authorization = ('Basic', ('broker', ''))
     response = self.app.get('/auctions/{}'.format(auction_id))
     self.assertEqual(response.json['data']['status'], 'complete')
 
@@ -947,13 +935,11 @@ def suspended_auction(self):
                                   {"data": auction_data})
     auction_id = self.auction_id = response.json['data']['id']
     owner_token = response.json['access']['token']
-    self.assertNotIn('suspended', response.json['data'])
+    transfer_token = response.json['access']['transfer']
 
-    # Ownership change
-    # TODO: replace when transfer_token is fully implemented
-    auction = self.db.get(auction_id)
-    auction['owner'] = 'broker'
-    self.db.save(auction)
+    # ownership change
+    self.app.authorization = ('Basic', ('broker3', ''))
+    owner_token = self.change_ownership(auction_id, transfer_token)
 
     response = self.app.patch_json('/auctions/{}'.format(auction_id), {"data": {"suspended": True}}, status=403)
     self.assertEqual(response.status, '403 Forbidden')
@@ -1040,7 +1026,7 @@ def suspended_auction(self):
     response = self.app.post_json('/auctions/{}/auction'.format(auction_id),
                                   {'data': {'bids': auction_bids_data}})
     # get awards
-    self.app.authorization = ('Basic', ('broker', ''))
+    self.app.authorization = ('Basic', ('broker3', ''))
     response = self.app.get('/auctions/{}/awards?acc_token={}'.format(auction_id, owner_token))
 
     # get pending award
@@ -1099,13 +1085,11 @@ def suspended_auction(self):
     self.assertEqual(response.json['data']['status'], 'unsuccessful')
 
     # get awards
-    self.app.authorization = ('Basic', ('broker', ''))
     response = self.app.get('/auctions/{}/awards?acc_token={}'.format(auction_id, owner_token))
     # get pending award
     award2_id = [i['id'] for i in response.json['data'] if i['status'] == 'pending'][0]
     self.assertNotEqual(award_id, award2_id)
 
-    self.app.authorization = ('Basic', ('broker', ''))
     response = self.app.get('/auctions/{}/awards?acc_token={}'.format(auction_id, owner_token))
 
     # get pending award
@@ -1195,10 +1179,8 @@ def suspended_auction(self):
     self.assertEqual(response.status, '200 OK')
 
     # sign contract
-    self.app.authorization = ('Basic', ('broker', ''))
     self.app.patch_json('/auctions/{}/contracts/{}?acc_token={}'.format(auction_id, contract_id, owner_token),
                         {"data": {"status": "active"}})
     # check status
-    self.app.authorization = ('Basic', ('broker', ''))
     response = self.app.get('/auctions/{}'.format(auction_id))
     self.assertEqual(response.json['data']['status'], 'complete')
