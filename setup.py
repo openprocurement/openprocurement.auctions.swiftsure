@@ -18,7 +18,6 @@ entry_points = {
 requires = [
     'setuptools',
     'openprocurement.auctions.core',
-    'openprocurement.auctions.flash',
     'openprocurement.schemas.dgf',
     'schematics-flexible'
 ]
