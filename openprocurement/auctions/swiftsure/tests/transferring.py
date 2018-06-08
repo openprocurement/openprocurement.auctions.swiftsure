@@ -1,10 +1,14 @@
 # -*- coding: utf-8 -*-
 import unittest
 
-from openprocurement.auctions.swiftsure.tests.base import BaseAuctionWebTest
+from openprocurement.auctions.core.tests.base import snitch
+from openprocurement.auctions.core.tests.plugins.transferring.blanks.resource_blanks import (
+    create_auction_by_concierge
+)
 from openprocurement.auctions.core.tests.plugins.transferring.mixins import (
     AuctionOwnershipChangeTestCaseMixin
 )
+from openprocurement.auctions.swiftsure.tests.base import BaseAuctionWebTest
 
 
 class AuctionOwnershipChangeResourceTest(BaseAuctionWebTest,
@@ -12,11 +16,13 @@ class AuctionOwnershipChangeResourceTest(BaseAuctionWebTest,
 
     first_owner = 'broker3'
     second_owner = 'broker3'
+    concierge = 'concierge'
     test_owner = 'broker1t'
     invalid_owner = 'broker1'
     initial_auth = ('Basic', (first_owner, ''))
 
     test_mode_test = None
+    test_create_auction_by_concierge = snitch(create_auction_by_concierge)
 
     def setUp(self):
         super(AuctionOwnershipChangeResourceTest, self).setUp()

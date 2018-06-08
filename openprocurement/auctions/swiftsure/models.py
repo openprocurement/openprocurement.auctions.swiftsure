@@ -123,7 +123,6 @@ class SwiftsureAuction(BaseAuction):
     bankAccount = ModelType(BankAccount)
     auctionParameters = ModelType(AuctionParameters)
     minNumberOfQualifiedBids = IntType(choices=[1], default=1)
-    transfer_token = StringType()
 
     create_accreditation = 3
     edit_accreditation = 4
