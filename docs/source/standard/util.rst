@@ -58,22 +58,6 @@ Schema
     bool, required
 
 .. index:: Revision, Change Tracking
-.. _revision:
-
-Revision
-========
-
-Schema
-------
-
-:date:
-    string, :ref:`date`
-
-    Date when changes were recorded.
-
-:changes:
-    List of `Change` objects
-
 
 .. _guarantee:
 

@@ -23,7 +23,7 @@ Schema
     Title of the question.
 
 :description:
-    string
+    string, optional
 
     Description of the question.
 
@@ -33,7 +33,7 @@ Schema
     Date of posting.
 
 :answer:
-    string
+    string, optional
 
     Answer for the question.
 
@@ -44,7 +44,6 @@ Schema
 
     * `auction`
     * `item`
-..    * `lot`
 
 :relatedItem:
     string

@@ -11,7 +11,7 @@ Schema
 ------
 
 :tenderers:
-    List of :ref:`Organization` objects
+    List of :ref:`Organization` objects, required
 
 :date:
     string, :ref:`date`, auto-generated
@@ -22,7 +22,7 @@ Schema
     UID, auto-generated
 
 :status:
-    string
+    string, required
 
     Possible values are:
 
@@ -39,71 +39,21 @@ Schema
     * `valueAddedTaxIncluded` should either be absent or match `Auction.value.valueAddedTaxIncluded`
 
 :documents:
-    List of :ref:`Document` objects
+    Array of :ref:`Document`, optional
 
-:parameters:
-    List of :ref:`Parameter` objects
-
-.. :lotValues:
-    List of :ref:`LotValue` objects
+    All documents needed.
 
 :participationUrl:
-    URL
+    URL, auto-generated
 
     A web address for participation in auction.
 
 :qualified:
     bool, required
 
+    Confirms the absence of grounds for refusal to participate. CDB accepts only true value.
+
 :eligible:
-    bool
+    bool, optional 
 
-    Required for `dgfFinancialAssets` procedure.
-
-.. _Parameter:
-
-Parameter
-=========
-
-Schema
-------
-
-:code:
-    string, required
-
-    Feature code.
-
-:value:
-    float, required
-
-    Feature value.
-
-.. _LotValue:
-
-.. LotValue
-   ========
-
-   Schema
-   ------
-
-   :value:
-    :ref:`Value`, required
-
-    Validation rules:
-
-    * `amount` should be less than `Lot.value.amout`
-    * `currency` should either be absent or match `Lot.value.currency`
-    * `valueAddedTaxIncluded` should either be absent or match `Lot.value.valueAddedTaxIncluded`
-
-   :relatedLot:
-    string
-
-    ID of related :ref:`lot`.
-
-   :date:
-    string, :ref:`date`, auto-generated
-
-   :participationUrl:
-    URL
-
-    A web address for participation in auction.
+    Confirms compliance of eligibility criteria set by the customer in the tendering documents. CDB accepts only true value.
