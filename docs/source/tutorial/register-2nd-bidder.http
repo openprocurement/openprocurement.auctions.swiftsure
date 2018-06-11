@@ -1,34 +1,34 @@
-POST /api/2.3/auctions/0bbf22e936f24d158f6d695b84b2de2f/bids HTTP/1.0
+POST /api/2.4/auctions/97220a271daa48faaae51d29771fbb88/bids HTTP/1.0
 Authorization: Basic YnJva2VyOg==
-Content-Length: 723
+Content-Length: 881
 Content-Type: application/json
 Host: api-sandbox.ea.openprocurement.org
 
 {
   "data": {
+    "status": "draft", 
     "qualified": true, 
     "value": {
-      "amount": 501
+      "amount": 300
     }, 
     "tenderers": [
       {
         "contactPoint": {
-          "telephone": "+380 (322) 91-69-30", 
-          "name": "Андрій Олексюк", 
-          "email": "aagt@gmail.com"
+          "name": "Державне управління справами", 
+          "telephone": "0440000000"
         }, 
         "identifier": {
           "scheme": "UA-EDR", 
-          "id": "00137226", 
-          "uri": "http://www.sc.gov.ua/"
+          "id": "00037256", 
+          "uri": "http://www.dus.gov.ua/"
         }, 
-        "name": "ДКП «Книга»", 
+        "name": "Державне управління справами", 
         "address": {
           "countryName": "Україна", 
-          "postalCode": "79013", 
-          "region": "м. Львів", 
-          "streetAddress": "вул. Островського, 34", 
-          "locality": "м. Львів"
+          "postalCode": "01220", 
+          "region": "м. Київ", 
+          "streetAddress": "вул. Банкова, 11, корпус 1", 
+          "locality": "м. Київ"
         }
       }
     ]
@@ -37,46 +37,46 @@ Host: api-sandbox.ea.openprocurement.org
 
 
 201 Created
-Content-Type: application/json; charset=UTF-8
-Location: http://api-sandbox.ea.openprocurement.org/api/2.3/auctions/0bbf22e936f24d158f6d695b84b2de2f/bids/6742acc9246c45059d4f46aad4c65f1c
+Content-Type: application/json
+Location: http://api-sandbox.ea.openprocurement.org/api/2.4/auctions/97220a271daa48faaae51d29771fbb88/bids/a31cfee128dd456a91b18bc89e3751f4
+X-Content-Type-Options: nosniff
 
 {
   "access": {
-    "token": "bf827cf4885e47f4a8dd584d33c7f06e"
+    "token": "64162bce114841aa821546f0a0f7d199"
   }, 
   "data": {
-    "status": "active", 
+    "status": "draft", 
     "value": {
       "currency": "UAH", 
-      "amount": 501.0, 
+      "amount": 300.0, 
       "valueAddedTaxIncluded": true
     }, 
-    "date": "2018-03-13T14:17:04.290704+02:00", 
+    "date": "2018-06-11T16:35:43.511922+03:00", 
     "qualified": true, 
     "tenderers": [
       {
         "contactPoint": {
-          "email": "aagt@gmail.com", 
-          "telephone": "+380 (322) 91-69-30", 
-          "name": "Андрій Олексюк"
+          "name": "Державне управління справами", 
+          "telephone": "0440000000"
         }, 
         "identifier": {
           "scheme": "UA-EDR", 
-          "id": "00137226", 
-          "uri": "http://www.sc.gov.ua/"
+          "id": "00037256", 
+          "uri": "http://www.dus.gov.ua/"
         }, 
-        "name": "ДКП «Книга»", 
+        "name": "Державне управління справами", 
         "address": {
-          "postalCode": "79013", 
+          "postalCode": "01220", 
           "countryName": "Україна", 
-          "streetAddress": "вул. Островського, 34", 
-          "region": "м. Львів", 
-          "locality": "м. Львів"
+          "streetAddress": "вул. Банкова, 11, корпус 1", 
+          "region": "м. Київ", 
+          "locality": "м. Київ"
         }
       }
     ], 
     "owner": "broker", 
-    "id": "6742acc9246c45059d4f46aad4c65f1c"
+    "id": "a31cfee128dd456a91b18bc89e3751f4"
   }
 }
 

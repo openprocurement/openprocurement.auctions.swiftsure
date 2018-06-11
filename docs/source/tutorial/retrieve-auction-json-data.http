@@ -1,0 +1,93 @@
+GET /api/2.4/auctions/84b47bb9907e49fea639a06d4d2bd026 HTTP/1.0
+Authorization: Basic YnJva2VyOg==
+Host: api-sandbox.ea.openprocurement.org
+
+
+200 OK
+Content-Type: application/json
+X-Content-Type-Options: nosniff
+
+{
+  "data": {
+    "procurementMethod": "open", 
+    "auctionID": "UA-EA-2018-06-11-000001", 
+    "minNumberOfQualifiedBids": 1, 
+    "enquiryPeriod": {
+      "startDate": "2018-06-11T16:35:23.371513+03:00", 
+      "endDate": "2018-06-24T23:59:50+03:00"
+    }, 
+    "submissionMethod": "electronicAuction", 
+    "next_check": "2018-06-24T23:59:50+03:00", 
+    "awardCriteria": "highestCost", 
+    "owner": "concierge", 
+    "id": "84b47bb9907e49fea639a06d4d2bd026", 
+    "title": "футляри до державних нагород", 
+    "tenderAttempts": 1, 
+    "procurementMethodDetails": "quick, accelerator=1440", 
+    "dateModified": "2018-06-11T16:35:23.375554+03:00", 
+    "status": "active.tendering", 
+    "tenderPeriod": {
+      "startDate": "2018-06-11T16:35:23.371513+03:00", 
+      "endDate": "2018-06-24T23:59:50+03:00"
+    }, 
+    "auctionPeriod": {
+      "shouldStartAfter": "2018-06-25T00:00:00+03:00"
+    }, 
+    "procurementMethodType": "Swiftsure", 
+    "date": "2018-06-11T16:35:23.371513+03:00", 
+    "submissionMethodDetails": "test submissionMethodDetails", 
+    "items": [
+      {
+        "description": "Земля для військовослужбовців", 
+        "classification": {
+          "scheme": "CPV", 
+          "description": "Земельні ділянки", 
+          "id": "66113000-5"
+        }, 
+        "address": {
+          "postalCode": "79000", 
+          "countryName": "Україна", 
+          "streetAddress": "вул. Банкова 1", 
+          "region": "м. Київ", 
+          "locality": "м. Київ"
+        }, 
+        "id": "e5be8d9cc4ac4505bd7bc1f0867a9f83", 
+        "unit": {
+          "code": "44617100-9", 
+          "name": "item"
+        }, 
+        "quantity": 5
+      }
+    ], 
+    "value": {
+      "currency": "UAH", 
+      "amount": 100.0, 
+      "valueAddedTaxIncluded": true
+    }, 
+    "minimalStep": {
+      "currency": "UAH", 
+      "amount": 35.0, 
+      "valueAddedTaxIncluded": true
+    }, 
+    "procuringEntity": {
+      "contactPoint": {
+        "name": "Державне управління справами", 
+        "telephone": "0440000000"
+      }, 
+      "identifier": {
+        "scheme": "UA-EDR", 
+        "id": "00037256", 
+        "uri": "http://www.dus.gov.ua/"
+      }, 
+      "name": "Державне управління справами", 
+      "address": {
+        "postalCode": "01220", 
+        "countryName": "Україна", 
+        "streetAddress": "вул. Банкова, 11, корпус 1", 
+        "region": "м. Київ", 
+        "locality": "м. Київ"
+      }
+    }
+  }
+}
+

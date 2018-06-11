@@ -1,0 +1,82 @@
+POST /api/2.4/auctions/97220a271daa48faaae51d29771fbb88/bids HTTP/1.0
+Authorization: Basic YnJva2VyOg==
+Content-Length: 881
+Content-Type: application/json
+Host: api-sandbox.ea.openprocurement.org
+
+{
+  "data": {
+    "status": "draft", 
+    "qualified": true, 
+    "value": {
+      "amount": 500
+    }, 
+    "tenderers": [
+      {
+        "contactPoint": {
+          "name": "Державне управління справами", 
+          "telephone": "0440000000"
+        }, 
+        "identifier": {
+          "scheme": "UA-EDR", 
+          "id": "00037256", 
+          "uri": "http://www.dus.gov.ua/"
+        }, 
+        "name": "Державне управління справами", 
+        "address": {
+          "countryName": "Україна", 
+          "postalCode": "01220", 
+          "region": "м. Київ", 
+          "streetAddress": "вул. Банкова, 11, корпус 1", 
+          "locality": "м. Київ"
+        }
+      }
+    ]
+  }
+}
+
+
+201 Created
+Content-Type: application/json
+Location: http://api-sandbox.ea.openprocurement.org/api/2.4/auctions/97220a271daa48faaae51d29771fbb88/bids/a509415f03f9484aa644f3afae62fb59
+X-Content-Type-Options: nosniff
+
+{
+  "access": {
+    "token": "9345d09074cb4c01b2983fbb8d7c1bf2"
+  }, 
+  "data": {
+    "status": "draft", 
+    "value": {
+      "currency": "UAH", 
+      "amount": 500.0, 
+      "valueAddedTaxIncluded": true
+    }, 
+    "date": "2018-06-11T16:35:43.343189+03:00", 
+    "qualified": true, 
+    "tenderers": [
+      {
+        "contactPoint": {
+          "name": "Державне управління справами", 
+          "telephone": "0440000000"
+        }, 
+        "identifier": {
+          "scheme": "UA-EDR", 
+          "id": "00037256", 
+          "uri": "http://www.dus.gov.ua/"
+        }, 
+        "name": "Державне управління справами", 
+        "address": {
+          "postalCode": "01220", 
+          "countryName": "Україна", 
+          "streetAddress": "вул. Банкова, 11, корпус 1", 
+          "region": "м. Київ", 
+          "locality": "м. Київ"
+        }
+      }
+    ], 
+    "owner": "broker", 
+    "id": "a509415f03f9484aa644f3afae62fb59"
+  }
+}
+

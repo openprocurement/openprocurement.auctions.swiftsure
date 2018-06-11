@@ -1,0 +1,105 @@
+PATCH /api/2.4/auctions/d4e1d31bb82244fab2ba50c64b89a005/contracts/f051b55cc79a4ef0a40e478911c91b68?acc_token=d65dce8c02494bda9337f1caf31368f8 HTTP/1.0
+Authorization: Basic YnJva2VyMzo=
+Content-Length: 30
+Content-Type: application/json
+Host: api-sandbox.ea.openprocurement.org
+
+{
+  "data": {
+    "status": "active"
+  }
+}
+
+
+200 OK
+Content-Type: application/json
+X-Content-Type-Options: nosniff
+
+{
+  "data": {
+    "status": "active", 
+    "documents": [
+      {
+        "hash": "md5:00000000000000000000000000000000", 
+        "description": "contract signed", 
+        "format": "application/pdf", 
+        "url": "http://public.docs-sandbox.ea.openprocurement.org/get/49aea6068d9a401c945c448e5904e096?KeyID=172d32c8&Signature=jAos41M0Ky9NGrc0slV5UNHt1VJdxiEOnMMEEgws6y8Z5fsK83lG%2F%2F2%252BFlkIKGJikpJhsofvys1kouY%252BsyFwAQ%253D%253D", 
+        "title": "contract_signed.pdf", 
+        "documentOf": "tender", 
+        "datePublished": "2018-06-11T12:23:28.178303+03:00", 
+        "documentType": "contractSigned", 
+        "dateModified": "2018-06-11T12:23:28.178334+03:00", 
+        "id": "dd2de4d63fa645498f9e0ecef6ae68d3"
+      }, 
+      {
+        "hash": "md5:00000000000000000000000000000000", 
+        "format": "application/msword", 
+        "url": "http://public.docs-sandbox.ea.openprocurement.org/get/01f7559bf9bf44bbae4fcc202c7e37ca?KeyID=172d32c8&Signature=0pSfbTojsT3Q8rSPbZD7xuPyuXRYYIUX%2F1uZcPw2W6HoRlgWjrniI9oTGws43aoaGLH0zR7m7s7pYYm8kw8%252BCg%253D%253D", 
+        "title": "contract_second_document.doc", 
+        "documentOf": "tender", 
+        "datePublished": "2018-06-11T12:23:28.367741+03:00", 
+        "dateModified": "2018-06-11T12:23:28.367772+03:00", 
+        "id": "7c814ec22e084e8894e53a3202065450"
+      }
+    ], 
+    "signingPeriod": {
+      "startDate": "2018-06-11T12:23:27.427053+03:00", 
+      "endDate": "2018-06-11T13:03:41.449673+03:00"
+    }, 
+    "items": [
+      {
+        "description": "Земля для військовослужбовців", 
+        "classification": {
+          "scheme": "CPV", 
+          "description": "Земельні ділянки", 
+          "id": "66113000-5"
+        }, 
+        "address": {
+          "postalCode": "79000", 
+          "countryName": "Україна", 
+          "streetAddress": "вул. Банкова 1", 
+          "region": "м. Київ", 
+          "locality": "м. Київ"
+        }, 
+        "id": "2406d008c8dd4097aa8e9fb7c80a4c53", 
+        "unit": {
+          "code": "44617100-9", 
+          "name": "item"
+        }, 
+        "quantity": 5
+      }
+    ], 
+    "suppliers": [
+      {
+        "contactPoint": {
+          "name": "Державне управління справами", 
+          "telephone": "0440000000"
+        }, 
+        "identifier": {
+          "scheme": "UA-EDR", 
+          "id": "00037256", 
+          "uri": "http://www.dus.gov.ua/"
+        }, 
+        "name": "Державне управління справами", 
+        "address": {
+          "postalCode": "01220", 
+          "countryName": "Україна", 
+          "streetAddress": "вул. Банкова, 11, корпус 1", 
+          "region": "м. Київ", 
+          "locality": "м. Київ"
+        }
+      }
+    ], 
+    "dateSigned": "2018-06-11T12:23:28.663159+03:00", 
+    "value": {
+      "currency": "UAH", 
+      "amount": 500.0, 
+      "valueAddedTaxIncluded": true
+    }, 
+    "date": "2018-06-11T12:23:28.931775+03:00", 
+    "awardID": "36176aa4f4d747589bef1a3d74e689c1", 
+    "id": "f051b55cc79a4ef0a40e478911c91b68", 
+    "contractID": "UA-EA-2018-06-11-000001-1"
+  }
+}
+

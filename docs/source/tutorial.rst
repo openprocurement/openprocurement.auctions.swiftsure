@@ -1,48 +1,22 @@
 .. _tutorial:
 
-Tutorial
-========
-
-Exploring basic rules
----------------------
-
-Let's try exploring the `/auctions` endpoint:
-
-............................
-
-Just invoking it reveals empty set.
-
-Now let's attempt creating some auction:
-
-......................
-
-Error states that the only accepted Content-Type is `application/json`.
-
-Let's satisfy the Content-type requirement:
-
-......................
-
-Error states that no `data` has been found in JSON body.
-
 
 .. index:: Auction
 
 Creating auction
 ----------------
 
-The auction is created with the data set (only required properties) provided within the Lots Registry:
+The auction is created automaticaly by bot. You can see this in owner field when retrieving auction by its `id`:
 
-..........................
+.. include:: tutorial/retrieve-auction-json-data.http
+   :code:
 
-Note that auction is created with `pending.activation` status.
-
-Let's access the URL of the created object (the `Location` header of the response):
-
-..........................
+Note that auction is initialy in `pending.activation` status. Also note that lot created before has `access` section which contains a ``transfer`` key. It is used to retrieve procedure ownership from bot in order to activate auction further.
 
 Let's see what listing of auctions reveals us:
 
-...........................
+.. include:: tutorial/initial-auction-listing.http
+   :code:
 
 We do see the auction's internal `id` (that can be used to construct full URL by prepending `https://lb.api-sandbox.ea2.openprocurement.net/api/2.3/auctions/`) and its `dateModified` datestamp.
 
@@ -51,20 +25,50 @@ Enquiries
 
 When auction is in `active.tendering` status, interested parties can ask questions:
 
-......................
+.. include:: tutorial/ask-question.http
+   :code:
 
 Organizer can answer them:
 
-........................
+.. include:: tutorial/answer-question.http
+   :code:
 
 And one can retrieve the question list:
 
-......................
+.. include:: tutorial/list-question.http
+   :code:
 
 Or an individual answer:
 
-......................
+.. include:: tutorial/get-answer.http
+   :code:
 
+
+.. _1_submitted_proposal:
+
+1 submitted proposal
+~~~~~~~~~~~~~~~~~~~~
+
+Activate procedure
+------------------
+To be able to register a bid we need to switch procedure to active.tendering status. We can to do this by changing procedure owner. First we need to create a `Transfer` object:
+
+.. include:: tutorial/create_transfer.http
+   :code:
+
+`Transfer` object contains new access ``token`` and new ``transfer`` token. They replace old auctions access ``token`` and lots ``transfer`` when we will change ownership of procedure.
+
+`Transfer` can be retrieved by `id`:
+
+.. include:: tutorial/retrieve_transfer.http
+   :code:
+
+To change auctions ownership broker should send POST request to appropriate `/auctions/<id>/` with `data` section containing ``id`` of Transfer and ``transfer`` token received when creating a lot:
+
+.. include:: tutorial/transfer_token.http
+   :code:
+
+You can see that now you are owner of auction and status have changed to 'active.tendering'
 
 .. index:: Bidding
 
@@ -73,59 +77,145 @@ Registering bid
 
 Bidder can register a bid in `draft` status:
 
-......................
+.. include:: tutorial/register-bidder.http
+   :code:
 
 And activate a bid:
 
-......................
+.. include:: tutorial/activate-bidder.http
+   :code:
 
-And upload proposal document:
+Then upload proposal document:
 
-......................
+.. include:: tutorial/upload-bid-proposal.http
+   :code:
 
 It is possible to check the uploaded documents:
 
-......................
+.. include:: tutorial/bidder-documents.http
+   :code:
 
-For the best effect (biggest economy) auction should have multiple bidders registered:
+If only one bid was registered then procedure autoimaticaly change status to `active.qualification` and one award in `pending.admission` will be generated. We cen view this award:
 
-......................
+.. include:: tutorial/get-award.http
+   :code:
 
+Then broker should upload admission protocol:
 
-.. index:: Qualification, 1_submitted_proposal, 2_submitted_proposals_or_more, Confirming_qualification, Contract_prolongation, Candidate_disqualification
+.. include:: tutorial/upload-admission-protocol.http
+   :code:
 
-Auction
--------
+And then you can update it with details:
 
-After auction is scheduled anybody can visit it to watch. The auction can be reached at `Auction.auctionUrl`:
+.. include:: tutorial/patch-admission-protocol.http
+   :code:
 
-......................
+After uploading of the admission protocol you are able to update award status to pending:
 
-And bidders can find out their participation URLs via their bids:
+.. include:: tutorial/update-award-to-pending.http
+   :code:
 
-......................
+Next step is to upload auction protocol:
 
-See the `Bid.participationUrl` in the response. Similar, but different, URL can be retrieved for other participants:
+.. include:: tutorial/bidder-auction-protocol.http
+   :code:
 
-......................
+We can update some of its fields:
 
-.. _Qualification:
+.. include:: tutorial/update-bidder-auction-protocol.http
+   :code:
 
-Qualification
--------------
+And finally activate award:
 
+.. include:: tutorial/confirm-qualification.http
+   :code:
 
-.. _1_submitted_proposal:
+Now we can find out that our auction has a contract with its id:
 
-1 submitted proposal
-~~~~~~~~~~~~~~~~~~~~
+.. include:: tutorial/get-contract.http
+   :code:
+
+Lets upload contract document:
+
+.. include:: tutorial/auction-contract-upload-document.http
+   :code:
+
+And sign it:
+
+.. include:: tutorial/signing-contract.http
+   :code:
+
+To activate a contract one more POST request should be done:
+
+.. include:: tutorial/activate-contract.http
+   :code:
+
+You can see that our auction is now in `complete` status:
+
+.. include:: tutorial/check-contract-status.http
+   :code:
+
+.. index:: 2_submitted_proposals_or_more, Confirming_qualification, Contract_prolongation, Candidate_disqualification
 
 .. _2_submitted_proposals_or_more:
 
 2 submitted proposals or more
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+We have auction owned by us. Lets try to register first bidder in `draft` status:
+
+.. include:: tutorial/2bidders-register-first-bidder.http
+   :code:
+
+Activate it:
+
+.. include:: tutorial/2bidders-activate-bidder.http
+   :code:
+
+Upload proposal:
+
+.. include:: tutorial/2bidders-upload-bid-proposal.http
+   :code:
+
+For the best effect (biggest economy) auction should have multiple bidders registered:
+
+.. include:: tutorial/register-2nd-bidder.http
+   :code:
+
+Activate second bidder:
+
+.. include:: tutorial/2bidders-activate-second-bidder.http
+   :code:
+
+Upload second bidder proposal:
+
+.. include:: tutorial/2bidders-upload-second-bid-proposal.http
+   :code:
+
+Now procedure is ready for auction stage.
+
+Auction
+~~~~~~~
+
+ After auction is scheduled anybody can visit it to watch. The auction can be reached at `Auction.auctionUrl`:
+
+.. include:: tutorial/auction-url.http
+   :code:
+
+And bidders can find out their participation URLs via their bids:
+
+.. include:: tutorial/bidder-participation-url.http
+   :code:
+
+See the `Bid.participationUrl` in the response. Similar, but different, URL can be retrieved for other participants:
+
+.. include:: tutorial/bidder2-participation-url.http
+   :code:
+
 
 After the competitive auction two `awards` are created:
+
+.. include:: qualification/awards-get.http
+   :code:
 
 * for the first candidate (a participant that has submitted the highest valid bid at the auction) - initially has a `pending` status and awaits auction protocol to be uploaded by the organizer;
 
@@ -147,48 +237,29 @@ Confirming qualification
 
 The organizer **must** upload and confirm the auction protocol `auctionProtocol` and add it to the award within **4 business days after the start of the qualification procedure**. The candidate still has a possibility to upload the protocol, but it is neither mandatory, nor sufficient to move to the next status. If the auction protocol has not been uploaded before the end of `verificationPeriod`, the `award` is automatically transferred to the `unsuccessful` status.
 
-It is the organizer's duty to upload and confirm the protocol, as well as to switch the award to `active` status.
+It is the organizer's duty to upload and confirm the protocol, as well as to switch the award to `active` status:
 
- Otherwise, the award will automatically become `unsuccessful"`
+.. include:: qualification/award-pending-upload.http
+   :code:
 
-.. _Contract_prolongation:
+Also auction protocol can be modified:
 
-Contract prolongation
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. include:: qualification/patch-award.http
+   :code:
 
-Organizer can prolong contract signing period by creating a prolongation object: 
+And confirm qualification:
 
-.. include:: tutorial/prolongation-create.http
-    :code:
+.. include:: qualification/confirm-qualification-2bids.http
+   :code:
 
-For the object to be prolonged the next data has to be included:
+.. include:: qualification/award-pending-unsuccessful.http
+   :code:
 
-.. include:: tutorial/prolongation-attach-document.http
-    :code:
+ Otherwise, the award will automatically become `unsuccessful`
 
-Created prolongation has status "draft" by default, so there is a need to active it:
-
-.. include:: tutorial/prolongation-apply.http
-    :code:
-
-When a contract has been prolongated for first time, a short prolongation period (42 business days) is applied.
-It's also possible to apply a long-term (132 business days) prolongation:
-just create new :ref:`Prolongation` for the already prolongated :ref:`Contract`, and apply it.
-
-.. include:: tutorial/prolongation-second-time-create.http
-    :code:
-
-.. include:: tutorial/prolongation-long-document-attach.http
-    :code:
-
-.. include:: tutorial/prolongation-long-apply.http
-    :code:
-
-.. _Candidate_disqualification:
-    :code:
 
 Disqualification of a candidate
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In case of manual disqualification, the organizer has to upload file with cancellation reason:
 
@@ -196,11 +267,14 @@ In case of manual disqualification, the organizer has to upload file with cancel
 .. include:: qualification/award-active-unsuccessful-upload.http
   :code:
 
+Update rejection protocol:
+
+.. include:: qualification/patch-award-active-unsuccessful.http
+  :code:
 
 And disqualify candidate:
 
-
-.. include:: qualification/award-active-disqualify.http
+.. include:: qualification/award-pending-unsuccessful.http
   :code:
 
 
@@ -224,63 +298,34 @@ The candidate has **20 business days after becoming a candidate** to conclude a 
 Uploading contract documentation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+Get contract id:
+
+.. include:: tutorial/get-contract-2bids.http
+   :code:
+
 You can upload contract documents. Let's upload contract document:
 
-.. include:: tutorial/auction-contract-upload-document.http
+.. include:: tutorial/auction-contract-upload-document-2bids.http
    :code:
 
 `201 Created` response code and `Location` header confirm that document has been added.
 
 Let's see the list of contract documents:
 
-.. include:: tutorial/auction-contract-get-documents.http
+.. include:: tutorial/auction-contract-get-documents-2bids.http
    :code:
 
 We can add another contract document:
 
-.. include:: tutorial/auction-contract-upload-second-document.http
+.. include:: tutorial/auction-contract-upload-second-document-2bids.http
    :code:
 
 `201 Created` response code and `Location` header confirm that the second document has been uploaded.
 
 Let's see the list of all added contract documents:
 
-.. include:: tutorial/auction-contract-get-documents-again.http
+.. include:: tutorial/auction-contract-get-documents-again-2bids.http
    :code:
-
-
-.. _Contract_prolongation:
-
-Contract prolongation
-~~~~~~~~~~~~~~~~~~~~~
-
-Organizer can prolongate contract signing period by creating prolongation
-
-.. include:: tutorial/prolongation-create.http
-    :code:
-
-Prolongation must have documents attached to be prepared for activation
-
-.. include:: tutorial/prolongation-attach-document.http
-    :code:
-
-Created prolongation has status "draft" by default, so there is a need to set status to "applied" to make it active.
-
-.. include:: tutorial/prolongation-apply.http
-    :code:
-
-When a contract has been prolongated for first time, a short prolongation period applies.
-It is equal to 42 working days. It's also possible to apply long-term (132 days) prolongation:
-just create new :ref:`Prolongation` for the already prolongated :ref:`Contract`, and apply it.
-
-.. include:: tutorial/prolongation-second-time-create.http
-    :code:
-
-.. include:: tutorial/prolongation-long-document-attach.http
-    :code:
-
-.. include:: tutorial/prolongation-long-apply.http
-    :code:
 
 
 Contract registration
@@ -290,7 +335,22 @@ There is a possibility to set custom contract signature date.
 If the date is not set it will be generated on contract registration.
 You can register contract:
 
-.. include:: tutorial/auction-contract-sign.http
+.. include:: tutorial/auction-contract-sign-2bids.http
+   :code:
+
+Sign contract:
+
+.. include:: tutorial/signing-contract-2bids.http
+   :code:
+
+Activate contract:
+
+.. include:: tutorial/activate-contract-2bids.http
+   :code:
+
+Check status:
+
+.. include:: tutorial/check-contract-status-2bids.http
    :code:
 
 Cancelling auction

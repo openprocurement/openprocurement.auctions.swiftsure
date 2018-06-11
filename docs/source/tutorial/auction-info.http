@@ -1,0 +1,4 @@
+GET /api/2.4/auctions/7ef2e355688e499a870bddd71b55c492/auction HTTP/1.0
+Authorization: Basic YnJva2VyOg==
+Host: api-sandbox.ea.openprocurement.org
+

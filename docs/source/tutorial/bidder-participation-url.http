@@ -1,10 +1,11 @@
-GET /api/2.3/auctions/0bbf22e936f24d158f6d695b84b2de2f/bids/be3bb6d966f34c7389a71bfdada36002?acc_token=3d81a5bab08b499fa57792f94a076401 HTTP/1.0
+GET /api/2.4/auctions/97220a271daa48faaae51d29771fbb88/bids/a509415f03f9484aa644f3afae62fb59?acc_token=9345d09074cb4c01b2983fbb8d7c1bf2 HTTP/1.0
 Authorization: Basic YnJva2VyOg==
 Host: api-sandbox.ea.openprocurement.org
 
 
 200 OK
-Content-Type: application/json; charset=UTF-8
+Content-Type: application/json
+X-Content-Type-Options: nosniff
 
 {
   "data": {
@@ -13,12 +14,12 @@ Content-Type: application/json; charset=UTF-8
       {
         "hash": "md5:00000000000000000000000000000000", 
         "format": "application/pdf", 
-        "url": "http://api-sandbox.ea.openprocurement.org/api/2.3/auctions/0bbf22e936f24d158f6d695b84b2de2f/bids/be3bb6d966f34c7389a71bfdada36002/documents/2e23708cc8bd4139a76355a5243b887f?download=224ccae28f16433a88a2b8d0fa392677", 
+        "url": "http://api-sandbox.ea.openprocurement.org/api/2.4/auctions/97220a271daa48faaae51d29771fbb88/bids/a509415f03f9484aa644f3afae62fb59/documents/ab22c78948584178bbb0b363801118e6?download=c892a93772af4941be65e3d3e900c91f", 
         "title": "Proposal.pdf", 
         "documentOf": "tender", 
-        "datePublished": "2018-03-13T14:17:04.200779+02:00", 
-        "dateModified": "2018-03-13T14:17:04.200804+02:00", 
-        "id": "2e23708cc8bd4139a76355a5243b887f"
+        "datePublished": "2018-06-11T16:35:43.442548+03:00", 
+        "dateModified": "2018-06-11T16:35:43.442574+03:00", 
+        "id": "ab22c78948584178bbb0b363801118e6"
       }
     ], 
     "value": {
@@ -26,33 +27,32 @@ Content-Type: application/json; charset=UTF-8
       "amount": 500.0, 
       "valueAddedTaxIncluded": true
     }, 
-    "date": "2018-03-13T14:17:04.076622+02:00", 
+    "date": "2018-06-11T16:35:43.343189+03:00", 
     "qualified": true, 
     "tenderers": [
       {
         "contactPoint": {
-          "email": "soleksuk@gmail.com", 
-          "telephone": "+380 (432) 21-69-30", 
-          "name": "Сергій Олексюк"
+          "name": "Державне управління справами", 
+          "telephone": "0440000000"
         }, 
         "identifier": {
           "scheme": "UA-EDR", 
-          "id": "00137256", 
-          "uri": "http://www.sc.gov.ua/"
+          "id": "00037256", 
+          "uri": "http://www.dus.gov.ua/"
         }, 
-        "name": "ДКП «Школяр»", 
+        "name": "Державне управління справами", 
         "address": {
-          "postalCode": "21100", 
+          "postalCode": "01220", 
           "countryName": "Україна", 
-          "streetAddress": "вул. Островського, 33", 
-          "region": "м. Вінниця", 
-          "locality": "м. Вінниця"
+          "streetAddress": "вул. Банкова, 11, корпус 1", 
+          "region": "м. Київ", 
+          "locality": "м. Київ"
         }
       }
     ], 
     "owner": "broker", 
-    "id": "be3bb6d966f34c7389a71bfdada36002", 
-    "participationUrl": "http://auction-sandbox.openprocurement.org/auctions/0bbf22e936f24d158f6d695b84b2de2f?key_for_bid=be3bb6d966f34c7389a71bfdada36002"
+    "id": "a509415f03f9484aa644f3afae62fb59", 
+    "participationUrl": "https://auction.auction.url/for_bid/a509415f03f9484aa644f3afae62fb59"
   }
 }
 

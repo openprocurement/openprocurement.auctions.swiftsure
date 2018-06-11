@@ -1,0 +1,34 @@
+PATCH /api/2.4/auctions/97220a271daa48faaae51d29771fbb88/awards/41e1409aba4045f8bc887ec7bcb9ac12/documents/35135216fca54f028f89185c5cdc7854?acc_token=65731d2d152b44c88f15331890f3d5d6 HTTP/1.0
+Authorization: Basic YnJva2VyMzo=
+Content-Length: 80
+Content-Type: application/json
+Host: api-sandbox.ea.openprocurement.org
+
+{
+  "data": {
+    "description": "auction protocol", 
+    "documentType": "auctionProtocol"
+  }
+}
+
+
+200 OK
+Content-Type: application/json
+X-Content-Type-Options: nosniff
+
+{
+  "data": {
+    "dateModified": "2018-06-11T16:35:44.189251+03:00", 
+    "hash": "md5:00000000000000000000000000000000", 
+    "description": "auction protocol", 
+    "author": "auction_owner", 
+    "url": "http://public.docs-sandbox.ea.openprocurement.org/get/d84f57581b9644dda2ce1c9494eaf5bb?KeyID=172d32c8&Signature=w%2F6FHASVITtCdylMlrRPQ4757gBqNYNoBYkRSFSq7UeTtUlMouhBsjlIWt0oEEl%2F8wzp2vabf6xtwtdjjrhgDA%253D%253D", 
+    "format": "application/pdf", 
+    "documentOf": "tender", 
+    "datePublished": "2018-06-11T16:35:44.189225+03:00", 
+    "documentType": "auctionProtocol", 
+    "title": "auction_protocol.pdf", 
+    "id": "35135216fca54f028f89185c5cdc7854"
+  }
+}
+

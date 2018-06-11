@@ -1,0 +1,82 @@
+PATCH /api/2.4/auctions/84b47bb9907e49fea639a06d4d2bd026/awards/494b2265301e441889f243b820967056?acc_token=7fe14b58a7324881baa92bad83f2b3c9 HTTP/1.0
+Authorization: Basic YnJva2VyMzo=
+Content-Length: 31
+Content-Type: application/json
+Host: api-sandbox.ea.openprocurement.org
+
+{
+  "data": {
+    "status": "pending"
+  }
+}
+
+
+200 OK
+Content-Type: application/json
+X-Content-Type-Options: nosniff
+
+{
+  "data": {
+    "status": "pending", 
+    "documents": [
+      {
+        "dateModified": "2018-06-11T16:35:40.962265+03:00", 
+        "hash": "md5:00000000000000000000000000000000", 
+        "description": "admission protocol", 
+        "author": "auction_owner", 
+        "url": "http://public.docs-sandbox.ea.openprocurement.org/get/cc19957ec3534b4bba83b46c888ccb98?KeyID=172d32c8&Signature=kyYzfvQ13TDcGxqVOD3q7tvvyjalarebLYt9FjTVtUy4cBPNeppMkgrRk6%252B3G7i%2FAsoQ6CN8hTN00B2teb6XCg%253D%253D", 
+        "format": "application/pdf", 
+        "documentOf": "tender", 
+        "datePublished": "2018-06-11T16:35:40.962239+03:00", 
+        "documentType": "admissionProtocol", 
+        "title": "admission_protocol.pdf", 
+        "id": "623dab07f4504279b6a64171fa581d72"
+      }
+    ], 
+    "verificationPeriod": {
+      "startDate": "2018-06-11T16:35:41.133133+03:00", 
+      "endDate": "2018-06-11T16:45:44.646234+03:00"
+    }, 
+    "signingPeriod": {
+      "startDate": "2018-06-11T16:35:41.133133+03:00", 
+      "endDate": "2018-06-11T17:15:44.646234+03:00"
+    }, 
+    "suppliers": [
+      {
+        "contactPoint": {
+          "name": "Державне управління справами", 
+          "telephone": "0440000000"
+        }, 
+        "identifier": {
+          "scheme": "UA-EDR", 
+          "id": "00037256", 
+          "uri": "http://www.dus.gov.ua/"
+        }, 
+        "name": "Державне управління справами", 
+        "address": {
+          "postalCode": "01220", 
+          "countryName": "Україна", 
+          "streetAddress": "вул. Банкова, 11, корпус 1", 
+          "region": "м. Київ", 
+          "locality": "м. Київ"
+        }
+      }
+    ], 
+    "complaintPeriod": {
+      "startDate": "2018-06-11T16:35:40.861507+03:00"
+    }, 
+    "bid_id": "16da75c44e8a49b89d836fed8d0be4e5", 
+    "value": {
+      "currency": "UAH", 
+      "amount": 500.0, 
+      "valueAddedTaxIncluded": true
+    }, 
+    "admissionPeriod": {
+      "startDate": "2018-06-11T16:35:40.861507+03:00", 
+      "endDate": "2018-06-11T16:35:41.133133+03:00"
+    }, 
+    "date": "2018-06-11T16:35:41.142487+03:00", 
+    "id": "494b2265301e441889f243b820967056"
+  }
+}
+

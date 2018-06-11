@@ -1,0 +1,34 @@
+PATCH /api/2.4/auctions/f788c5f54c7148ab976016a6e9fdd99b/awards/a47f6758c4ea47ef8626a287b5be43c6/documents/d2192a515f8e42109851528b20caea98?acc_token=b2343f38d55f4b2c82bf8602023b4faa HTTP/1.0
+Authorization: Basic YnJva2VyMzo=
+Content-Length: 84
+Content-Type: application/json
+Host: api-sandbox.ea.openprocurement.org
+
+{
+  "data": {
+    "description": "rejection protocol", 
+    "documentType": "rejectionProtocol"
+  }
+}
+
+
+200 OK
+Content-Type: application/json
+X-Content-Type-Options: nosniff
+
+{
+  "data": {
+    "dateModified": "2018-06-11T16:35:18.493906+03:00", 
+    "hash": "md5:00000000000000000000000000000000", 
+    "description": "rejection protocol", 
+    "author": "auction_owner", 
+    "url": "http://public.docs-sandbox.ea.openprocurement.org/get/18f4d31ebb3e4404abdda5c0acd47c0a?KeyID=172d32c8&Signature=ccJuyUi1ypuE5TEl5atUV7fvirNEeb55VxD%252BB4jOzz6ZsINdDaeS4d%252BmIU9R4%252BVNrQL21DS8Tm3v5auhpKDVBg%253D%253D", 
+    "format": "application/pdf", 
+    "documentOf": "tender", 
+    "datePublished": "2018-06-11T16:35:18.493856+03:00", 
+    "documentType": "rejectionProtocol", 
+    "title": "rejection_protocol.pdf", 
+    "id": "d2192a515f8e42109851528b20caea98"
+  }
+}
+

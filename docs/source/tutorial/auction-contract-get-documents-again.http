@@ -1,34 +1,33 @@
-GET /api/2.3/auctions/0bbf22e936f24d158f6d695b84b2de2f/contracts/167820e4b4ce4684944cf83b16deaf73/documents HTTP/1.0
-Authorization: Basic YnJva2VyOg==
+GET /api/2.4/auctions/a30fbb0cdfaa4885b5948e188dcb1710/contracts/f0ce720b32d340ebb1a52fc8db59f6f5/documents HTTP/1.0
+Authorization: Basic YnJva2VyMzo=
 Host: api-sandbox.ea.openprocurement.org
 
 
 200 OK
-Content-Type: application/json; charset=UTF-8
+Content-Type: application/json
+X-Content-Type-Options: nosniff
 
 {
   "data": [
     {
       "hash": "md5:00000000000000000000000000000000", 
-      "format": "application/msword", 
-      "url": "http://public.docs-sandbox.ea.openprocurement.org/get/22d3b8cc510d4be880b1e16cea384c31?KeyID=e578eecc&Signature=y%252BF%252BUGdh%2FLEYDdSri%2FDCYRIxHp8gf%252BpAewKgGvNuw%252BxkBdBRauis3I8G9a%2FkV0h9TjRM1IOvFMiLlyB1uvH9AQ%253D%253D", 
-      "title": "contract_first_document.doc", 
+      "format": "application/pdf", 
+      "url": "http://public.docs-sandbox.ea.openprocurement.org/get/367fe3af04b242848232419261374baa?KeyID=172d32c8&Signature=E%2F5ub4Q5kHBfy1nnKK66gQJPjoPm2l%2Fsro0TbvSckyYgv74YxRnJtw5XiINFzeNE1WkpEcvwy1AmY9e4gJacDQ%253D%253D", 
+      "title": "contract_signed.pdf", 
       "documentOf": "tender", 
-      "datePublished": "2018-03-13T14:17:05.462936+02:00", 
-      "documentType": "prolongationProtocol", 
-      "dateModified": "2018-03-13T14:17:05.462956+02:00", 
-      "id": "8e9699adc2ca412eb7c9ea74a65d3ed9"
+      "datePublished": "2018-06-11T12:16:52.632496+03:00", 
+      "dateModified": "2018-06-11T12:16:52.632550+03:00", 
+      "id": "1510f528e39a4b21aea6e6bb33e6df36"
     }, 
     {
       "hash": "md5:00000000000000000000000000000000", 
       "format": "application/msword", 
-      "url": "http://public.docs-sandbox.ea.openprocurement.org/get/8106c4b78aed461cbb0e7ebe76e7a655?KeyID=e578eecc&Signature=kVWCHjZFpGIzqNMQSz6XeC8rB24UnK3Ur9RsFx38Hs5coEn3ekJMC31APBRo2fzQIoB2F0bV3XweXi4dwqe%2FBQ%253D%253D", 
+      "url": "http://public.docs-sandbox.ea.openprocurement.org/get/8136aa577e8c49538f02cc420c3951fb?KeyID=172d32c8&Signature=1PMQSZ2Dpbwv4RkAzQeDFeRUGFMNc9QMqApZj7XHnWklRDfGibYudcFPm0UHcHFou49P6b5SoK6RzpnhluXKBw%253D%253D", 
       "title": "contract_second_document.doc", 
       "documentOf": "tender", 
-      "datePublished": "2018-03-13T14:17:05.600939+02:00", 
-      "documentType": "prolongationProtocol", 
-      "dateModified": "2018-03-13T14:17:05.600959+02:00", 
-      "id": "1a9b1f726af546c0a56b867fa98370df"
+      "datePublished": "2018-06-11T12:16:52.788405+03:00", 
+      "dateModified": "2018-06-11T12:16:52.788439+03:00", 
+      "id": "1708e731a17848db807c14666f84c6cf"
     }
   ]
 }

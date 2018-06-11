@@ -1,5 +1,5 @@
-PATCH /api/2.3/auctions/3a65f2a2814047f698731e25fbbfbfca?acc_token=8ce904ff276848009376e2a2346fe747 HTTP/1.0
-Authorization: Basic YnJva2VyOg==
+PATCH /api/2.4/auctions/2ff3eb63679a47d0b9dc1856ad962e3e?acc_token=571d8411057e431dbd2ac8a3a6f75504 HTTP/1.0
+Authorization: Basic YnJva2VyMzo=
 Content-Length: 40
 Content-Type: application/json
 Host: api-sandbox.ea.openprocurement.org
@@ -12,61 +12,45 @@ Host: api-sandbox.ea.openprocurement.org
 
 
 200 OK
-Content-Type: application/json; charset=UTF-8
+Content-Type: application/json
+X-Content-Type-Options: nosniff
 
 {
   "data": {
     "procurementMethod": "open", 
-    "auctionID": "UA-EA-2018-03-13-000001", 
+    "auctionID": "UA-EA-2018-06-11-000001", 
+    "minNumberOfQualifiedBids": 1, 
     "enquiryPeriod": {
-      "startDate": "2018-03-13T14:16:57.516157+02:00", 
-      "endDate": "2018-03-26T23:59:50+03:00"
+      "startDate": "2018-06-11T16:35:20.829820+03:00", 
+      "endDate": "2018-06-24T23:59:50+03:00"
     }, 
     "submissionMethod": "electronicAuction", 
-    "dgfDecisionDate": "2016-11-17", 
-    "next_check": "2018-03-26T23:59:50+03:00", 
+    "next_check": "2018-06-24T23:59:50+03:00", 
     "awardCriteria": "highestCost", 
-    "dgfDecisionID": "219560", 
-    "owner": "broker", 
-    "id": "3a65f2a2814047f698731e25fbbfbfca", 
-    "documents": [
-      {
-        "title": "Місце та форма прийому заяв на участь в аукціоні та банківські реквізити для зарахування гарантійних внесків", 
-        "url": "http://torgi.fg.gov.ua/prozorrosale", 
-        "documentOf": "tender", 
-        "datePublished": "2018-03-13T14:16:57.516442+02:00", 
-        "documentType": "x_dgfPlatformLegalDetails", 
-        "dateModified": "2018-03-13T14:16:57.516464+02:00", 
-        "id": "e00ca1789e994e7a81fc1264c1ff7040"
-      }
-    ], 
+    "owner": "broker3", 
+    "id": "2ff3eb63679a47d0b9dc1856ad962e3e", 
     "title": "футляри до державних нагород", 
     "tenderAttempts": 1, 
     "procurementMethodDetails": "quick, accelerator=1440", 
-    "dateModified": "2018-03-13T14:16:57.551805+02:00", 
+    "dateModified": "2018-06-11T16:35:20.889453+03:00", 
     "status": "active.tendering", 
     "tenderPeriod": {
-      "startDate": "2018-03-13T14:16:57.516157+02:00", 
-      "endDate": "2018-03-26T23:59:50+03:00"
+      "startDate": "2018-06-11T16:35:20.829820+03:00", 
+      "endDate": "2018-06-24T23:59:50+03:00"
     }, 
     "auctionPeriod": {
-      "shouldStartAfter": "2018-03-27T00:00:00+03:00"
+      "shouldStartAfter": "2018-06-25T00:00:00+03:00"
     }, 
-    "procurementMethodType": "dgfOtherAssets", 
-    "dgfID": "219560", 
-    "date": "2018-03-13T14:16:57.551805+02:00", 
-    "minimalStep": {
-      "currency": "UAH", 
-      "amount": 35.0, 
-      "valueAddedTaxIncluded": true
-    }, 
+    "procurementMethodType": "Swiftsure", 
+    "date": "2018-06-11T16:35:20.889453+03:00", 
+    "submissionMethodDetails": "test submissionMethodDetails", 
     "items": [
       {
         "description": "Земля для військовослужбовців", 
         "classification": {
-          "scheme": "CAV", 
+          "scheme": "CPV", 
           "description": "Земельні ділянки", 
-          "id": "06000000-2"
+          "id": "66113000-5"
         }, 
         "address": {
           "postalCode": "79000", 
@@ -75,7 +59,7 @@ Content-Type: application/json; charset=UTF-8
           "region": "м. Київ", 
           "locality": "м. Київ"
         }, 
-        "id": "85ffe420bb304faeb1406cc6f0be5871", 
+        "id": "553a4a1f6c2f4491a31ac1571039b4ea", 
         "unit": {
           "code": "44617100-9", 
           "name": "item"
@@ -86,6 +70,11 @@ Content-Type: application/json; charset=UTF-8
     "value": {
       "currency": "UAH", 
       "amount": 100.0, 
+      "valueAddedTaxIncluded": true
+    }, 
+    "minimalStep": {
+      "currency": "UAH", 
+      "amount": 35.0, 
       "valueAddedTaxIncluded": true
     }, 
     "procuringEntity": {

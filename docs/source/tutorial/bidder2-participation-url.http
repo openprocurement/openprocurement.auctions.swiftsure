@@ -1,46 +1,58 @@
-GET /api/2.3/auctions/0bbf22e936f24d158f6d695b84b2de2f/bids/6742acc9246c45059d4f46aad4c65f1c?acc_token=bf827cf4885e47f4a8dd584d33c7f06e HTTP/1.0
+GET /api/2.4/auctions/97220a271daa48faaae51d29771fbb88/bids/a31cfee128dd456a91b18bc89e3751f4?acc_token=64162bce114841aa821546f0a0f7d199 HTTP/1.0
 Authorization: Basic YnJva2VyOg==
 Host: api-sandbox.ea.openprocurement.org
 
 
 200 OK
-Content-Type: application/json; charset=UTF-8
+Content-Type: application/json
+X-Content-Type-Options: nosniff
 
 {
   "data": {
     "status": "active", 
+    "documents": [
+      {
+        "hash": "md5:00000000000000000000000000000000", 
+        "format": "application/pdf", 
+        "url": "http://api-sandbox.ea.openprocurement.org/api/2.4/auctions/97220a271daa48faaae51d29771fbb88/bids/a31cfee128dd456a91b18bc89e3751f4/documents/c93f6b76b8f8408ba3e4c1809846124d?download=b79d79e71ad64485b862438165d91952", 
+        "title": "Proposal.pdf", 
+        "documentOf": "tender", 
+        "datePublished": "2018-06-11T16:35:43.632323+03:00", 
+        "dateModified": "2018-06-11T16:35:43.632348+03:00", 
+        "id": "c93f6b76b8f8408ba3e4c1809846124d"
+      }
+    ], 
     "value": {
       "currency": "UAH", 
-      "amount": 501.0, 
+      "amount": 300.0, 
       "valueAddedTaxIncluded": true
     }, 
-    "date": "2018-03-13T14:17:04.290704+02:00", 
+    "date": "2018-06-11T16:35:43.511922+03:00", 
     "qualified": true, 
     "tenderers": [
       {
         "contactPoint": {
-          "email": "aagt@gmail.com", 
-          "telephone": "+380 (322) 91-69-30", 
-          "name": "Андрій Олексюк"
+          "name": "Державне управління справами", 
+          "telephone": "0440000000"
         }, 
         "identifier": {
           "scheme": "UA-EDR", 
-          "id": "00137226", 
-          "uri": "http://www.sc.gov.ua/"
+          "id": "00037256", 
+          "uri": "http://www.dus.gov.ua/"
         }, 
-        "name": "ДКП «Книга»", 
+        "name": "Державне управління справами", 
         "address": {
-          "postalCode": "79013", 
+          "postalCode": "01220", 
           "countryName": "Україна", 
-          "streetAddress": "вул. Островського, 34", 
-          "region": "м. Львів", 
-          "locality": "м. Львів"
+          "streetAddress": "вул. Банкова, 11, корпус 1", 
+          "region": "м. Київ", 
+          "locality": "м. Київ"
         }
       }
     ], 
     "owner": "broker", 
-    "id": "6742acc9246c45059d4f46aad4c65f1c", 
-    "participationUrl": "http://auction-sandbox.openprocurement.org/auctions/0bbf22e936f24d158f6d695b84b2de2f?key_for_bid=6742acc9246c45059d4f46aad4c65f1c"
+    "id": "a31cfee128dd456a91b18bc89e3751f4", 
+    "participationUrl": "https://auction.auction.url/for_bid/a31cfee128dd456a91b18bc89e3751f4"
   }
 }
 
