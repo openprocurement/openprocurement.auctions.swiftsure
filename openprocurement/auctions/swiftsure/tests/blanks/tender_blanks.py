@@ -322,7 +322,9 @@ def create_auction_auctionPeriod(self):
     else:
         self.assertEqual(parse_date(auction['tenderPeriod']['endDate']).date(),
                          parse_date(data['auctionPeriod']['startDate'], TZ).date() - timedelta(days=1))
-        self.assertEqual(parse_date(auction['tenderPeriod']['endDate']).time(), time(20, 0))
+        tender_period_end_date_time = parse_date(auction['tenderPeriod']['endDate']).time()
+        self.assertGreaterEqual(tender_period_end_date_time, time(19, 30))
+        self.assertLessEqual(tender_period_end_date_time, time(20, 30))
 
 
 def create_auction_generated(self):
