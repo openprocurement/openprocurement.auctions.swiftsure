@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from datetime import timedelta
+from random import randint
 
 from pyramid.security import Allow
 from schematics.exceptions import ValidationError
@@ -160,7 +161,9 @@ class SwiftsureAuction(BaseAuction):
         self.auctionPeriod.endDate = None
         self.tenderPeriod.startDate = self.enquiryPeriod.startDate = now
         pause_between_periods = start_date - (start_date.replace(hour=20, minute=0, second=0, microsecond=0) - timedelta(days=1))
-        end_date = calculate_business_date(start_date, -pause_between_periods, self)
+        end_date = calculate_business_date(
+            start_date, -pause_between_periods, self
+        ) + timedelta(minutes=randint(-30, 30))  # set period end at 19:30-20:30 to reduce system load
         self.enquiryPeriod.endDate = end_date
         self.tenderPeriod.endDate = self.enquiryPeriod.endDate
         self.date = now
