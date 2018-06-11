@@ -19,7 +19,7 @@ Schema
     The reason, why auction is being cancelled.
 
 :status:
-    string
+    string, required
 
     Possible values are:
      :`pending`:
@@ -28,25 +28,19 @@ Schema
        Cancellation activated.
 
 :documents:
-    List of :ref:`Document` objects
+    List of :ref:`Document` objects, optional
 
     Documents accompanying the Cancellation: Protocol of Auction Committee
     with decision to cancel the Auction.
 
 :date:
-    string, :ref:`date`
+    string, :ref:`date`, auto-generated
 
     Cancellation date.
 
 :cancellationOf:
-    string
+    string, required
 
     Possible values are:
 
     * `auction`
-..    * `lot`
-
-.. :relatedLot:
-    string
-
-    ID of related :ref:`lot`.

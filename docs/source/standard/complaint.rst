@@ -25,6 +25,8 @@ Schema
     Title of the complaint.
 
 :description:
+    string, required
+
     Description of the issue.
 
 :date:
@@ -52,13 +54,13 @@ Schema
 
     Date of complaint decision.
 
-:dateCanceled:
+:dateCancelled:
     string, :ref:`date`, auto-generated
 
     Date of cancelling.
 
 :status:
-    string
+    string, required
 
     Possible values are:
 

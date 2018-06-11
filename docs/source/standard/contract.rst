@@ -17,28 +17,19 @@ Schema
     The identifier for this contract.
 
 :awardID:
-    string, required
+    string, required, auto-generated
 
     |ocdsDescription|
     The `Award.id` against which this contract is being issued.
 
 :contractID:
-       string, auto-generated, read-only
+    string, auto-generated, read-only
+
+    |ocdsDescription|
+    The `Contract.id` against which this contract is being issued.
 
 :contractNumber:
-       string
-
-:title:
-    string, required
-
-    |ocdsDescription|
-    Contract title
-
-:description:
-    string
-
-    |ocdsDescription|
-    Contract description
+    string, optional
 
 :value:
     `Value` object, auto-generated, read-only
@@ -72,12 +63,6 @@ Schema
       to a close.  This may be due to a successful completion of the contract,
       or may be early termination due to some non-completion issue.
 
-:period:
-    :ref:`Period`
-
-    |ocdsDescription|
-    The start and end date for the contract.
-
 :dateSigned:
     string, :ref:`date`
 
@@ -90,19 +75,13 @@ Schema
     |ocdsDescription|
     The start and end date for the contract signing.
 
-:datePaid:
-    string, :ref:`date`
-
-    |ocdsDescription|
-    The date the contract was paid.
-
 :date:
-    string, :ref:`date`
+    string, :ref:`date`, auto-generated, read-only
 
     The date when the contract was changed or activated.
 
 :documents:
-    List of :ref:`Document` objects
+    List of :ref:`Document` objects, required
 
     |ocdsDescription|
     All documents and attachments related to the contract, including any notices.

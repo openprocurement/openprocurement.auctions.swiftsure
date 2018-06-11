@@ -21,20 +21,8 @@ Schema
 
     The ID of a bid that the award relates to.
     
-:title:
-    string, multilingual
-    
-    |ocdsDescription|
-    Award title.
-    
-:description:
-    string, multilingual
-    
-    |ocdsDescription|
-    Award description.
-    
 :status:
-    string
+    string, required
     
     |ocdsDescription|
     The current status of the award drawn from the `awardStatus` codelist.
@@ -49,17 +37,12 @@ Schema
     * `cancelled` - the second bidder does not want to wait for the first bidder to be disqualified
 
 :verificationPeriod:
-    :ref:`period`
+    :ref:`period`, auto-generated, read-only
     
     The period of uploading (for the auction winner) and verification (for the bank) of the auction protocol
     
-:paymentPeriod:
-    :ref:`period`
-
-    The period given to the winner of the auction to make a payment
-    
 :signingPeriod:
-    :ref:`period`
+    :ref:`period`, auto-generated, read-only
 
     The period for the contract to be activated in the system (by the bank)
     
@@ -88,7 +71,7 @@ Schema
     The goods and services awarded in this award, broken into line items wherever possible. Items should not be duplicated, but the quantity should be specified instead. 
     
 :documents:
-    List of :ref:`Document` objects
+    List of :ref:`Document` objects, required
     
     |ocdsDescription|
     All documents and attachments related to the award, including any notices. 
@@ -97,11 +80,6 @@ Schema
     List of :ref:`Complaint` objects
 
 :complaintPeriod:
-    :ref:`period`
+    :ref:`period`, auto-generated, read-only
 
     The time frame when complaints can be submitted.
-
-.. :lotID:
-    string
-
-    ID of related :ref:`lot`.

@@ -15,10 +15,9 @@ Schema
     string, auto-generated
 
 :documentType:
-    string
+    string, required
 
     Possible values for :ref:`auction`
-
 
     * `notice` - **Auction notice**
 
@@ -44,7 +43,7 @@ Schema
 
     * `illustration` - **Illustrations**
 
-    * `x_dgfPublicAssetCertificate` - **Public Asset Certificate**
+    * `x_PublicAssetCertificate` - **Public Asset Certificate**
 
       Information about the auction. It is a link to the Public Asset Certificate.
 
@@ -56,7 +55,7 @@ Schema
 
       A non-disclosure agreement between a participant and a bank/Deposit Guarantee Fund.
 
-    * `x_dgfPlatformLegalDetails` - **Platform Legal Details**
+    * `x_PlatformLegalDetails` - **Platform Legal Details**
 
       Place and application forms for participation in the auction as well as bank details for transferring guarantee deposits.
 
@@ -91,7 +90,7 @@ Schema
 
     * `eligibilityDocuments` - **Eligibility documents**
 
-    * `financialLicense` - **License** (available only for the `dgfFinancialAssets` procedure, see :ref:`fintutorial`)
+    * `financialLicense` - **License** 
 
     * `auctionProtocol` - **Auction protocol**
 
@@ -99,24 +98,24 @@ Schema
 
 
 :title:
-    string, multilingual
+    string, multilingual, required
 
     |ocdsDescription|
     The document title.
 
 :description:
-    string, multilingual
+    string, multilingual, optional
 
     |ocdsDescription|
     A short description of the document. In the event the document is not accessible online, the description field can be used to describe arrangements for obtaining a copy of the document.
 
 :index:
-    integer
+    integer, optional
 
     Sorting (display order) parameter used for illustrations. The smaller number is, the higher illustration is in the sorting. If index is not specified, illustration will be displayed the last. If two illustrations have the same index, they will be sorted depending on their publishing date.
 
 :format:
-    string
+    string, optional
 
     |ocdsDescription|
     The format of the document taken from the `IANA Media Types code list <http://www.iana.org/assignments/media-types/>`_, with the addition of one extra value for 'offline/print', used when this document entry is being used to describe the offline publication of a document.
@@ -128,73 +127,32 @@ Schema
     Direct link to the document or attachment.
 
 :datePublished:
-    string, :ref:`date`
+    string, :ref:`date`, auto-generated
 
     |ocdsDescription|
     The date on which the document was first published.
 
 :dateModified:
-    string, :ref:`date`
+    string, :ref:`date`, auto-generated
 
     |ocdsDescription|
     Date that the document was last modified
 
 :language:
-    string
+    string, optional
 
     |ocdsDescription|
     Specifies the language of the linked document using either two-digit `ISO 639-1 <https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes>`_, or extended `BCP47 language tags <http://www.w3.org/International/articles/language-tags/>`_.
 
 :documentOf:
-    string
+    string, required
 
     Possible values are:
 
     * `auction`
     * `item`
-..    * `lot`
 
 :relatedItem:
-    string
+    string, optional
 
     ID of related :ref:`item`.
-
-..    ID of related :ref:`lot` or :ref:`item`.
-
-    * `biddingDocuments` - **Bidding Documents**
-
-      Information for potential participants, describing the goals of the contract (e.g. goods and services to be sold), and the bidding process.
-
-    * `eligibilityCriteria` - **Eligibility Criteria**
-
-      Detailed documents about the eligibility of bidders.
-
-    * `shortlistedFirms` - **Shortlisted Firms**
-
-    * `riskProvisions` - **Provisions for management of risks and liabilities**
-
-    * `billOfQuantity` - **Bill Of Quantity**
-
-    * `conflictOfInterest` - **Conflicts of interest uncovered**
-
-    * `debarments` - **Debarments issued**
-
-    * `evaluationReports` - **Evaluation report**
-
-      Report on the evaluation of the bids and the application of the evaluation criteria, including the justification fo the award.
-
-    * `complaints` - **Complaints and decisions**
-
-    * `notice` - **Award Notice**
-
-      The formal notice that gives details of the contract award. This may be a link to a downloadable document, to a web page, or to an official gazette in which the notice is contained.
-
-    * `contractProforma` - **Draft contract**
-
-    * `contractArrangements` - **Arrangements for ending contract**
-
-    * `contractGuarantees` - **Guarantees**
-
-    * `subContract` - **Subcontracts**
-
-    * `contractSchedule` - **Schedules and milestones**
