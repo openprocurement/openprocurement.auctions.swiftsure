@@ -1,13 +1,13 @@
-POST /api/2.3/auctions/6428763175bc491b9514dc7de4771281/awards/0be2b9c4dc4b43a8a203b239d726a74f/documents?acc_token=fa248967de2244439451050d2499166d HTTP/1.0
-Authorization: Basic YnJva2VyOg==
-Content-Length: 344
+POST /api/2.4/auctions/97220a271daa48faaae51d29771fbb88/awards/41e1409aba4045f8bc887ec7bcb9ac12/documents?acc_token=65731d2d152b44c88f15331890f3d5d6 HTTP/1.0
+Authorization: Basic YnJva2VyMzo=
+Content-Length: 343
 Content-Type: application/json
 Host: api-sandbox.ea.openprocurement.org
 
 {
   "data": {
-    "url": "http://public.docs-sandbox.ea.openprocurement.org/get/ceec00f1e1fe45d4823b6cff73a5e6e2?KeyID=278be238&Signature=xuIgYzql%2By8kTVjeTDgkirEqWHJXVgwjw17fzyw3vmwlejlibzdpjPJyDqKEm6E0xilYrz%2Fq%2FSe4oeTMnF2DCg%3D%3D", 
-    "title": "Unsuccessful_Reason.pdf", 
+    "url": "http://public.docs-sandbox.ea.openprocurement.org/get/d84f57581b9644dda2ce1c9494eaf5bb?KeyID=172d32c8&Signature=WaikauIYiEalYepLD%2Fb4a5Et3V0X1ZXveQLmhC7cpgir%2B6uI%2F0t3R7pnZ7yWthtHv%2FpIBBc6sR6eoNrnqvm8CQ%3D%3D", 
+    "title": "auction_protocol.pdf", 
     "hash": "md5:00000000000000000000000000000000", 
     "format": "application/pdf"
   }
@@ -15,19 +15,21 @@ Host: api-sandbox.ea.openprocurement.org
 
 
 201 Created
-Content-Type: application/json; charset=UTF-8
-Location: http://api-sandbox.ea.openprocurement.org/api/2.3/auctions/6428763175bc491b9514dc7de4771281/awards/0be2b9c4dc4b43a8a203b239d726a74f/documents/b52b77a5e21b4f7cafd0c9f44ca7932f
+Content-Type: application/json
+Location: http://api-sandbox.ea.openprocurement.org/api/2.4/auctions/97220a271daa48faaae51d29771fbb88/awards/41e1409aba4045f8bc887ec7bcb9ac12/documents/35135216fca54f028f89185c5cdc7854
+X-Content-Type-Options: nosniff
 
 {
   "data": {
     "hash": "md5:00000000000000000000000000000000", 
+    "author": "auction_owner", 
+    "title": "auction_protocol.pdf", 
+    "url": "http://public.docs-sandbox.ea.openprocurement.org/get/d84f57581b9644dda2ce1c9494eaf5bb?KeyID=172d32c8&Signature=w%2F6FHASVITtCdylMlrRPQ4757gBqNYNoBYkRSFSq7UeTtUlMouhBsjlIWt0oEEl%2F8wzp2vabf6xtwtdjjrhgDA%253D%253D", 
     "format": "application/pdf", 
-    "url": "http://public.docs-sandbox.ea.openprocurement.org/get/ceec00f1e1fe45d4823b6cff73a5e6e2?KeyID=278be238&Signature=GSt%2FNNdHL%252BgkEhjgxHCBjmWNNVMei%2FQA%252BZ65LBLXAxaZbYdfeLDwfvaGA0Wi%2FwCkAczFZKDsUkK0m5NItNxtDQ%253D%253D", 
-    "title": "Unsuccessful_Reason.pdf", 
     "documentOf": "tender", 
-    "datePublished": "2016-09-16T16:17:46.934420+03:00", 
-    "dateModified": "2016-09-16T16:17:46.934449+03:00", 
-    "id": "b52b77a5e21b4f7cafd0c9f44ca7932f"
+    "datePublished": "2018-06-11T16:35:44.189225+03:00", 
+    "dateModified": "2018-06-11T16:35:44.189251+03:00", 
+    "id": "35135216fca54f028f89185c5cdc7854"
   }
 }
 

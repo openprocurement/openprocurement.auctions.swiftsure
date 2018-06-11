@@ -1,5 +1,5 @@
-PATCH /api/2.3/auctions/6428763175bc491b9514dc7de4771281/awards/0be2b9c4dc4b43a8a203b239d726a74f?acc_token=fa248967de2244439451050d2499166d HTTP/1.0
-Authorization: Basic YnJva2VyOg==
+PATCH /api/2.4/auctions/f788c5f54c7148ab976016a6e9fdd99b/awards/a47f6758c4ea47ef8626a287b5be43c6?acc_token=b2343f38d55f4b2c82bf8602023b4faa HTTP/1.0
+Authorization: Basic YnJva2VyMzo=
 Content-Length: 36
 Content-Type: application/json
 Host: api-sandbox.ea.openprocurement.org
@@ -12,27 +12,35 @@ Host: api-sandbox.ea.openprocurement.org
 
 
 200 OK
-Content-Type: application/json; charset=UTF-8
-Location: http://api-sandbox.ea.openprocurement.org/api/2.3/auctions/6428763175bc491b9514dc7de4771281/awards/153fcdbbcfd64ab38b2279cc474787f8
+Content-Type: application/json
+Location: http://api-sandbox.ea.openprocurement.org/api/2.4/auctions/f788c5f54c7148ab976016a6e9fdd99b/awards/2e8fb2f78e5d403f8517b80b98894358
+X-Content-Type-Options: nosniff
 
 {
   "data": {
     "status": "unsuccessful", 
     "documents": [
       {
+        "dateModified": "2018-06-11T16:35:18.493906+03:00", 
         "hash": "md5:00000000000000000000000000000000", 
+        "description": "rejection protocol", 
+        "author": "auction_owner", 
+        "url": "http://public.docs-sandbox.ea.openprocurement.org/get/18f4d31ebb3e4404abdda5c0acd47c0a?KeyID=172d32c8&Signature=ccJuyUi1ypuE5TEl5atUV7fvirNEeb55VxD%252BB4jOzz6ZsINdDaeS4d%252BmIU9R4%252BVNrQL21DS8Tm3v5auhpKDVBg%253D%253D", 
         "format": "application/pdf", 
-        "url": "http://public.docs-sandbox.ea.openprocurement.org/get/ceec00f1e1fe45d4823b6cff73a5e6e2?KeyID=278be238&Signature=GSt%2FNNdHL%252BgkEhjgxHCBjmWNNVMei%2FQA%252BZ65LBLXAxaZbYdfeLDwfvaGA0Wi%2FwCkAczFZKDsUkK0m5NItNxtDQ%253D%253D", 
-        "title": "Unsuccessful_Reason.pdf", 
         "documentOf": "tender", 
-        "datePublished": "2016-09-16T16:17:46.934420+03:00", 
-        "dateModified": "2016-09-16T16:17:46.934449+03:00", 
-        "id": "b52b77a5e21b4f7cafd0c9f44ca7932f"
+        "datePublished": "2018-06-11T16:35:18.493856+03:00", 
+        "documentType": "rejectionProtocol", 
+        "title": "rejection_protocol.pdf", 
+        "id": "d2192a515f8e42109851528b20caea98"
       }
     ], 
-    "complaintPeriod": {
-      "startDate": "2016-09-16T16:17:46.702347+03:00", 
-      "endDate": "2016-09-20T16:17:47.101766+03:00"
+    "verificationPeriod": {
+      "startDate": "2018-06-11T16:35:18.145518+03:00", 
+      "endDate": "2018-06-11T16:35:18.733959+03:00"
+    }, 
+    "signingPeriod": {
+      "startDate": "2018-06-11T16:35:18.145518+03:00", 
+      "endDate": "2018-06-11T17:15:21.674583+03:00"
     }, 
     "suppliers": [
       {
@@ -55,14 +63,18 @@ Location: http://api-sandbox.ea.openprocurement.org/api/2.3/auctions/6428763175b
         }
       }
     ], 
-    "bid_id": "5e687c10e6964f3087d491a63b692a02", 
+    "complaintPeriod": {
+      "startDate": "2018-06-11T16:35:18.145518+03:00", 
+      "endDate": "2018-06-11T16:35:18.733959+03:00"
+    }, 
+    "bid_id": "2f76dc5eb2e14b5bbc0ac488c21d43d5", 
     "value": {
       "currency": "UAH", 
-      "amount": 479.0, 
+      "amount": 500.0, 
       "valueAddedTaxIncluded": true
     }, 
-    "date": "2016-09-16T16:17:47.113324+03:00", 
-    "id": "0be2b9c4dc4b43a8a203b239d726a74f"
+    "date": "2018-06-11T16:35:18.747618+03:00", 
+    "id": "a47f6758c4ea47ef8626a287b5be43c6"
   }
 }
 

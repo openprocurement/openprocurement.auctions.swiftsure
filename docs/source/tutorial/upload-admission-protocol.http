@@ -1,0 +1,37 @@
+POST /api/2.4/auctions/84b47bb9907e49fea639a06d4d2bd026/awards/494b2265301e441889f243b820967056/documents?acc_token=7fe14b58a7324881baa92bad83f2b3c9 HTTP/1.0
+Authorization: Basic YnJva2VyMzo=
+Content-Length: 374
+Content-Type: application/json
+Host: api-sandbox.ea.openprocurement.org
+
+{
+  "data": {
+    "url": "http://public.docs-sandbox.ea.openprocurement.org/get/cc19957ec3534b4bba83b46c888ccb98?KeyID=172d32c8&Signature=M6twtq070Hbje9AdfEqaCd7huhxcYcpPpOD%2BcNlmBcXvuToQGb1XqhkCJjnt2Pg289jEdevL80zv8RYA8S8ECQ%3D%3D", 
+    "title": "admission_protocol.pdf", 
+    "format": "application/pdf", 
+    "hash": "md5:00000000000000000000000000000000", 
+    "documentType": "auctionProtocol"
+  }
+}
+
+
+201 Created
+Content-Type: application/json
+Location: http://api-sandbox.ea.openprocurement.org/api/2.4/auctions/84b47bb9907e49fea639a06d4d2bd026/awards/494b2265301e441889f243b820967056/documents/623dab07f4504279b6a64171fa581d72
+X-Content-Type-Options: nosniff
+
+{
+  "data": {
+    "hash": "md5:00000000000000000000000000000000", 
+    "author": "auction_owner", 
+    "title": "admission_protocol.pdf", 
+    "url": "http://public.docs-sandbox.ea.openprocurement.org/get/cc19957ec3534b4bba83b46c888ccb98?KeyID=172d32c8&Signature=kyYzfvQ13TDcGxqVOD3q7tvvyjalarebLYt9FjTVtUy4cBPNeppMkgrRk6%252B3G7i%2FAsoQ6CN8hTN00B2teb6XCg%253D%253D", 
+    "format": "application/pdf", 
+    "documentOf": "tender", 
+    "datePublished": "2018-06-11T16:35:40.962239+03:00", 
+    "documentType": "auctionProtocol", 
+    "dateModified": "2018-06-11T16:35:40.962265+03:00", 
+    "id": "623dab07f4504279b6a64171fa581d72"
+  }
+}
+

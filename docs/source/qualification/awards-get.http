@@ -1,17 +1,23 @@
-GET /api/2.3/auctions/6428763175bc491b9514dc7de4771281/awards HTTP/1.0
-Authorization: Basic YnJva2VyOg==
+GET /api/2.4/auctions/97220a271daa48faaae51d29771fbb88/awards HTTP/1.0
+Authorization: Basic YnJva2VyMzo=
 Host: api-sandbox.ea.openprocurement.org
 
 
 200 OK
-Content-Type: application/json; charset=UTF-8
+Content-Type: application/json
+X-Content-Type-Options: nosniff
 
 {
   "data": [
     {
       "status": "pending", 
-      "complaintPeriod": {
-        "startDate": "2016-09-16T16:17:46.702347+03:00"
+      "verificationPeriod": {
+        "startDate": "2018-06-11T16:35:43.978129+03:00", 
+        "endDate": "2018-06-11T16:45:47.489255+03:00"
+      }, 
+      "signingPeriod": {
+        "startDate": "2018-06-11T16:35:43.978129+03:00", 
+        "endDate": "2018-06-11T17:15:47.489255+03:00"
       }, 
       "suppliers": [
         {
@@ -34,14 +40,52 @@ Content-Type: application/json; charset=UTF-8
           }
         }
       ], 
-      "bid_id": "5e687c10e6964f3087d491a63b692a02", 
+      "complaintPeriod": {
+        "startDate": "2018-06-11T16:35:43.978129+03:00"
+      }, 
+      "bid_id": "a509415f03f9484aa644f3afae62fb59", 
       "value": {
         "currency": "UAH", 
-        "amount": 479.0, 
+        "amount": 500.0, 
         "valueAddedTaxIncluded": true
       }, 
-      "date": "2016-09-16T16:17:46.702331+03:00", 
-      "id": "0be2b9c4dc4b43a8a203b239d726a74f"
+      "date": "2018-06-11T16:35:43.978129+03:00", 
+      "id": "41e1409aba4045f8bc887ec7bcb9ac12"
+    }, 
+    {
+      "status": "pending.waiting", 
+      "complaintPeriod": {
+        "startDate": "2018-06-11T16:35:43.978129+03:00"
+      }, 
+      "suppliers": [
+        {
+          "contactPoint": {
+            "name": "Державне управління справами", 
+            "telephone": "0440000000"
+          }, 
+          "identifier": {
+            "scheme": "UA-EDR", 
+            "id": "00037256", 
+            "uri": "http://www.dus.gov.ua/"
+          }, 
+          "name": "Державне управління справами", 
+          "address": {
+            "postalCode": "01220", 
+            "countryName": "Україна", 
+            "streetAddress": "вул. Банкова, 11, корпус 1", 
+            "region": "м. Київ", 
+            "locality": "м. Київ"
+          }
+        }
+      ], 
+      "bid_id": "a31cfee128dd456a91b18bc89e3751f4", 
+      "value": {
+        "currency": "UAH", 
+        "amount": 300.0, 
+        "valueAddedTaxIncluded": true
+      }, 
+      "date": "2018-06-11T16:35:43.978129+03:00", 
+      "id": "d191c1b6b641439d966ab8aa45d8ef3d"
     }
   ]
 }
