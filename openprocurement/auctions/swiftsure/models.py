@@ -115,10 +115,10 @@ class SwiftsureAuction(BaseAuction):
     tenderPeriod = ModelType(Period)  # The period when the auction is open for submissions. The end date is the closing date for auction submissions.
     tenderAttempts = IntType(choices=[1, 2, 3, 4, 5, 6, 7, 8])
     auctionPeriod = ModelType(AuctionAuctionPeriod, required=True, default={})
-    status = StringType(choices=['draft', 'pending.verification', 'invalid', 'active.tendering', 'active.auction', 'active.qualification', 'active.awarded', 'complete', 'cancelled', 'unsuccessful'], default='active.tendering')
+    status = StringType(choices=['draft', 'pending.activation', 'active.tendering', 'active.auction', 'active.qualification', 'active.awarded', 'complete', 'cancelled', 'unsuccessful'], default='active.tendering')
     features = ListType(ModelType(Feature), validators=[validate_features_uniq, validate_not_available])
     lots = ListType(ModelType(Lot), default=list(), validators=[validate_lots_uniq, validate_not_available])
-    items = ListType(ModelType(Item), default=list(), validators=[validate_items_uniq])
+    items = ListType(ModelType(Item), default=list(), validators=[validate_items_uniq], min_size=1)
     suspended = BooleanType()
     registrationFee = ModelType(Guarantee)
     bankAccount = ModelType(BankAccount)
@@ -177,15 +177,8 @@ class SwiftsureAuction(BaseAuction):
             raise ValidationError(u"currency should be only UAH")
 
     def validate_merchandisingObject(self, data, merchandisingObject):
-        if data['status'] == 'pending.verification' and not merchandisingObject:
+        if data['status'] == 'pending.activation' and not merchandisingObject:
             raise ValidationError(u'This field is required.')
-
-    def validate_items(self, data, items):
-        if data['status'] not in ['draft', 'pending.verification', 'invalid']:
-            if not items:
-                raise ValidationError(u'This field is required.')
-            elif len(items) < 1:
-                raise ValidationError(u'Please provide at least 1 item.')
 
 
     @serializable(serialize_when_none=False)

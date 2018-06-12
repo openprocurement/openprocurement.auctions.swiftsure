@@ -278,7 +278,7 @@ def create_auction_invalid(self):
     self.assertEqual(response.status, '422 Unprocessable Entity')
     self.assertEqual(response.content_type, 'application/json')
     self.assertEqual(response.json['status'], 'error')
-    self.assertIn({u'description': [u'This field is required.'], u'location': u'body', u'name': u'items'}, response.json['errors'])
+    self.assertIn({u'description': [u'Please provide at least 1 item.'], u'location': u'body', u'name': u'items'}, response.json['errors'])
 
     # accreditaion level checks
 
