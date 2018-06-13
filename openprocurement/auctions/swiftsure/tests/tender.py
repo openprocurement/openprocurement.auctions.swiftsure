@@ -21,7 +21,7 @@ from openprocurement.auctions.swiftsure.models import (
     SwiftsureAuction
 )
 from openprocurement.auctions.swiftsure.tests.base import (
-    test_auction_data, test_organization,
+    test_auction_data, test_organization, test_documents,
     BaseWebTest, BaseAuctionWebTest
 )
 from openprocurement.auctions.swiftsure.tests.blanks.tender_blanks import (
@@ -33,6 +33,8 @@ from openprocurement.auctions.swiftsure.tests.blanks.tender_blanks import (
     create_auction_auctionPeriod,
     create_auction_generated,
     create_auction,
+    create_auction_with_documents,
+    create_auction_with_documents_invalid,
     # AuctionProcessTest
     one_valid_bid_auction,
     one_invalid_bid_auction_manual,
@@ -63,6 +65,16 @@ class AuctionResourceTest(BaseWebTest, AuctionResourceTestMixin, DgfInsiderResou
     test_auction_features_invalid = unittest.skip("option not available")(snitch(auction_features_invalid))
     test_auction_features = unittest.skip("option not available")(snitch(auction_features))
     test_patch_tender_jsonpatch = snitch(patch_tender_jsonpatch)
+
+
+class AuctionResourceTestWDocument(BaseWebTest):
+    initial_status = 'active.tendering'
+    initial_data = deepcopy(test_auction_data)
+    documents = deepcopy(test_documents)
+    initial_data['documents'] = documents
+
+    test_create_auction_with_documents = snitch(create_auction_with_documents)
+    test_create_auction_with_documents_invalid = snitch(create_auction_with_documents_invalid)
 
 
 class AuctionProcessTest(BaseAuctionWebTest):
