@@ -186,8 +186,7 @@ class BaseAuctionWebTest(CoreBaseAuctionWebTest):
             for i, item in enumerate(data['items']):
                 item['relatedLot'] = lots[i % len(lots)]['id']
         if self.registry:
-            items = data.pop('items')
-            data.update({'status': "pending.verification", 'merchandisingObject': uuid4().hex})
+            data.update({'status': "draft", 'merchandisingObject': uuid4().hex})
             response = self.app.post_json('/auctions', {'data': data})
             auction = response.json['data']
             self.auction_token = response.json['access']['token']
@@ -195,14 +194,19 @@ class BaseAuctionWebTest(CoreBaseAuctionWebTest):
             self.auction_transfer = response.json['access']['transfer']
             self.auction_id = auction['id']
             authorization = self.app.authorization
-            self.app.authorization = ('Basic', ('convoy', ''))
+            self.app.authorization = ('Basic', ('concierge', ''))
             response = self.app.patch_json('/auctions/{}'.format(self.auction_id),
-                                           {'data': {'items': items, 'status': 'active.tendering'}})
+                                           {'data': {'status': 'pending.activation'}})
+            self.assertEqual(response.status, '200 OK')
+            self.assertEqual(response.content_type, 'application/json')
+            self.assertEqual(response.json['data']['status'], 'pending.activation')
+            self.app.authorization = authorization
+            response = self.app.patch_json('/auctions/{}'.format(self.auction_id),
+                                           {'data': {'status': 'active.tendering'}})
             self.assertEqual(response.status, '200 OK')
             self.assertEqual(response.content_type, 'application/json')
             auction = response.json['data']
             self.assertEqual(auction['status'], 'active.tendering')
-            self.app.authorization = authorization
         else:
             response = self.app.post_json('/auctions', {'data': data})
             auction = response.json['data']
