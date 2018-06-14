@@ -422,6 +422,16 @@ def create_auction(self):
     self.assertEqual(data['bankAccount']['accountIdentification'][0]['description'], 'test')
     self.assertEqual(data['bankAccount']['bankName'], 'test')
 
+    auction_data['procuringEntity']['additionalContactPoints'] = [
+        {'name': 'name', 'email': 'some@mail.com'}
+    ]
+    response = self.app.post_json('/auctions', {'data': auction_data})
+    self.assertEqual(response.status, '201 Created')
+    self.assertEqual(response.content_type, 'application/json')
+    data = response.json['data']
+    self.assertEqual(data['procuringEntity']['additionalContactPoints'][0]['name'], 'name')
+    self.assertEqual(data['procuringEntity']['additionalContactPoints'][0]['email'], 'some@mail.com')
+
 
 def create_auction_with_documents(self):
     data = deepcopy(self.initial_data)
