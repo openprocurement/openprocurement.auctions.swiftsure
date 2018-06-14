@@ -38,7 +38,9 @@ from openprocurement.auctions.core.models import (
     validate_not_available,
     Guarantee,
     BankAccount,
-    AuctionParameters
+    AuctionParameters,
+    ContactPoint,
+    ProcuringEntity as BaseProcuringEntity
 )
 from openprocurement.auctions.core.plugins.awarding.v3_1.models import (
     Award
@@ -57,6 +59,10 @@ from openprocurement.auctions.core.utils import (
 from openprocurement.auctions.core.validation import (
     validate_disallow_dgfPlatformLegalDetails
 )
+
+
+class ProcuringEntity(BaseProcuringEntity):
+    additionalContactPoints = ListType(ModelType(ContactPoint), default=list())
 
 
 class Bid(BaseBid):
@@ -124,6 +130,7 @@ class SwiftsureAuction(BaseAuction):
     bankAccount = ModelType(BankAccount)
     auctionParameters = ModelType(AuctionParameters)
     minNumberOfQualifiedBids = IntType(choices=[1], default=1)
+    procuringEntity = ModelType(ProcuringEntity, required=True)
 
     create_accreditation = 3
     edit_accreditation = 4
