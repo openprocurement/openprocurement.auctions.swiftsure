@@ -157,6 +157,27 @@ test_features = [
     }
 ]
 
+test_documents = [
+    {
+        u'dateModified': u'2018-06-13T18:52:38.439672+03:00',
+        u'datePublished': u'2018-06-13T18:52:38.439645+03:00',
+        u'documentOf': u'tender',
+        u'format': u'application/msword',
+        u'id': u'5b15488495424a70873f9062f43996fd',
+        u'title': u'first_document.doc',
+        u'url': u'http://localhost/api/2.5/auctions/d391dc0e36e64e9599cadaff069555ca/documents/5b15488495424a70873f9062f43996fd?download=79e962b14487481d87996bcdffa05d58'
+    },
+    {
+        u'dateModified': u'2018-06-13T19:07:35.860955+03:00',
+        u'datePublished': u'2018-06-13T19:07:35.860933+03:00',
+        u'documentOf': u'tender',
+        u'format': u'application/msword',
+        u'id': u'0aa995cdfa234e4fa432ac24f7178763',
+        u'title': u'second_document.doc',
+        u'url': u'http://localhost/api/2.5/auctions/35e55ce810834138aa9e768e9a01ffdb/documents/0aa995cdfa234e4fa432ac24f7178763?download=7995192f6c3f41b497fdcdc9cc3f7c49'
+    }
+]
+
 
 class BaseWebTest(CoreBaseWebTest):
 

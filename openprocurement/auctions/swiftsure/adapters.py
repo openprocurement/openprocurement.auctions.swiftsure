@@ -20,7 +20,11 @@ class AuctionSwiftsureConfigurator(AuctionConfigurator,
 class AuctionSwiftsureManagerAdapter(AuctionManagerAdapter):
 
     def create_auction(self, request):
-        pass
+        auction = request.validated['auction']
+        for i in request.validated['json_data'].get('documents', []):
+            document = type(auction).documents.model_class(i)
+            document.__parent__ = auction
+            auction.documents.append(document)
 
     def change_auction(self, request):
         pass

@@ -423,6 +423,46 @@ def create_auction(self):
     self.assertEqual(data['bankAccount']['bankName'], 'test')
 
 
+def create_auction_with_documents(self):
+    data = deepcopy(self.initial_data)
+
+    response = self.app.post_json('/auctions', {"data": data})
+    self.assertEqual(response.status, '201 Created')
+    self.assertEqual(response.content_type, 'application/json')
+    auction = response.json['data']
+    self.assertEqual(auction['status'], 'active.tendering')
+
+    for index, _ in enumerate(self.documents):
+        self.assertEqual(response.json["data"]['documents'][index]['id'], self.documents[index]['id'])
+        self.assertEqual(response.json["data"]['documents'][index]['datePublished'],
+                         self.documents[index]['datePublished'])
+        self.assertEqual(response.json["data"]['documents'][index]['dateModified'],
+                         self.documents[index]['dateModified'])
+
+    response = self.app.get('/auctions/{}/documents'.format(auction['id']))
+    self.assertEqual(response.status, '200 OK')
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertEqual(len(response.json["data"]), 2)
+    self.assertEqual(response.json["data"][0]['title'], self.documents[0]['title'])
+    self.assertEqual(response.json["data"][1]['title'], self.documents[1]['title'])
+
+
+def create_auction_with_documents_invalid(self):
+    data = deepcopy(self.initial_data)
+    data['documents'][0].pop('title')
+    data['documents'][1].pop('url')
+    response = self.app.post_json('/auctions', {"data": data}, status=422)
+    self.assertEqual(response.status, '422 Unprocessable Entity')
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertEqual(response.json['status'], 'error')
+    self.assertEqual(response.json['errors'], [
+        {"description": [
+            {"title": ["This field is required."]},
+            {"url": ["This field is required."]}],
+         u'location': u'body', u'name': u'documents'}
+    ])
+
+
 # AuctionProcessTest
 
 
