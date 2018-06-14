@@ -38,7 +38,7 @@ from openprocurement.auctions.core.models import (
     validate_not_available,
     Guarantee,
     BankAccount,
-    AuctionParameters,
+    AuctionParameters as BaseAuctionParameters,
     ContactPoint,
     ProcuringEntity as BaseProcuringEntity
 )
@@ -59,6 +59,13 @@ from openprocurement.auctions.core.utils import (
 from openprocurement.auctions.core.validation import (
     validate_disallow_dgfPlatformLegalDetails
 )
+
+
+class AuctionParameters(BaseAuctionParameters):
+    class Options:
+        roles = {
+            'create': whitelist('type')
+        }
 
 
 class ProcuringEntity(BaseProcuringEntity):
