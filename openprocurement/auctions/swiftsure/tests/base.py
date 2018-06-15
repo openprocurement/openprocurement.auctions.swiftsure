@@ -164,7 +164,7 @@ test_documents = [
     {
         u'dateModified': u'2018-06-13T18:52:38.439672+03:00',
         u'datePublished': u'2018-06-13T18:52:38.439645+03:00',
-        u'documentOf': u'tender',
+        u'documentOf': u'auction',
         u'format': u'application/msword',
         u'id': u'5b15488495424a70873f9062f43996fd',
         u'title': u'first_document.doc',
@@ -173,7 +173,8 @@ test_documents = [
     {
         u'dateModified': u'2018-06-13T19:07:35.860955+03:00',
         u'datePublished': u'2018-06-13T19:07:35.860933+03:00',
-        u'documentOf': u'tender',
+        u'documentOf': u'lot',
+        u'relatedItem': u'1' * 32,
         u'format': u'application/msword',
         u'id': u'0aa995cdfa234e4fa432ac24f7178763',
         u'title': u'second_document.doc',

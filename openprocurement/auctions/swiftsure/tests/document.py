@@ -4,28 +4,34 @@ import unittest
 from openprocurement.auctions.swiftsure.tests.base import (
     BaseAuctionWebTest
 )
+from openprocurement.auctions.core.tests.base import snitch
 from openprocurement.auctions.core.tests.document import (
     AuctionDocumentResourceTestMixin,
     AuctionDocumentWithDSResourceTestMixin
 )
+from openprocurement.auctions.swiftsure.tests.blanks.document_blanks import patch_auction_document
 
 
 class AuctionDocumentResourceTest(BaseAuctionWebTest, AuctionDocumentResourceTestMixin):
     docservice = False
+    test_patch_auction_document = snitch(patch_auction_document)
 
 
 class AuctionDocumentWithDSResourceTest(BaseAuctionWebTest, AuctionDocumentResourceTestMixin, AuctionDocumentWithDSResourceTestMixin):
     docservice = True
+    test_patch_auction_document = snitch(patch_auction_document)
 
     # TODO this TestCase didn't contain "test_create_auction_document_pas"
 
 
 class AuctionDocumentResourceTestWithRegistry(AuctionDocumentResourceTest):
     registry = True
+    test_patch_auction_document = snitch(patch_auction_document)
 
 
 class AuctionDocumentWithDSResourceTestWithRegistry(AuctionDocumentWithDSResourceTest):
     registry = True
+    test_patch_auction_document = snitch(patch_auction_document)
 
 
 def suite():

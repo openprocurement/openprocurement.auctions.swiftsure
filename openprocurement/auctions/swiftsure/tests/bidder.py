@@ -27,6 +27,7 @@ from openprocurement.auctions.swiftsure.tests.blanks.bidder_blanks import (
     features_bidder,
     # AuctionBidderDocumentResourceTest
     create_auction_bidder_document_nopending,
+    patch_auction_bidder_document,
     # AuctionBidderDocumentWithDSResourceTest
     operate_bidder_document_json_invalid
 )
@@ -57,6 +58,7 @@ class AuctionBidderFeaturesResourceTest(BaseAuctionWebTest):
 class AuctionBidderDocumentResourceTest(BaseAuctionWebTest,
                                         AuctionBidderDocumentResourceTestMixin):
     initial_status = 'active.tendering'
+    test_patch_auction_bidder_document = snitch(patch_auction_bidder_document)
 
     def setUp(self):
         super(AuctionBidderDocumentResourceTest, self).setUp()
@@ -75,6 +77,7 @@ class AuctionBidderDocumentWithDSResourceTest(BaseAuctionWebTest,
                                               AuctionBidderDocumentWithDSResourceTestMixin):
     initial_status = 'active.tendering'
     docservice = True
+    test_patch_auction_bidder_document = snitch(patch_auction_bidder_document)
 
     def setUp(self):
         super(AuctionBidderDocumentWithDSResourceTest, self).setUp()
