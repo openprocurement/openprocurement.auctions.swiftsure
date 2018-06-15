@@ -23,6 +23,9 @@ now = datetime.now()
 test_auction_data = {
     "title": u"футляри до державних нагород",
     "tenderAttempts": 1,
+    "auctionParameters": {
+        "type": "english"
+    },
     "procuringEntity": test_procuringEntity,
     "value": {
         "amount": 100,
