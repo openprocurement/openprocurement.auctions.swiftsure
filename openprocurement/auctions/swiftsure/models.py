@@ -23,8 +23,8 @@ from openprocurement.auctions.core.models import (
     Auction as BaseAuction,
     Bid as BaseBid,
     dgfCancellation as Cancellation,
-    SwiftsureItem as Item,
-    dgfDocument as Document,
+    SwiftsureItem,
+    swiftsureDocument,
     dgfComplaint as Complaint,
     Feature,
     Period,
@@ -79,7 +79,7 @@ class Bid(BaseBid):
         }
 
     status = StringType(choices=['active', 'draft', 'invalid'], default='active')
-    documents = ListType(ModelType(Document), default=list(), validators=[validate_disallow_dgfPlatformLegalDetails])
+    documents = ListType(ModelType(swiftsureDocument), default=list(), validators=[validate_disallow_dgfPlatformLegalDetails])
     qualified = BooleanType(required=True, choices=[True])
 
 
@@ -123,7 +123,7 @@ class SwiftsureAuction(BaseAuction):
     complaints = ListType(ComplaintModelType(Complaint), default=list())
     contracts = ListType(ModelType(Contract), default=list())
     merchandisingObject = MD5Type()
-    documents = ListType(ModelType(Document), default=list())  # All documents and attachments related to the auction.
+    documents = ListType(ModelType(swiftsureDocument), default=list())  # All documents and attachments related to the auction.
     enquiryPeriod = ModelType(Period)  # The period during which enquiries may be made and will be answered.
     tenderPeriod = ModelType(Period)  # The period when the auction is open for submissions. The end date is the closing date for auction submissions.
     tenderAttempts = IntType(choices=[1, 2, 3, 4, 5, 6, 7, 8])
@@ -131,7 +131,7 @@ class SwiftsureAuction(BaseAuction):
     status = StringType(choices=['draft', 'pending.activation', 'active.tendering', 'active.auction', 'active.qualification', 'active.awarded', 'complete', 'cancelled', 'unsuccessful'], default='active.tendering')
     features = ListType(ModelType(Feature), validators=[validate_features_uniq, validate_not_available])
     lots = ListType(ModelType(Lot), default=list(), validators=[validate_lots_uniq, validate_not_available])
-    items = ListType(ModelType(Item), default=list(), validators=[validate_items_uniq], min_size=1)
+    items = ListType(ModelType(SwiftsureItem), default=list(), validators=[validate_items_uniq], min_size=1)
     suspended = BooleanType()
     registrationFee = ModelType(Guarantee)
     bankAccount = ModelType(BankAccount)
