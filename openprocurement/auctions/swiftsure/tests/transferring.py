@@ -17,11 +17,11 @@ class AuctionOwnershipChangeResourceTest(BaseAuctionWebTest,
     first_owner = 'broker3'
     second_owner = 'broker3'
     concierge = 'concierge'
-    test_owner = 'broker1t'
+    test_owner = 'broker3t'
     invalid_owner = 'broker1'
     initial_auth = ('Basic', (first_owner, ''))
 
-    test_mode_test = None
+    test_new_owner_can_change = None  # swiftsure auction can not be changed during enquiryPeriod
     test_create_auction_by_concierge = snitch(create_auction_by_concierge)
 
     def setUp(self):

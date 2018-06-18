@@ -3,7 +3,6 @@ from copy import deepcopy
 from datetime import timedelta, time
 from iso8601 import parse_date
 
-from openprocurement.auctions.core.constants import DGF_ELIGIBILITY_CRITERIA
 from openprocurement.auctions.core.tests.base import JSON_RENDERER_ERROR
 from openprocurement.auctions.core.utils import get_now, SANDBOX_MODE, TZ
 
@@ -27,15 +26,12 @@ def create_role(self):
 
 
 def edit_role(self):
-    fields = set([
-        'features', 'hasEnquiries', 'description', 'description_en', 'description_ru',
-        'title', 'title_en', 'title_ru', 'tenderAttempts',
-        'merchandisingObject',
-    ])
-    if SANDBOX_MODE:
-        fields.add('procurementMethodDetails')
-    self.assertEqual(set(self.auction._fields) - self.auction._options.roles['edit_active.tendering'].fields, fields)
-
+    fields = set([])
+    role = self.auction._options.roles['edit_active.tendering']
+    if role.function.__name__ == 'blacklist':
+        self.assertEqual(set(self.auction._fields) - role.fields, fields)
+    else:
+        self.assertEqual(set(self.auction._fields).intersection(role.fields), fields)
 # AuctionResourceTest
 
 
