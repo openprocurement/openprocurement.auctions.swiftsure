@@ -39,11 +39,22 @@ def validate_patch_auction_data(request, **kwargs):
         return
 
     elif request.context.status == 'pending.activation':
-        if request.authenticated_role == 'concierge' or (new_status and new_status != default_status):
+        if not new_status or request.authenticated_role == 'concierge' or (new_status and new_status != default_status):
             request.errors.add('body', 'data',
                                'Can\'t update auction in current ({}) status'.format(request.context.status))
             request.errors.status = 403
             return
+
         request.validated['data'] = {'status': new_status}
         request.context.status = new_status
+        return
+
+
+def validate_post_auction_status_role(request, **kwargs):
+    auction = request.validated['auction']
+    status = auction.get('status', type(auction).fields['status'].default)
+    if request.authenticated_role == 'concierge' and status not in ['draft', 'pending.activation']:
+        request.errors.add('body', 'data',
+                           'Can\'t create auction in current ({}) status'.format(status))
+        request.errors.status = 403
         return

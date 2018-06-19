@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 from copy import deepcopy
+from uuid import uuid4
+
 from datetime import timedelta, time
 from iso8601 import parse_date
 
@@ -17,7 +19,7 @@ def create_role(self):
         'procurementMethodRationale', 'procurementMethodRationale_en', 'procurementMethodRationale_ru',
         'procurementMethodType', 'procuringEntity', 'merchandisingObject',
         'submissionMethodDetails', 'submissionMethodDetails_en', 'submissionMethodDetails_ru',
-        'title', 'title_en', 'title_ru', 'value', 'auctionPeriod',
+        'title', 'title_en', 'title_ru', 'value', 'auctionPeriod', 'status',
         'registrationFee', 'bankAccount', 'auctionParameters', u'minNumberOfQualifiedBids'
     ])
     if SANDBOX_MODE:
@@ -293,6 +295,20 @@ def create_auction_invalid(self):
              u'name': u'accreditation'}
         ])
 
+    # create by concierge in non draft/pending.activation status
+    self.app.authorization = ('Basic', ('concierge', ''))
+    auction_data = deepcopy(self.initial_data)
+    auction_data['status'] = 'active.tendering'
+    response = self.app.post_json(request_path, {'data': auction_data}, status=403)
+    self.assertEqual(response.status, '403 Forbidden')
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertEqual(response.json['status'], 'error')
+    self.assertEqual(response.json['errors'], [
+        {u'description': u'Can\'t create auction in current (active.tendering) status',
+         u'location': u'body',
+         u'name': u'data'}
+    ])
+
 
 def create_auction_auctionPeriod(self):
     data = self.initial_data.copy()
@@ -481,6 +497,8 @@ def one_valid_bid_auction(self):
 
     data = deepcopy(self.initial_data)
     data['minNumberOfQualifiedBids'] = 1
+    data['status'] = 'pending.activation'
+    data['merchandisingObject'] = uuid4().hex
 
     response = self.app.post_json('/auctions',
                                   {"data": data})
@@ -606,6 +624,8 @@ def one_invalid_bid_auction_manual(self):
     # create auction
     data = deepcopy(self.initial_data)
     data['minNumberOfQualifiedBids'] = 1
+    data['status'] = 'pending.activation'
+    data['merchandisingObject'] = uuid4().hex
 
     response = self.app.post_json('/auctions',
                                   {"data": data})
@@ -678,6 +698,8 @@ def one_invalid_bid_auction_automatic(self):
     # create auction
     data = deepcopy(self.initial_data)
     data['minNumberOfQualifiedBids'] = 1
+    data['status'] = 'pending.activation'
+    data['merchandisingObject'] = uuid4().hex
 
     response = self.app.post_json('/auctions',
                                   {"data": data})
@@ -734,8 +756,12 @@ def first_bid_auction(self):
     response = self.app.get('/auctions')
     self.assertEqual(response.json['data'], [])
     # create auction
+    auction_data = deepcopy(self.initial_data)
+    auction_data['status'] = 'pending.activation'
+    auction_data['merchandisingObject'] = uuid4().hex
+
     response = self.app.post_json('/auctions',
-                                  {"data": self.initial_data})
+                                  {"data": auction_data})
     auction_id = self.auction_id = response.json['data']['id']
     transfer_token = response.json['access']['transfer']
 
@@ -978,6 +1004,8 @@ def suspended_auction(self):
     self.assertEqual(response.json['data'], [])
     # create auction
     auction_data = deepcopy(self.initial_data)
+    auction_data['status'] = 'pending.activation'
+    auction_data['merchandisingObject'] = uuid4().hex
     auction_data['suspended'] = True
     response = self.app.post_json('/auctions',
                                   {"data": auction_data})
@@ -988,6 +1016,14 @@ def suspended_auction(self):
     # ownership change
     self.app.authorization = ('Basic', ('broker3', ''))
     owner_token = self.change_ownership(auction_id, transfer_token)
+
+    response = self.app.patch_json(
+        '/auctions/{}?acc_token={}'.format(auction_id, owner_token),
+        {"data": {"status": 'active.tendering'}}
+    )
+    self.assertEqual(response.status, '200 OK')
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertEqual(response.json['data']['status'], 'active.tendering')
 
     response = self.app.patch_json('/auctions/{}'.format(auction_id), {"data": {"suspended": True}}, status=403)
     self.assertEqual(response.status, '403 Forbidden')
