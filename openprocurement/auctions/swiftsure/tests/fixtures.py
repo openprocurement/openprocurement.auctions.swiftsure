@@ -5,6 +5,17 @@ from openprocurement.auctions.core.plugins.contracting.v3.models import (
 )
 from openprocurement.auctions.core.utils import get_now
 
+PARTIAL_MOCK_CONFIG = {
+    "auctions.swiftsure":{
+        "use_default":True,
+        "plugins":{
+            "swiftsure.migration":None
+        },
+        "migration":False,
+        "aliases":[]
+    }
+}
+
 PROLONGATION = {
     'decisionID': 'very_importante_documente',
     'description': 'Prolongate your contract for free!',
