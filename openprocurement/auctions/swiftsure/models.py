@@ -22,9 +22,10 @@ from openprocurement.auctions.core.models import (
     IAuction,
     Auction as BaseAuction,
     Bid as BaseBid,
-    dgfCancellation as Cancellation,
+    swiftsureCancellation,
     SwiftsureItem,
     swiftsureDocument,
+    swiftsureBidDocument,
     dgfComplaint as Complaint,
     Feature,
     Period,
@@ -79,7 +80,7 @@ class Bid(BaseBid):
         }
 
     status = StringType(choices=['active', 'draft', 'invalid'], default='active')
-    documents = ListType(ModelType(swiftsureDocument), default=list(), validators=[validate_disallow_dgfPlatformLegalDetails])
+    documents = ListType(ModelType(swiftsureBidDocument), default=list(), validators=[validate_disallow_dgfPlatformLegalDetails])
     qualified = BooleanType(required=True, choices=[True])
 
 
@@ -119,7 +120,7 @@ class SwiftsureAuction(BaseAuction):
     _procedure_type = "swiftsure"
     awards = ListType(ModelType(Award), default=list())
     bids = ListType(ModelType(Bid), default=list())  # A list of all the companies who entered submissions for the auction.
-    cancellations = ListType(ModelType(Cancellation), default=list())
+    cancellations = ListType(ModelType(swiftsureCancellation), default=list())
     complaints = ListType(ComplaintModelType(Complaint), default=list())
     contracts = ListType(ModelType(Contract), default=list())
     merchandisingObject = MD5Type()

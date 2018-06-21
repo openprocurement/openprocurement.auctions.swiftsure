@@ -20,6 +20,8 @@ class AuctionDocumentResourceTest(BaseAuctionWebTest, AuctionDocumentResourceTes
 class AuctionDocumentWithDSResourceTest(BaseAuctionWebTest, AuctionDocumentResourceTestMixin, AuctionDocumentWithDSResourceTestMixin):
     docservice = True
     test_patch_auction_document = snitch(patch_auction_document)
+    test_put_auction_document_pas = None
+    test_create_auction_document_pas = None
 
     # TODO this TestCase didn't contain "test_create_auction_document_pas"
 
