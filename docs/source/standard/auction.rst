@@ -63,6 +63,11 @@ Schema
   integer, auto-generated, read-only
 
   Number of submitted bids for the process to become successful. The default value is 1.
+
+:procurementMethod:
+  string, auto-generated, read-only
+
+  Purchase method. The only value is “open”.
   
 :procurementMethodType:
   string, read-only
@@ -161,6 +166,12 @@ Schema
 
   |ocdsDescription|
   All documents and attachments related to the auction.
+
+:dateModified:
+    string, :ref:`date`, auto-generated
+
+    |ocdsDescription|
+    Date when the auction was last modified
 
 :questions:
   Array of :ref:`question` objects, optional
@@ -261,7 +272,11 @@ Schema
   |ocdsDescription|
   The date or period on which an award is anticipated to be made.
 
-  
+:mode: 
+  string, optional
+
+  The additional parameter with a value `test`.
+
 .. _Auction_Parameters:
   
 Auction Parameters

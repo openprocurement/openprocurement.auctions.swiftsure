@@ -30,6 +30,8 @@ Schema
 :contactPoint:
   :ref:`ContactPoint`, required
 
+:additionalContactPoints:
+    Array of :ref:`ContactPoint` objects, optional
 
 .. index:: Company, id
 
