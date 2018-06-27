@@ -13,7 +13,7 @@ Schema
     UID, auto-generated
 
 :author:
-    :ref:`Organization`, required
+    :ref:`Organization`, optional
 
     Who is asking a question (contactPoint - person, identification - organization that person represents).
 
@@ -42,13 +42,10 @@ Schema
 
     Possible values are:
 
-    * `auction`
+    * `tender`
     * `item`
 
 :relatedItem:
     string
 
     ID of related :ref:`item`.
-
-..    ID of related :ref:`lot` or :ref:`item`.
-

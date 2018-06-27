@@ -1,12 +1,14 @@
 .. . Kicking page rebuild 2014-10-30 17:00:08
 .. include:: defs.hrst
 
-.. index:: Item, Parameter, Classification, CAV, Unit
+.. index:: Item, Parameter, Classification, CAV, Unit, registrationDetails
 
 .. _Item:
 
 Item
 ====
+
+Originates from `lot.items <http://lotsloki.api-docs.registry.ea2.openprocurement.io/en/latest/standard/item.html>`_.
 
 Schema
 ------
@@ -73,6 +75,10 @@ Schema
 
     `location` usually takes precedence over `address` if both are present.
 
+:registrationDetails:
+    
+    :ref:`Registration Details`, required
+
 .. _Classification:
 
 Classification
@@ -128,3 +134,38 @@ Schema
 
     |ocdsDescription|
     Name of the unit
+
+.. _registrationDetails:
+
+Registration Details
+====================
+
+Schema
+------
+
+:status:
+    string, required
+
+    Possible values are:
+
+    :`unknown`: 
+        default value;
+    :`registering`:
+        item is still registering;
+    :`complete`:
+        item has already been registered.
+
+:registrationID:
+    string, optional
+
+    The document identifier to refer to in the `paper` documentation.
+
+    Available for mentioning in status: complete.
+
+:registrationDate:
+    :ref:`Date`, optional
+
+    |ocdsDescription|
+    The date on which the document was first published.
+
+    Available for mentioning in status: complete.
