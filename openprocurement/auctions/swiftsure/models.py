@@ -41,7 +41,7 @@ from openprocurement.auctions.core.models import (
     BankAccount,
     AuctionParameters as BaseAuctionParameters,
     ContactPoint,
-    ProcuringEntity as BaseProcuringEntity
+    SwiftsureProcuringEntity
 )
 from openprocurement.auctions.core.plugins.awarding.v3_1.models import (
     Award
@@ -67,10 +67,6 @@ class AuctionParameters(BaseAuctionParameters):
         roles = {
             'create': whitelist('type')
         }
-
-
-class ProcuringEntity(BaseProcuringEntity):
-    additionalContactPoints = ListType(ModelType(ContactPoint), default=list())
 
 
 class Bid(BaseBid):
@@ -138,7 +134,7 @@ class SwiftsureAuction(BaseAuction):
     bankAccount = ModelType(BankAccount)
     auctionParameters = ModelType(AuctionParameters)
     minNumberOfQualifiedBids = IntType(choices=[1], default=1)
-    procuringEntity = ModelType(ProcuringEntity, required=True)
+    procuringEntity = ModelType(SwiftsureProcuringEntity, required=True)
 
     create_accreditation = 3
     edit_accreditation = 4
