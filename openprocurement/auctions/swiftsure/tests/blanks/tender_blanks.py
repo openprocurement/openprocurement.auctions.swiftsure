@@ -19,7 +19,7 @@ def create_role(self):
         'procurementMethodRationale', 'procurementMethodRationale_en', 'procurementMethodRationale_ru',
         'procurementMethodType', 'procuringEntity', 'merchandisingObject',
         'submissionMethodDetails', 'submissionMethodDetails_en', 'submissionMethodDetails_ru',
-        'title', 'title_en', 'title_ru', 'value', 'auctionPeriod', 'status',
+        'title', 'title_en', 'title_ru', 'value', 'auctionPeriod', 'status', 'contractTerms',
         'registrationFee', 'bankAccount', 'auctionParameters', u'minNumberOfQualifiedBids'
     ])
     if SANDBOX_MODE:

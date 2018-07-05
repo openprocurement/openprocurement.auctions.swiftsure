@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from datetime import timedelta
+from functools import partial
 from random import randint
 
 from pyramid.security import Allow
@@ -22,6 +23,7 @@ from openprocurement.auctions.core.models import (
     IAuction,
     Auction as BaseAuction,
     Bid as BaseBid,
+    ContractTerms,
     swiftsureCancellation,
     SwiftsureItem,
     swiftsureDocument,
@@ -35,12 +37,12 @@ from openprocurement.auctions.core.models import (
     validate_features_uniq,
     validate_lots_uniq,
     validate_items_uniq,
+    validate_contract_type,
     calc_auction_end_time,
     validate_not_available,
     Guarantee,
     BankAccount,
     AuctionParameters as BaseAuctionParameters,
-    ContactPoint,
     SwiftsureProcuringEntity
 )
 from openprocurement.auctions.core.plugins.awarding.v3_1.models import (
@@ -60,6 +62,11 @@ from openprocurement.auctions.core.utils import (
 from openprocurement.auctions.core.validation import (
     validate_disallow_dgfPlatformLegalDetails
 )
+
+from openprocurement.auctions.swiftsure.constants import CONTRACT_TYPES
+
+
+validate_contract_type = partial(validate_contract_type, choices=CONTRACT_TYPES)
 
 
 class AuctionParameters(BaseAuctionParameters):
@@ -135,6 +142,7 @@ class SwiftsureAuction(BaseAuction):
     auctionParameters = ModelType(AuctionParameters)
     minNumberOfQualifiedBids = IntType(choices=[1], default=1)
     procuringEntity = ModelType(SwiftsureProcuringEntity, required=True)
+    contractTerms = ModelType(ContractTerms, validators=[validate_contract_type])
 
     create_accreditation = 3
     edit_accreditation = 4
