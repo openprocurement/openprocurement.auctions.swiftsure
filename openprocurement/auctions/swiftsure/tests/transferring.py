@@ -3,8 +3,7 @@ import unittest
 
 from openprocurement.auctions.core.tests.base import snitch
 from openprocurement.auctions.core.tests.plugins.transferring.blanks.resource_blanks import (
-    create_auction_by_concierge
-)
+    create_auction_by_concierge)
 from openprocurement.auctions.core.tests.plugins.transferring.mixins import (
     AuctionOwnershipChangeTestCaseMixin
 )
@@ -21,7 +20,8 @@ class AuctionOwnershipChangeResourceTest(BaseAuctionWebTest,
     invalid_owner = 'broker1'
     initial_auth = ('Basic', (first_owner, ''))
 
-    test_new_owner_can_change = None  # swiftsure auction can not be changed during enquiryPeriod
+    # swiftsure auction can not be changed during enquiryPeriod
+    test_new_owner_can_change = None
     test_create_auction_by_concierge = snitch(create_auction_by_concierge)
 
     def setUp(self):

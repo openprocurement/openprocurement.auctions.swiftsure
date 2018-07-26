@@ -3,8 +3,18 @@
 import unittest
 
 from openprocurement.auctions.swiftsure.tests import (
-    auction, award, bidder, cancellation, chronograph, complaint, contract, document, lot, migration, tender, question
-)
+    auction,
+    award,
+    bidder,
+    cancellation,
+    chronograph,
+    complaint,
+    contract,
+    document,
+    lot,
+    migration,
+    tender,
+    question)
 
 
 def suite():

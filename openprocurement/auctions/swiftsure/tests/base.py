@@ -75,47 +75,28 @@ test_features_auction_data = test_auction_data.copy()
 test_features_item = test_features_auction_data['items'][0].copy()
 test_features_item['id'] = "1"
 test_features_auction_data['items'] = [test_features_item]
-test_features_auction_data["features"] = [
-    {
-        "code": "OCDS-123454-AIR-INTAKE",
-        "featureOf": "item",
-        "relatedItem": "1",
-        "title": u"Потужність всмоктування",
-        "title_en": "Air Intake",
-        "description": u"Ефективна потужність всмоктування пилососа, в ватах (аероватах)",
-        "enum": [
-            {
-                "value": 0.1,
-                "title": u"До 1000 Вт"
-            },
-            {
-                "value": 0.15,
-                "title": u"Більше 1000 Вт"
-            }
-        ]
-    },
-    {
-        "code": "OCDS-123454-YEARS",
-        "featureOf": "tenderer",
-        "title": u"Років на ринку",
-        "title_en": "Years trading",
-        "description": u"Кількість років, які організація учасник працює на ринку",
-        "enum": [
-            {
-                "value": 0.05,
-                "title": u"До 3 років"
-            },
-            {
-                "value": 0.1,
-                "title": u"Більше 3 років, менше 5 років"
-            },
-            {
-                "value": 0.15,
-                "title": u"Більше 5 років"
-            }
-        ]
-    }
-]
+test_features_auction_data["features"] = [{"code": "OCDS-123454-AIR-INTAKE",
+                                           "featureOf": "item",
+                                           "relatedItem": "1",
+                                           "title": u"Потужність всмоктування",
+                                           "title_en": "Air Intake",
+                                           "description":
+                                               u"Ефективна потужність всмоктування пилососа, в ватах (аероватах)",
+                                           "enum": [{"value": 0.1,
+                                                     "title": u"До 1000 Вт"},
+                                                    {"value": 0.15,
+                                                     "title": u"Більше 1000 Вт"}]},
+                                          {"code": "OCDS-123454-YEARS",
+                                           "featureOf": "tenderer",
+                                           "title": u"Років на ринку",
+                                           "title_en": "Years trading",
+                                           "description": u"Кількість років, які організація учасник працює на ринку",
+                                           "enum": [{"value": 0.05,
+                                                     "title": u"До 3 років"},
+                                                    {"value": 0.1,
+                                                     "title": u"Більше 3 років, менше 5 років"},
+                                                    {"value": 0.15,
+                                                     "title": u"Більше 5 років"}]}]
 
 test_bids = []
 for i in base_test_bids:
@@ -173,7 +154,7 @@ test_documents = [
         u'format': u'application/msword',
         u'id': u'5b15488495424a70873f9062f43996fd',
         u'title': u'first_document.doc',
-        u'url': u'http://localhost/api/2.5/auctions/d391dc0e36e64e9599cadaff069555ca/documents/5b15488495424a70873f9062f43996fd?download=79e962b14487481d87996bcdffa05d58'
+        u'url': u'http://localhost/api/2.5/auctions/d391dc0e36e64e9599cadaff069555ca/documents/5b15488495424a70873f9062f43996fd?download=79e962b14487481d87996bcdffa05d58'  # noqa
     },
     {
         u'dateModified': u'2018-06-13T19:07:35.860955+03:00',
@@ -183,7 +164,7 @@ test_documents = [
         u'format': u'application/msword',
         u'id': u'0aa995cdfa234e4fa432ac24f7178763',
         u'title': u'second_document.doc',
-        u'url': u'http://localhost/api/2.5/auctions/35e55ce810834138aa9e768e9a01ffdb/documents/0aa995cdfa234e4fa432ac24f7178763?download=7995192f6c3f41b497fdcdc9cc3f7c49'
+        u'url': u'http://localhost/api/2.5/auctions/35e55ce810834138aa9e768e9a01ffdb/documents/0aa995cdfa234e4fa432ac24f7178763?download=7995192f6c3f41b497fdcdc9cc3f7c49'  # noqa
     }
 ]
 
@@ -204,6 +185,7 @@ class BaseWebTest(CoreBaseWebTest):
     relative_to = os.path.dirname(__file__)
     mock_config = MOCK_CONFIG
 
+
 class BaseAuctionWebTest(CoreBaseAuctionWebTest):
     relative_to = os.path.dirname(__file__)
     initial_data = test_auction_data
@@ -223,7 +205,8 @@ class BaseAuctionWebTest(CoreBaseAuctionWebTest):
             for i, item in enumerate(data['items']):
                 item['relatedLot'] = lots[i % len(lots)]['id']
         if self.registry:
-            data.update({'status': "draft", 'merchandisingObject': uuid4().hex})
+            data.update({'status': "draft",
+                         'merchandisingObject': uuid4().hex})
             response = self.app.post_json('/auctions', {'data': data})
             auction = response.json['data']
             self.auction_token = response.json['access']['token']
@@ -236,7 +219,9 @@ class BaseAuctionWebTest(CoreBaseAuctionWebTest):
                                            {'data': {'status': 'pending.activation'}})
             self.assertEqual(response.status, '200 OK')
             self.assertEqual(response.content_type, 'application/json')
-            self.assertEqual(response.json['data']['status'], 'pending.activation')
+            self.assertEqual(
+                response.json['data']['status'],
+                'pending.activation')
             self.app.authorization = authorization
             response = self.app.patch_json('/auctions/{}'.format(self.auction_id),
                                            {'data': {'status': 'active.tendering'}})
@@ -268,10 +253,12 @@ class BaseAuctionWebTest(CoreBaseAuctionWebTest):
                         }
                         for l in self.initial_lots
                     ]
-                response = self.app.post_json('/auctions/{}/bids'.format(self.auction_id), {'data': i})
+                response = self.app.post_json(
+                    '/auctions/{}/bids'.format(self.auction_id), {'data': i})
                 self.assertEqual(response.status, '201 Created')
                 bids.append(response.json['data'])
-                self.initial_bids_tokens[response.json['data']['id']] = response.json['access']['token']
+                self.initial_bids_tokens[response.json['data'][
+                    'id']] = response.json['access']['token']
             self.initial_bids = bids
         if self.initial_status != status:
             self.set_status(self.initial_status)
@@ -413,7 +400,6 @@ class BaseAuctionWebTest(CoreBaseAuctionWebTest):
         self.db.save(auction)
         authorization = self.app.authorization
         self.app.authorization = ('Basic', ('chronograph', ''))
-        #response = self.app.patch_json('/auctions/{}'.format(self.auction_id), {'data': {'id': self.auction_id}})
         response = self.app.get('/auctions/{}'.format(self.auction_id))
         self.app.authorization = authorization
         self.assertEqual(response.status, '200 OK')

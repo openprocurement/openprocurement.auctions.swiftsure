@@ -12,12 +12,17 @@ from openprocurement.auctions.core.tests.document import (
 from openprocurement.auctions.swiftsure.tests.blanks.document_blanks import patch_auction_document
 
 
-class AuctionDocumentResourceTest(BaseAuctionWebTest, AuctionDocumentResourceTestMixin):
+class AuctionDocumentResourceTest(
+        BaseAuctionWebTest,
+        AuctionDocumentResourceTestMixin):
     docservice = False
     test_patch_auction_document = snitch(patch_auction_document)
 
 
-class AuctionDocumentWithDSResourceTest(BaseAuctionWebTest, AuctionDocumentResourceTestMixin, AuctionDocumentWithDSResourceTestMixin):
+class AuctionDocumentWithDSResourceTest(
+        BaseAuctionWebTest,
+        AuctionDocumentResourceTestMixin,
+        AuctionDocumentWithDSResourceTestMixin):
     docservice = True
     test_patch_auction_document = snitch(patch_auction_document)
     test_put_auction_document_pas = None
@@ -31,7 +36,8 @@ class AuctionDocumentResourceTestWithRegistry(AuctionDocumentResourceTest):
     test_patch_auction_document = snitch(patch_auction_document)
 
 
-class AuctionDocumentWithDSResourceTestWithRegistry(AuctionDocumentWithDSResourceTest):
+class AuctionDocumentWithDSResourceTestWithRegistry(
+        AuctionDocumentWithDSResourceTest):
     registry = True
     test_patch_auction_document = snitch(patch_auction_document)
 

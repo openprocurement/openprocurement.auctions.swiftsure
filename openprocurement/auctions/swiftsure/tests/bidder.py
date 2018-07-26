@@ -55,26 +55,34 @@ class AuctionBidderFeaturesResourceTest(BaseAuctionWebTest):
     test_features_bidder_invalid = snitch(features_bidder_invalid)
 
 
-class AuctionBidderDocumentResourceTest(BaseAuctionWebTest,
-                                        AuctionBidderDocumentResourceTestMixin):
+class AuctionBidderDocumentResourceTest(
+        BaseAuctionWebTest,
+        AuctionBidderDocumentResourceTestMixin):
     initial_status = 'active.tendering'
     test_patch_auction_bidder_document = snitch(patch_auction_bidder_document)
 
     def setUp(self):
         super(AuctionBidderDocumentResourceTest, self).setUp()
         # Create bid
-        response = self.app.post_json('/auctions/{}/bids'.format(
-            self.auction_id), {'data': {'tenderers': [self.initial_organization], "value": {"amount": 500}, 'qualified': True}})
+        response = self.app.post_json(
+            '/auctions/{}/bids'.format(
+                self.auction_id), {
+                'data': {
+                    'tenderers': [
+                        self.initial_organization], "value": {
+                        "amount": 500}, 'qualified': True}})
         bid = response.json['data']
         self.bid_id = bid['id']
         self.bid_token = response.json['access']['token']
 
-    test_create_auction_bidder_document_nopending = snitch(create_auction_bidder_document_nopending)
+    test_create_auction_bidder_document_nopending = snitch(
+        create_auction_bidder_document_nopending)
 
 
-class AuctionBidderDocumentWithDSResourceTest(BaseAuctionWebTest,
-                                              AuctionBidderDocumentResourceTestMixin,
-                                              AuctionBidderDocumentWithDSResourceTestMixin):
+class AuctionBidderDocumentWithDSResourceTest(
+        BaseAuctionWebTest,
+        AuctionBidderDocumentResourceTestMixin,
+        AuctionBidderDocumentWithDSResourceTestMixin):
     initial_status = 'active.tendering'
     docservice = True
     test_patch_auction_bidder_document = snitch(patch_auction_bidder_document)
@@ -82,16 +90,22 @@ class AuctionBidderDocumentWithDSResourceTest(BaseAuctionWebTest,
     def setUp(self):
         super(AuctionBidderDocumentWithDSResourceTest, self).setUp()
         # Create bid
-        response = self.app.post_json('/auctions/{}/bids'.format(
-            self.auction_id), {'data': {'tenderers': [self.initial_organization], "value": {"amount": 500}, 'qualified': True}})
+        response = self.app.post_json(
+            '/auctions/{}/bids'.format(
+                self.auction_id), {
+                'data': {
+                    'tenderers': [
+                        self.initial_organization], "value": {
+                        "amount": 500}, 'qualified': True}})
         bid = response.json['data']
         self.bid_id = bid['id']
         self.bid_token = response.json['access']['token']
 
-        test_operate_bidder_document_json_invalid = snitch(operate_bidder_document_json_invalid)
+        test_operate_bidder_document_json_invalid = snitch(  # noqa
+            operate_bidder_document_json_invalid)
 
-
-    test_create_auction_bidder_document_nopending = snitch(create_auction_bidder_document_nopending)
+    test_create_auction_bidder_document_nopending = snitch(
+        create_auction_bidder_document_nopending)
 
     def test_operate_bidder_document_json_invalid(self):
         """
@@ -99,15 +113,18 @@ class AuctionBidderDocumentWithDSResourceTest(BaseAuctionWebTest,
             documentType = auctionProtocol
         """
         # Test POST auctionProtocol document
-        response = self.app.post_json('/auctions/{}/bids/{}/documents'.format(self.auction_id, self.bid_id), {
-            'data': {
-                'title': 'name.doc',
-                'url': self.generate_docservice_url(),
-                'hash': 'md5:' + '0' * 32,
-                'format': 'application/msword',
-                'documentType': 'auctionProtocol'
-            }
-        }, status=422)
+        response = self.app.post_json(
+            '/auctions/{}/bids/{}/documents'.format(
+                self.auction_id,
+                self.bid_id),
+            {
+                'data': {
+                    'title': 'name.doc',
+                    'url': self.generate_docservice_url(),
+                    'hash': 'md5:' + '0' * 32,
+                    'format': 'application/msword',
+                    'documentType': 'auctionProtocol'}},
+            status=422)
         self.assertEqual(response.status, '422 Unprocessable Entity')
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(
@@ -117,26 +134,35 @@ class AuctionBidderDocumentWithDSResourceTest(BaseAuctionWebTest,
              "'eligibilityDocuments', 'financialLicense']."])
 
         # Test PUT auctionProtocol document
-        response = self.app.post_json('/auctions/{}/bids/{}/documents'.format(self.auction_id, self.bid_id), {
-            'data': {
-                'title': 'name.doc',
-                'url': self.generate_docservice_url(),
-                'hash': 'md5:' + '0' * 32,
-                'format': 'application/msword',
-            }})
+        response = self.app.post_json(
+            '/auctions/{}/bids/{}/documents'.format(
+                self.auction_id,
+                self.bid_id),
+            {
+                'data': {
+                    'title': 'name.doc',
+                    'url': self.generate_docservice_url(),
+                    'hash': 'md5:' + '0' * 32,
+                    'format': 'application/msword',
+                }})
         self.assertEqual(response.status, '201 Created')
         self.assertEqual(response.content_type, 'application/json')
         doc_id = response.json["data"]['id']
         self.assertIn(doc_id, response.headers['Location'])
 
-        response = self.app.put_json('/auctions/{}/bids/{}/documents/{}'.format(self.auction_id, self.bid_id, doc_id), {
-            'data': {
-                'title': 'name.doc',
-                'url': self.generate_docservice_url(),
-                'hash': 'md5:' + '0' * 32,
-                'format': 'application/msword',
-                'documentType': 'auctionProtocol'
-            }}, status=422)
+        response = self.app.put_json(
+            '/auctions/{}/bids/{}/documents/{}'.format(
+                self.auction_id,
+                self.bid_id,
+                doc_id),
+            {
+                'data': {
+                    'title': 'name.doc',
+                    'url': self.generate_docservice_url(),
+                    'hash': 'md5:' + '0' * 32,
+                    'format': 'application/msword',
+                    'documentType': 'auctionProtocol'}},
+            status=422)
         self.assertEqual(response.status, '422 Unprocessable Entity')
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(
@@ -146,10 +172,11 @@ class AuctionBidderDocumentWithDSResourceTest(BaseAuctionWebTest,
              "'eligibilityDocuments', 'financialLicense']."])
 
         # Test PATCH auctionProtocol document
-        response = self.app.patch_json('/auctions/{}/bids/{}/documents/{}'.format(self.auction_id, self.bid_id, doc_id), {
-            'data': {
-                'documentType': 'auctionProtocol'
-            }}, status=422)
+        response = self.app.patch_json(
+            '/auctions/{}/bids/{}/documents/{}'.format(
+                self.auction_id, self.bid_id, doc_id), {
+                'data': {
+                    'documentType': 'auctionProtocol'}}, status=422)
         self.assertEqual(response.status, '422 Unprocessable Entity')
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(

@@ -23,13 +23,21 @@ class AuctionLotAwardComplaintResourceTest(BaseAuctionWebTest):
     test_create_auction_complaint_lot = snitch(create_auction_complaint_lot)
 
 
-class AuctionComplaintDocumentResourceTest(BaseAuctionWebTest, InsiderAuctionComplaintDocumentResourceTestMixin):
+class AuctionComplaintDocumentResourceTest(
+        BaseAuctionWebTest,
+        InsiderAuctionComplaintDocumentResourceTestMixin):
 
     def setUp(self):
         super(AuctionComplaintDocumentResourceTest, self).setUp()
         # Create complaint
-        response = self.app.post_json('/auctions/{}/complaints'.format(
-            self.auction_id), {'data': {'title': 'complaint title', 'description': 'complaint description', 'author': self.initial_organization}})
+        response = self.app.post_json(
+            '/auctions/{}/complaints'.format(
+                self.auction_id),
+            {
+                'data': {
+                    'title': 'complaint title',
+                    'description': 'complaint description',
+                    'author': self.initial_organization}})
         complaint = response.json['data']
         self.complaint_id = complaint['id']
         self.complaint_owner_token = response.json['access']['token']
@@ -43,7 +51,9 @@ def suite():
     return tests
 
 
-class AuctionComplaintResourceTest(BaseAuctionWebTest, AuctionComplaintResourceTestMixin):
+class AuctionComplaintResourceTest(
+        BaseAuctionWebTest,
+        AuctionComplaintResourceTestMixin):
     """Test Case for Auction Complaint resource"""
 
 

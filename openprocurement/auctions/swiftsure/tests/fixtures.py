@@ -6,13 +6,13 @@ from openprocurement.auctions.core.plugins.contracting.v3.models import (
 from openprocurement.auctions.core.utils import get_now
 
 PARTIAL_MOCK_CONFIG = {
-    "auctions.swiftsure":{
-        "use_default":True,
-        "plugins":{
-            "swiftsure.migration":None
+    "auctions.swiftsure": {
+        "use_default": True,
+        "plugins": {
+            "swiftsure.migration": None
         },
-        "migration":False,
-        "aliases":[]
+        "migration": False,
+        "aliases": []
     }
 }
 
@@ -119,11 +119,10 @@ def create_prolongation(test_case, test_case_attr):
 
     prolongation_data = prolongation_post_response.json.get('data', {})
     created_prolongation = Prolongation(prolongation_data)
-    created_prolongation.validate() # check returned data
+    created_prolongation.validate()  # check returned data
     test_case.assertEqual(
         created_prolongation.decisionID,
         PROLONGATION['decisionID'],
         'Prolongation creation is wrong.'
     )
     setattr(test_case, test_case_attr, created_prolongation.id)
-

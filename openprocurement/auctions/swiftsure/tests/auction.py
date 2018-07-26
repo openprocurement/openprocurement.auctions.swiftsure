@@ -39,7 +39,9 @@ from openprocurement.auctions.swiftsure.tests.blanks.auction_blanks import (
 )
 
 
-class AuctionAuctionResourceTest(BaseAuctionWebTest, AuctionAuctionResourceTestMixin):
+class AuctionAuctionResourceTest(
+        BaseAuctionWebTest,
+        AuctionAuctionResourceTestMixin):
     initial_status = 'active.tendering'
     initial_bids = test_bids
 
@@ -51,18 +53,15 @@ class AuctionBidInvalidationAuctionResourceTest(BaseAuctionWebTest):
     initial_status = 'active.auction'
     initial_bids = [
         {
-            "tenderers": [
-                test_organization
-            ],
+            "tenderers": [test_organization],
             "value": {
-                "amount": (initial_data['value']['amount'] + initial_data['minimalStep']['amount']/2),
+                "amount": (
+                    initial_data['value']['amount'] +
+                    initial_data['minimalStep']['amount'] /
+                    2),
                 "currency": "UAH",
-                "valueAddedTaxIncluded": True
-            },
-            'qualified': True
-        }
-        for i in range(3)
-    ]
+                "valueAddedTaxIncluded": True},
+            'qualified': True} for i in range(3)]
 
     test_post_auction_all_invalid_bids = snitch(post_auction_all_invalid_bids)
     test_post_auction_one_invalid_bid = snitch(post_auction_one_invalid_bid)
@@ -86,12 +85,15 @@ class AuctionSameValueAuctionResourceTest(BaseAuctionWebTest):
         for i in range(3)
     ]
 
-    test_post_auction_auction_not_changed = snitch(post_auction_auction_not_changed)
+    test_post_auction_auction_not_changed = snitch(
+        post_auction_auction_not_changed)
     test_post_auction_auction_reversed = snitch(post_auction_auction_reversed)
 
 
 @unittest.skip("option not available")
-class AuctionLotAuctionResourceTest(BaseAuctionWebTest, AuctionLotAuctionResourceTestMixin):
+class AuctionLotAuctionResourceTest(
+        BaseAuctionWebTest,
+        AuctionLotAuctionResourceTestMixin):
     initial_status = 'active.tendering'
     initial_bids = test_bids
     initial_lots = test_lots
@@ -100,8 +102,9 @@ class AuctionLotAuctionResourceTest(BaseAuctionWebTest, AuctionLotAuctionResourc
 
 
 @unittest.skip("option not available")
-class AuctionMultipleLotAuctionResourceTest(BaseAuctionWebTest,
-                                            AuctionMultipleLotAuctionResourceTestMixin):
+class AuctionMultipleLotAuctionResourceTest(
+        BaseAuctionWebTest,
+        AuctionMultipleLotAuctionResourceTestMixin):
     initial_status = 'active.tendering'
     initial_bids = test_bids
     initial_lots = 2 * test_lots
@@ -160,19 +163,23 @@ class AuctionSubmissionMethodDetailsTest(BaseAuctionWebTest):
     initial_bids = test_bids
     initial_status = 'active.auction'
 
-    test_submission_method_details_no_auction = snitch(submission_method_details_no_auction)
-    test_submission_method_details_fast_forward = snitch(submission_method_details_fast_forward)
+    test_submission_method_details_no_auction = snitch(
+        submission_method_details_no_auction)
+    test_submission_method_details_fast_forward = snitch(
+        submission_method_details_fast_forward)
 
 
 class AuctionAuctionResourceTestWithRegistry(AuctionAuctionResourceTest):
     registry = True
 
 
-class AuctionBidInvalidationAuctionResourceTestWithRegistry(AuctionBidInvalidationAuctionResourceTest):
+class AuctionBidInvalidationAuctionResourceTestWithRegistry(
+        AuctionBidInvalidationAuctionResourceTest):
     registry = True
 
 
-class AuctionSameValueAuctionResourceTestWithRegistry(AuctionSameValueAuctionResourceTest):
+class AuctionSameValueAuctionResourceTestWithRegistry(
+        AuctionSameValueAuctionResourceTest):
     registry = True
 
 
@@ -185,9 +192,10 @@ def suite():
     suite.addTest(unittest.makeSuite(AuctionSubmissionMethodDetailsTest))
 
     suite.addTest(unittest.makeSuite(AuctionAuctionResourceTestWithRegistry))
-    suite.addTest(unittest.makeSuite(AuctionBidInvalidationAuctionResourceTestWithRegistry))
-    suite.addTest(unittest.makeSuite(AuctionSameValueAuctionResourceTestWithRegistry))
-    suite.addTest(unittest.makeSuite(AuctionSubmissionMethodDetailsTestWithRegistry))
+    suite.addTest(unittest.makeSuite(
+        AuctionBidInvalidationAuctionResourceTestWithRegistry))
+    suite.addTest(unittest.makeSuite(
+        AuctionSameValueAuctionResourceTestWithRegistry))
 
     return suite
 

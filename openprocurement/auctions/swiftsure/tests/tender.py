@@ -53,7 +53,10 @@ class AuctionTest(BaseWebTest):
     test_edit_role = snitch(edit_role)
 
 
-class AuctionResourceTest(BaseWebTest, AuctionResourceTestMixin, DgfInsiderResourceTestMixin):
+class AuctionResourceTest(
+        BaseWebTest,
+        AuctionResourceTestMixin,
+        DgfInsiderResourceTestMixin):
     initial_status = 'active.tendering'
     initial_data = test_auction_data
     initial_organization = test_organization
@@ -62,8 +65,10 @@ class AuctionResourceTest(BaseWebTest, AuctionResourceTestMixin, DgfInsiderResou
     test_create_auction_auctionPeriod = snitch(create_auction_auctionPeriod)
     test_create_auction_generated = snitch(create_auction_generated)
     test_create_auction = snitch(create_auction)
-    test_auction_features_invalid = unittest.skip("option not available")(snitch(auction_features_invalid))
-    test_auction_features = unittest.skip("option not available")(snitch(auction_features))
+    test_auction_features_invalid = unittest.skip(
+        "option not available")(snitch(auction_features_invalid))
+    test_auction_features = unittest.skip(
+        "option not available")(snitch(auction_features))
     test_patch_tender_jsonpatch = snitch(patch_tender_jsonpatch)
 
 
@@ -74,13 +79,13 @@ class AuctionResourceTestWDocument(BaseWebTest):
     initial_data['documents'] = documents
 
     test_create_auction_with_documents = snitch(create_auction_with_documents)
-    test_create_auction_with_documents_invalid = snitch(create_auction_with_documents_invalid)
+    test_create_auction_with_documents_invalid = snitch(
+        create_auction_with_documents_invalid)
 
 
 class AuctionProcessTest(BaseAuctionWebTest):
     test_financial_organization = None
 
-    #setUp = BaseWebTest.setUp
     def setUp(self):
         super(AuctionProcessTest.__bases__[0], self).setUp()
 
@@ -112,10 +117,13 @@ class AuctionProcessTest(BaseAuctionWebTest):
 
         return owner_token
 
-    test_invalid_auction_conditions = unittest.skip("option not available")(snitch(invalid_auction_conditions))
+    test_invalid_auction_conditions = unittest.skip(
+        "option not available")(snitch(invalid_auction_conditions))
     test_one_valid_bid_auction = snitch(one_valid_bid_auction)
-    test_one_invalid_bid_auction_manual = snitch(one_invalid_bid_auction_manual)
-    test_one_invalid_bid_auction_automatic = snitch(one_invalid_bid_auction_automatic)
+    test_one_invalid_bid_auction_manual = snitch(
+        one_invalid_bid_auction_manual)
+    test_one_invalid_bid_auction_automatic = snitch(
+        one_invalid_bid_auction_automatic)
     test_first_bid_auction = snitch(first_bid_auction)
     test_suspended_auction = snitch(suspended_auction)
 
