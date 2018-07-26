@@ -7,7 +7,10 @@ def validate_patch_auction_data(request, **kwargs):
     if data is None:
         return
     if request.authenticated_role == 'concierge' and request.context.status != "draft":
-        request.errors.add('body', 'data', 'Can\'t update auction in current ({}) status'.format(request.context.status))
+        request.errors.add(
+            'body',
+            'data',
+            'Can\'t update auction in current ({}) status'.format(request.context.status))
         request.errors.status = 403
         return
     if request.context.status not in ['draft', 'pending.activation']:

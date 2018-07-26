@@ -9,8 +9,7 @@ from openprocurement.auctions.core.tests.contract import (
 
 from openprocurement.auctions.core.tests.base import snitch
 from openprocurement.auctions.core.tests.plugins.contracting.v3_1.tests.contract import (
-    AuctionContractV3_1ResourceTestCaseMixin
-)
+    AuctionContractV3_1ResourceTestCaseMixin)
 from openprocurement.auctions.core.tests.plugins.contracting.v3_1.tests.blanks.contract_blanks import (
     # Auction2LotContractResourceTest
     patch_auction_contract_2_lots

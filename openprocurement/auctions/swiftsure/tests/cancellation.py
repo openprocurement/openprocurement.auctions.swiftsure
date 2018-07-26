@@ -18,25 +18,28 @@ class AuctionCancellationResourceTest(BaseAuctionWebTest,
     initial_status = 'active.tendering'
     initial_bids = test_bids
 
-  
+
 @unittest.skip("option not available")
-class AuctionLotCancellationResourceTest(BaseAuctionWebTest,
-                                         AuctionLotCancellationResourceTestMixin):
+class AuctionLotCancellationResourceTest(
+        BaseAuctionWebTest,
+        AuctionLotCancellationResourceTestMixin):
     initial_status = 'active.tendering'
     initial_lots = test_lots
     initial_bids = test_bids
 
 
 @unittest.skip("option not available")
-class AuctionLotsCancellationResourceTest(BaseAuctionWebTest,
-                                          AuctionLotsCancellationResourceTestMixin):
+class AuctionLotsCancellationResourceTest(
+        BaseAuctionWebTest,
+        AuctionLotsCancellationResourceTestMixin):
     initial_status = 'active.tendering'
     initial_lots = 2 * test_lots
     initial_bids = test_bids
 
 
-class AuctionCancellationDocumentResourceTest(BaseAuctionWebTest,
-                                              AuctionCancellationDocumentResourceTestMixin):
+class AuctionCancellationDocumentResourceTest(
+        BaseAuctionWebTest,
+        AuctionCancellationDocumentResourceTestMixin):
 
     def setUp(self):
         super(AuctionCancellationDocumentResourceTest, self).setUp()

@@ -6,20 +6,25 @@ from email.header import Header
 # AuctionDocumentResourceTest
 
 def patch_auction_document(self):
-    if hasattr(self, 'dgf_platform_legal_details_from') and get_now() > self.dgf_platform_legal_details_from:
-        response = self.app.get('/auctions/{}/documents'.format(self.auction_id))
+    if hasattr(self, 'dgf_platform_legal_details_from') and get_now(
+    ) > self.dgf_platform_legal_details_from:
+        response = self.app.get(
+            '/auctions/{}/documents'.format(self.auction_id))
         self.assertEqual(response.status, '200 OK')
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(
-            u'Місце та форма прийому заяв на участь в аукціоні та банківські реквізити для зарахування гарантійних внесків',
+            u'Місце та форма прийому заяв на участь в аукціоні та банківські реквізити для зарахування гарантійних внесків',  # noqa
             response.json["data"][0]["title"])
-        self.assertEqual('x_dgfPlatformLegalDetails', response.json["data"][0]["documentType"])
+        self.assertEqual(
+            'x_dgfPlatformLegalDetails',
+            response.json["data"][0]["documentType"])
         doc_id = response.json["data"][0]['id']
 
-        response = self.app.patch_json('/auctions/{}/documents/{}'.format(self.auction_id, doc_id), {"data": {
-            'format': 'application/msword',
-            "documentType": 'auctionNotice'
-        }}, status=422)
+        response = self.app.patch_json(
+            '/auctions/{}/documents/{}'.format(
+                self.auction_id, doc_id), {
+                "data": {
+                    'format': 'application/msword', "documentType": 'auctionNotice'}}, status=422)
         self.assertEqual(response.status, '422 Unprocessable Entity')
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['status'], 'error')
@@ -38,67 +43,78 @@ def patch_auction_document(self):
     self.assertEqual(u'укр.doc', response.json["data"]["title"])
     self.assertNotIn("documentType", response.json["data"])
 
-    response = self.app.patch_json('/auctions/{}/documents/{}'.format(self.auction_id, doc_id), {"data": {
-        "documentOf": "lot"
-    }}, status=422)
+    response = self.app.patch_json(
+        '/auctions/{}/documents/{}'.format(
+            self.auction_id, doc_id), {
+            "data": {
+                "documentOf": "lot"}}, status=422)
     self.assertEqual(response.status, '422 Unprocessable Entity')
     self.assertEqual(response.content_type, 'application/json')
     self.assertEqual(response.json['status'], 'error')
-    self.assertEqual(response.json['errors'], [
-        {u'description': [u'This field is required.'], u'location': u'body', u'name': u'relatedItem'},
-    ])
+    self.assertEqual(response.json['errors'], [{u'description': [
+                     u'This field is required.'], u'location': u'body', u'name': u'relatedItem'}, ])
 
-    response = self.app.patch_json('/auctions/{}/documents/{}'.format(self.auction_id, doc_id), {"data": {
-        "documentOf": "lot",
-        "relatedItem": '0' * 32
-    }})
+    response = self.app.patch_json(
+        '/auctions/{}/documents/{}'.format(
+            self.auction_id, doc_id), {
+            "data": {
+                "documentOf": "lot", "relatedItem": '0' * 32}})
     self.assertEqual(response.status, '200 OK')
     self.assertEqual(response.content_type, 'application/json')
     self.assertEqual(response.json['data']['relatedItem'], '0' * 32)
     self.assertEqual(response.json['data']['documentOf'], 'lot')
 
-
-    response = self.app.patch_json('/auctions/{}/documents/{}'.format(self.auction_id, doc_id), {"data": {
-        "documentOf": "item",
-        "relatedItem": '0' * 32
-    }}, status=422)
+    response = self.app.patch_json(
+        '/auctions/{}/documents/{}'.format(
+            self.auction_id, doc_id), {
+            "data": {
+                "documentOf": "item", "relatedItem": '0' * 32}}, status=422)
     self.assertEqual(response.status, '422 Unprocessable Entity')
     self.assertEqual(response.content_type, 'application/json')
     self.assertEqual(response.json['status'], 'error')
-    self.assertEqual(response.json['errors'], [
-        {u'description': [u'relatedItem should be one of items'], u'location': u'body', u'name': u'relatedItem'}
-    ])
+    self.assertEqual(response.json['errors'], [{u'description': [
+                     u'relatedItem should be one of items'], u'location': u'body', u'name': u'relatedItem'}])
 
-    response = self.app.patch_json('/auctions/{}/documents/{}'.format(self.auction_id, doc_id), {"data": {
-        "description": "document description",
-        "documentType": 'notice'
-    }})
+    response = self.app.patch_json(
+        '/auctions/{}/documents/{}'.format(
+            self.auction_id, doc_id), {
+            "data": {
+                "description": "document description", "documentType": 'notice'}})
     self.assertEqual(response.status, '200 OK')
     self.assertEqual(response.content_type, 'application/json')
     self.assertEqual(doc_id, response.json["data"]["id"])
     self.assertIn("documentType", response.json["data"])
     self.assertEqual(response.json["data"]["documentType"], 'notice')
 
-    response = self.app.patch_json('/auctions/{}/documents/{}'.format(self.auction_id, doc_id), {"data": {
-        "documentType": None
-    }})
+    response = self.app.patch_json(
+        '/auctions/{}/documents/{}'.format(
+            self.auction_id, doc_id), {
+            "data": {
+                "documentType": None}})
     self.assertEqual(response.status, '200 OK')
     self.assertEqual(response.content_type, 'application/json')
     self.assertEqual(doc_id, response.json["data"]["id"])
     self.assertNotIn("documentType", response.json["data"])
 
-    response = self.app.get('/auctions/{}/documents/{}'.format(self.auction_id, doc_id))
+    response = self.app.get(
+        '/auctions/{}/documents/{}'.format(self.auction_id, doc_id))
     self.assertEqual(response.status, '200 OK')
     self.assertEqual(response.content_type, 'application/json')
     self.assertEqual(doc_id, response.json["data"]["id"])
-    self.assertEqual('document description', response.json["data"]["description"])
+    self.assertEqual(
+        'document description',
+        response.json["data"]["description"])
     # self.assertTrue(dateModified < response.json["data"]["dateModified"])
 
     self.set_status('active.auction')
 
-    response = self.app.patch_json('/auctions/{}/documents/{}'.format(self.auction_id, doc_id),
-                                   {"data": {"description": "document description"}}, status=403)
+    response = self.app.patch_json(
+        '/auctions/{}/documents/{}'.format(
+            self.auction_id, doc_id), {
+            "data": {
+                "description": "document description"}}, status=403)
     self.assertEqual(response.status, '403 Forbidden')
     self.assertEqual(response.content_type, 'application/json')
-    self.assertEqual(response.json['errors'][0]["description"],
-                     "Can't update document in current (active.auction) auction status")
+    self.assertEqual(
+        response.json['errors'][0]["description"],
+        "Can't update document in current (active.auction) auction status")

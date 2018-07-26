@@ -14,7 +14,9 @@ from openprocurement.auctions.swiftsure.tests.base import (
 )
 
 
-class AuctionQuestionResourceTest(BaseAuctionWebTest, AuctionQuestionResourceTestMixin):
+class AuctionQuestionResourceTest(
+        BaseAuctionWebTest,
+        AuctionQuestionResourceTestMixin):
     pass
 
 

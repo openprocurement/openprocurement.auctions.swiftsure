@@ -21,7 +21,13 @@ LOGGER = getLogger(PKG.project_name)
 def check_bids(request):
     auction = request.validated['auction']
     if auction.lots:
-        [setattr(i.auctionPeriod, 'startDate', None) for i in auction.lots if i.numberOfBids < 2 and i.auctionPeriod and i.auctionPeriod.startDate]
+        [
+            setattr(i.auctionPeriod, 'startDate', None)
+            for i in auction.lots
+            if i.numberOfBids < 2
+            and i.auctionPeriod
+            and i.auctionPeriod.startDate
+        ]
         [setattr(i, 'status', 'unsuccessful') for i in auction.lots if i.numberOfBids < 2 and i.status == 'active']
         cleanup_bids_for_cancelled_lots(auction)
         if not set([i.status for i in auction.lots]).difference(set(['unsuccessful', 'cancelled'])):
