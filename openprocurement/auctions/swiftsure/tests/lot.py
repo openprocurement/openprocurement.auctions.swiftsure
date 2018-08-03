@@ -58,69 +58,41 @@ class AuctionLotFeatureBidderResourceTest(BaseAuctionWebTest):
     def setUp(self):
         super(AuctionLotFeatureBidderResourceTest, self).setUp()
         self.lot_id = self.initial_lots[0]['id']
-        response = self.app.patch_json('/auctions/{}'.format(self.auction_id), {"data": {
-            "items": [
-                {
-                    'relatedLot': self.lot_id,
-                    'id': '1'
-                }
-            ],
-            "features": [
-                {
-                    "code": "code_item",
-                    "featureOf": "item",
-                    "relatedItem": "1",
-                    "title": u"item feature",
-                    "enum": [
-                        {
-                            "value": 0.01,
-                            "title": u"good"
-                        },
-                        {
-                            "value": 0.02,
-                            "title": u"best"
-                        }
-                    ]
-                },
-                {
-                    "code": "code_lot",
-                    "featureOf": "lot",
-                    "relatedItem": self.lot_id,
-                    "title": u"lot feature",
-                    "enum": [
-                        {
-                            "value": 0.01,
-                            "title": u"good"
-                        },
-                        {
-                            "value": 0.02,
-                            "title": u"best"
-                        }
-                    ]
-                },
-                {
-                    "code": "code_tenderer",
-                    "featureOf": "tenderer",
-                    "title": u"tenderer feature",
-                    "enum": [
-                        {
-                            "value": 0.01,
-                            "title": u"good"
-                        },
-                        {
-                            "value": 0.02,
-                            "title": u"best"
-                        }
-                    ]
-                }
-            ]
-        }})
+        response = self.app.patch_json('/auctions/{}'.format(self.auction_id),
+                                       {"data": {"items": [{'relatedLot': self.lot_id,
+                                                            'id': '1'}],
+                                                 "features": [{"code": "code_item",
+                                                               "featureOf": "item",
+                                                               "relatedItem": "1",
+                                                               "title": u"item feature",
+                                                               "enum": [{"value": 0.01,
+                                                                         "title": u"good"},
+                                                                        {"value": 0.02,
+                                                                         "title": u"best"}]},
+                                                              {"code": "code_lot",
+                                                               "featureOf": "lot",
+                                                               "relatedItem": self.lot_id,
+                                                               "title": u"lot feature",
+                                                               "enum": [{"value": 0.01,
+                                                                         "title": u"good"},
+                                                                        {"value": 0.02,
+                                                                         "title": u"best"}]},
+                                                              {"code": "code_tenderer",
+                                                               "featureOf": "tenderer",
+                                                               "title": u"tenderer feature",
+                                                               "enum": [{"value": 0.01,
+                                                                         "title": u"good"},
+                                                                        {"value": 0.02,
+                                                                         "title": u"best"}]}]}})
         self.assertEqual(response.status, '200 OK')
         self.assertEqual(response.content_type, 'application/json')
-        self.assertEqual(response.json['data']['items'][0]['relatedLot'], self.lot_id)
+        self.assertEqual(
+            response.json['data']['items'][0]['relatedLot'],
+            self.lot_id)
         self.set_status('active.tendering')
 
-    test_create_auction_bidder_invalid_feature = snitch(create_auction_bidder_invalid_feature)
+    test_create_auction_bidder_invalid_feature = snitch(
+        create_auction_bidder_invalid_feature)
     test_create_auction_bidder_feature = snitch(create_auction_bidder_feature)
 
 

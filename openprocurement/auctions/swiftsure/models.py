@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from datetime import timedelta
+from functools import partial
 from random import randint
 
 from pyramid.security import Allow
@@ -22,6 +23,7 @@ from openprocurement.auctions.core.models import (
     IAuction,
     Auction as BaseAuction,
     Bid as BaseBid,
+    ContractTerms,
     swiftsureCancellation,
     SwiftsureItem,
     swiftsureDocument,
@@ -35,13 +37,13 @@ from openprocurement.auctions.core.models import (
     validate_features_uniq,
     validate_lots_uniq,
     validate_items_uniq,
+    validate_contract_type,
     calc_auction_end_time,
     validate_not_available,
     Guarantee,
     BankAccount,
     AuctionParameters as BaseAuctionParameters,
-    ContactPoint,
-    ProcuringEntity as BaseProcuringEntity
+    SwiftsureProcuringEntity
 )
 from openprocurement.auctions.core.plugins.awarding.v3_1.models import (
     Award
@@ -61,6 +63,13 @@ from openprocurement.auctions.core.validation import (
     validate_disallow_dgfPlatformLegalDetails
 )
 
+from openprocurement.auctions.swiftsure.constants import CONTRACT_TYPES
+
+
+validate_contract_type = partial(
+    validate_contract_type,
+    choices=CONTRACT_TYPES)
+
 
 class AuctionParameters(BaseAuctionParameters):
     class Options:
@@ -69,18 +78,28 @@ class AuctionParameters(BaseAuctionParameters):
         }
 
 
-class ProcuringEntity(BaseProcuringEntity):
-    additionalContactPoints = ListType(ModelType(ContactPoint), default=list())
-
-
 class Bid(BaseBid):
     class Options:
         roles = {
-            'create': whitelist('value', 'tenderers', 'parameters', 'lotValues', 'status', 'qualified'),
+            'create': whitelist(
+                'value',
+                'tenderers',
+                'parameters',
+                'lotValues',
+                'status',
+                'qualified'),
         }
 
-    status = StringType(choices=['active', 'draft', 'invalid'], default='active')
-    documents = ListType(ModelType(swiftsureBidDocument), default=list(), validators=[validate_disallow_dgfPlatformLegalDetails])
+    status = StringType(
+        choices=[
+            'active',
+            'draft',
+            'invalid'],
+        default='active')
+    documents = ListType(
+        ModelType(swiftsureBidDocument),
+        default=list(),
+        validators=[validate_disallow_dgfPlatformLegalDetails])
     qualified = BooleanType(required=True, choices=[True])
 
 
@@ -92,15 +111,19 @@ class AuctionAuctionPeriod(Period):
         if self.endDate:
             return
         auction = self.__parent__
-        if auction.lots or auction.status not in ['active.tendering', 'active.auction']:
+        if auction.lots or auction.status not in [
+                'active.tendering', 'active.auction']:
             return
-        if self.startDate and get_now() > calc_auction_end_time(auction.numberOfBids, self.startDate):
-            start_after = calc_auction_end_time(auction.numberOfBids, self.startDate)
+        if self.startDate and get_now() > calc_auction_end_time(
+                auction.numberOfBids, self.startDate):
+            start_after = calc_auction_end_time(
+                auction.numberOfBids, self.startDate)
         elif auction.tenderPeriod and auction.tenderPeriod.endDate:
             start_after = auction.tenderPeriod.endDate
         else:
             return
-        return rounding_shouldStartAfter_after_midnigth(start_after, auction).isoformat()
+        return rounding_shouldStartAfter_after_midnigth(
+            start_after, auction).isoformat()
 
     def validate_startDate(self, data, startDate):
         auction = get_auction(data['__parent__'])
@@ -114,31 +137,66 @@ class ISwiftsureAuction(IAuction):
 
 @implementer(ISwiftsureAuction)
 class SwiftsureAuction(BaseAuction):
-    """Data regarding auction process - publicly inviting prospective contractors to submit bids for evaluation and selecting a winner or winners."""
+    """Data regarding auction process
+
+    Publicly inviting prospective contractors to submit bids for evaluation and selecting a winner or winners.
+    """
     class Options:
         roles = swiftsure_auction_roles
     _procedure_type = "swiftsure"
     awards = ListType(ModelType(Award), default=list())
-    bids = ListType(ModelType(Bid), default=list())  # A list of all the companies who entered submissions for the auction.
+    # A list of all the companies who entered submissions for the auction.
+    bids = ListType(ModelType(Bid), default=list())
     cancellations = ListType(ModelType(swiftsureCancellation), default=list())
     complaints = ListType(ComplaintModelType(Complaint), default=list())
     contracts = ListType(ModelType(Contract), default=list())
     merchandisingObject = MD5Type()
-    documents = ListType(ModelType(swiftsureDocument), default=list())  # All documents and attachments related to the auction.
-    enquiryPeriod = ModelType(Period)  # The period during which enquiries may be made and will be answered.
-    tenderPeriod = ModelType(Period)  # The period when the auction is open for submissions. The end date is the closing date for auction submissions.
+    # All documents and attachments related to the auction.
+    documents = ListType(ModelType(swiftsureDocument), default=list())
+    # The period during which enquiries may be made and will be answered.
+    enquiryPeriod = ModelType(Period)
+    # The period when the auction is open for submissions. The end date is the
+    # closing date for auction submissions.
+    tenderPeriod = ModelType(Period)
     tenderAttempts = IntType(choices=[1, 2, 3, 4, 5, 6, 7, 8])
     auctionPeriod = ModelType(AuctionAuctionPeriod, required=True, default={})
-    status = StringType(choices=['draft', 'pending.activation', 'active.tendering', 'active.auction', 'active.qualification', 'active.awarded', 'complete', 'cancelled', 'unsuccessful'], default='active.tendering')
-    features = ListType(ModelType(Feature), validators=[validate_features_uniq, validate_not_available])
-    lots = ListType(ModelType(Lot), default=list(), validators=[validate_lots_uniq, validate_not_available])
-    items = ListType(ModelType(SwiftsureItem), default=list(), validators=[validate_items_uniq], min_size=1)
+    status = StringType(
+        choices=[
+            'draft',
+            'pending.activation',
+            'active.tendering',
+            'active.auction',
+            'active.qualification',
+            'active.awarded',
+            'complete',
+            'cancelled',
+            'unsuccessful'],
+        default='active.tendering')
+    features = ListType(
+        ModelType(Feature),
+        validators=[
+            validate_features_uniq,
+            validate_not_available])
+    lots = ListType(
+        ModelType(Lot),
+        default=list(),
+        validators=[
+            validate_lots_uniq,
+            validate_not_available])
+    items = ListType(
+        ModelType(SwiftsureItem),
+        default=list(),
+        validators=[validate_items_uniq],
+        min_size=1)
     suspended = BooleanType()
     registrationFee = ModelType(Guarantee)
     bankAccount = ModelType(BankAccount)
     auctionParameters = ModelType(AuctionParameters)
     minNumberOfQualifiedBids = IntType(choices=[1], default=1)
-    procuringEntity = ModelType(ProcuringEntity, required=True)
+    procuringEntity = ModelType(SwiftsureProcuringEntity, required=True)
+    contractTerms = ModelType(
+        ContractTerms,
+        validators=[validate_contract_type])
 
     create_accreditation = 3
     edit_accreditation = 4
@@ -171,15 +229,19 @@ class SwiftsureAuction(BaseAuction):
         if not self.tenderPeriod:
             self.tenderPeriod = type(self).tenderPeriod.model_class()
         now = get_now()
-        start_date = TZ.localize(self.auctionPeriod.startDate.replace(tzinfo=None))
+        start_date = TZ.localize(
+            self.auctionPeriod.startDate.replace(
+                tzinfo=None))
         self.auctionPeriod.startDate = None
         self.auctionPeriod.endDate = None
         self.tenderPeriod.startDate = self.enquiryPeriod.startDate = now
         pause_between_periods = start_date - (
             start_date.replace(hour=20, minute=0, second=0, microsecond=0) -
-            timedelta(days=1, minutes=randint(-30, 30))  # set period end at 19:30-20:30 to reduce system load
+            # set period end at 19:30-20:30 to reduce system load
+            timedelta(days=1, minutes=randint(-30, 30))
         )
-        end_date = calculate_business_date(start_date, -pause_between_periods, self)
+        end_date = calculate_business_date(
+            start_date, -pause_between_periods, self)
         self.enquiryPeriod.endDate = end_date
         self.tenderPeriod.endDate = self.enquiryPeriod.endDate
         self.date = now
@@ -195,45 +257,82 @@ class SwiftsureAuction(BaseAuction):
         if data['status'] == 'pending.activation' and not merchandisingObject:
             raise ValidationError(u'This field is required.')
 
-
     @serializable(serialize_when_none=False)
     def next_check(self):
         if self.suspended:
             return None
         now = get_now()
         checks = []
-        if self.status == 'active.tendering' and self.tenderPeriod and self.tenderPeriod.endDate:
+        if (
+            self.status == 'active.tendering'
+            and self.tenderPeriod
+            and self.tenderPeriod.endDate
+        ):
             checks.append(self.tenderPeriod.endDate.astimezone(TZ))
-        elif not self.lots and self.status == 'active.auction' and self.auctionPeriod and self.auctionPeriod.startDate and not self.auctionPeriod.endDate:
+        elif (
+            not self.lots
+            and self.status == 'active.auction'
+            and self.auctionPeriod
+            and self.auctionPeriod.startDate
+            and not self.auctionPeriod.endDate
+        ):
             if now < self.auctionPeriod.startDate:
                 checks.append(self.auctionPeriod.startDate.astimezone(TZ))
             elif now < calc_auction_end_time(self.numberOfBids, self.auctionPeriod.startDate).astimezone(TZ):
-                checks.append(calc_auction_end_time(self.numberOfBids, self.auctionPeriod.startDate).astimezone(TZ))
+                checks.append(
+                    calc_auction_end_time(
+                        self.numberOfBids,
+                        self.auctionPeriod.startDate).astimezone(TZ))
         elif self.lots and self.status == 'active.auction':
             for lot in self.lots:
-                if lot.status != 'active' or not lot.auctionPeriod or not lot.auctionPeriod.startDate or lot.auctionPeriod.endDate:
+                if (
+                    lot.status != 'active'
+                    or not lot.auctionPeriod
+                    or not lot.auctionPeriod.startDate
+                    or lot.auctionPeriod.endDate
+                ):
                     continue
                 if now < lot.auctionPeriod.startDate:
                     checks.append(lot.auctionPeriod.startDate.astimezone(TZ))
                 elif now < calc_auction_end_time(lot.numberOfBids, lot.auctionPeriod.startDate).astimezone(TZ):
-                    checks.append(calc_auction_end_time(lot.numberOfBids, lot.auctionPeriod.startDate).astimezone(TZ))
+                    checks.append(
+                        calc_auction_end_time(
+                            lot.numberOfBids,
+                            lot.auctionPeriod.startDate).astimezone(TZ))
         # Use next_check part from awarding 2.0
         request = get_request_from_root(self)
         if request is not None:
-            awarding_check = request.registry.getAdapter(self, IAwardingNextCheck).add_awarding_checks(self)
+            awarding_check = request.registry.getAdapter(
+                self, IAwardingNextCheck).add_awarding_checks(self)
             if awarding_check is not None:
                 checks.append(awarding_check)
         if self.status.startswith('active'):
             from openprocurement.auctions.core.utils import calculate_business_date
             for complaint in self.complaints:
                 if complaint.status == 'claim' and complaint.dateSubmitted:
-                    checks.append(calculate_business_date(complaint.dateSubmitted, AUCTIONS_COMPLAINT_STAND_STILL_TIME, self))
+                    checks.append(
+                        calculate_business_date(
+                            complaint.dateSubmitted,
+                            AUCTIONS_COMPLAINT_STAND_STILL_TIME,
+                            self))
                 elif complaint.status == 'answered' and complaint.dateAnswered:
-                    checks.append(calculate_business_date(complaint.dateAnswered, AUCTIONS_COMPLAINT_STAND_STILL_TIME, self))
+                    checks.append(
+                        calculate_business_date(
+                            complaint.dateAnswered,
+                            AUCTIONS_COMPLAINT_STAND_STILL_TIME,
+                            self))
             for award in self.awards:
                 for complaint in award.complaints:
                     if complaint.status == 'claim' and complaint.dateSubmitted:
-                        checks.append(calculate_business_date(complaint.dateSubmitted, AUCTIONS_COMPLAINT_STAND_STILL_TIME, self))
+                        checks.append(
+                            calculate_business_date(
+                                complaint.dateSubmitted,
+                                AUCTIONS_COMPLAINT_STAND_STILL_TIME,
+                                self))
                     elif complaint.status == 'answered' and complaint.dateAnswered:
-                        checks.append(calculate_business_date(complaint.dateAnswered, AUCTIONS_COMPLAINT_STAND_STILL_TIME, self))
+                        checks.append(
+                            calculate_business_date(
+                                complaint.dateAnswered,
+                                AUCTIONS_COMPLAINT_STAND_STILL_TIME,
+                                self))
         return min(checks).isoformat() if checks else None

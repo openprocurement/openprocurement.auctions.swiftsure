@@ -34,7 +34,9 @@ def migrate_data(registry, destination=None):
     if cur_version == SCHEMA_VERSION:
         return cur_version
     for step in xrange(cur_version, destination or SCHEMA_VERSION):
-        LOGGER.info("Migrate openprocurement auction schema from {} to {}".format(step, step + 1), extra={'MESSAGE_ID': 'migrate_data'})
+        LOGGER.info(
+            "Migrate openprocurement auction schema from {} to {}".format(step, step + 1),
+            extra={'MESSAGE_ID': 'migrate_data'})
         migration_func = globals().get('from{}to{}'.format(step, step + 1))
         if migration_func:
             migration_func(registry)
@@ -61,8 +63,10 @@ def from0to1(registry):
                 auction = model(auction)
                 auction.__parent__ = root
                 auction = auction.to_primitive()
-            except: # pragma: no cover
-                LOGGER.error("Failed migration of auction {} to schema 1.".format(auction.id), extra={'MESSAGE_ID': 'migrate_data_failed', 'AUCTION_ID': auction.id})
+            except Exception:
+                LOGGER.error(
+                    "Failed migration of auction {} to schema 1.".format(auction.id),
+                    extra={'MESSAGE_ID': 'migrate_data_failed', 'AUCTION_ID': auction.id})
             else:
                 auction['dateModified'] = get_now().isoformat()
                 docs.append(auction)

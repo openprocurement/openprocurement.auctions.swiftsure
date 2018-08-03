@@ -67,7 +67,8 @@ class AuctionSwitchUnsuccessfulResourceTest(BaseAuctionWebTest):
 
 
 @unittest.skip("option not available")
-class AuctionLotSwitchQualificationResourceTest(AuctionSwitchQualificationResourceTest):
+class AuctionLotSwitchQualificationResourceTest(
+        AuctionSwitchQualificationResourceTest):
     initial_lots = test_lots
 
 
@@ -77,7 +78,8 @@ class AuctionLotSwitchAuctionResourceTest(AuctionSwitchAuctionResourceTest):
 
 
 @unittest.skip("option not available")
-class AuctionLotSwitchUnsuccessfulResourceTest(AuctionSwitchUnsuccessfulResourceTest):
+class AuctionLotSwitchUnsuccessfulResourceTest(
+        AuctionSwitchUnsuccessfulResourceTest):
     initial_lots = test_lots
 
 
@@ -88,7 +90,9 @@ class AuctionAuctionPeriodResourceTest(BaseAuctionWebTest):
     test_reset_auction_period = snitch(reset_auction_period)
 
 
-class AuctionAward2BidsSwitchResourceTest(BaseAuctionWebTest, AuctionAwardSwitchResourceTestMixin):
+class AuctionAward2BidsSwitchResourceTest(
+        BaseAuctionWebTest,
+        AuctionAwardSwitchResourceTestMixin):
     initial_status = 'active.auction'
     initial_bids = test_bids
 
@@ -108,7 +112,8 @@ class AuctionAward2BidsSwitchResourceTest(BaseAuctionWebTest, AuctionAwardSwitch
             ]
         }
 
-        response = self.app.post_json('/auctions/{}/auction'.format(self.auction_id), {'data': auction_result})
+        response = self.app.post_json(
+            '/auctions/{}/auction'.format(self.auction_id), {'data': auction_result})
         self.assertEqual(response.status, '200 OK')
         self.assertEqual(response.content_type, 'application/json')
         auction = response.json['data']
@@ -135,12 +140,15 @@ class AuctionAward1BidSwitchResourceTest(BaseAuctionWebTest):
         )
         self.assertEqual(response.status, '200 OK')
         self.assertEqual(response.content_type, 'application/json')
-        self.assertEqual(response.json['data']['status'], 'active.qualification')
+        self.assertEqual(
+            response.json['data']['status'],
+            'active.qualification')
         auction = response.json['data']
         self.award_id = auction['awards'][0]['id']
         self.app.authorization = authorization
 
-    test_switch_admission_to_unsuccessful = snitch(switch_admission_to_unsuccessful)
+    test_switch_admission_to_unsuccessful = snitch(
+        switch_admission_to_unsuccessful)
 
 
 @unittest.skip("option not available")
@@ -166,7 +174,8 @@ class AuctionAwardSwitch2ResourceTest(BaseAuctionWebTest):
         authorization = self.app.authorization
         self.app.authorization = ('Basic', ('auction', ''))
 
-        response = self.app.post_json('/auctions/{}/auction'.format(self.auction_id), {'data': {'bids': self.initial_bids}})
+        response = self.app.post_json(
+            '/auctions/{}/auction'.format(self.auction_id), {'data': {'bids': self.initial_bids}})
         self.assertEqual(response.status, '200 OK')
         self.assertEqual(response.content_type, 'application/json')
         auction = response.json['data']
@@ -177,8 +186,10 @@ class AuctionAwardSwitch2ResourceTest(BaseAuctionWebTest):
         self.second_award_id = self.second_award['id']
         self.app.authorization = authorization
 
-    test_switch_verification_to_unsuccessful_2 = snitch(switch_verification_to_unsuccessful_2)
-    test_switch_active_to_unsuccessful_2 = snitch(switch_active_to_unsuccessful_2)
+    test_switch_verification_to_unsuccessful_2 = snitch(
+        switch_verification_to_unsuccessful_2)
+    test_switch_active_to_unsuccessful_2 = snitch(
+        switch_active_to_unsuccessful_2)
 
 
 @unittest.skip("option not available")
@@ -193,7 +204,8 @@ class AuctionComplaintSwitchResourceTest(BaseAuctionWebTest):
 
 
 @unittest.skip("option not available")
-class AuctionLotComplaintSwitchResourceTest(AuctionComplaintSwitchResourceTest):
+class AuctionLotComplaintSwitchResourceTest(
+        AuctionComplaintSwitchResourceTest):
     initial_lots = test_lots
 
 
@@ -205,8 +217,12 @@ class AuctionAwardComplaintSwitchResourceTest(BaseAuctionWebTest):
     def setUp(self):
         super(AuctionAwardComplaintSwitchResourceTest, self).setUp()
         # Create award
-        response = self.app.post_json('/auctions/{}/awards'.format(
-            self.auction_id), {'data': {'suppliers': [self.initial_organization], 'status': 'pending', 'bid_id': self.initial_bids[0]['id']}})
+        response = self.app.post_json(
+            '/auctions/{}/awards'.format(
+                self.auction_id), {
+                'data': {
+                    'suppliers': [
+                        self.initial_organization], 'status': 'pending', 'bid_id': self.initial_bids[0]['id']}})
         award = response.json['data']
         self.award_id = award['id']
 
@@ -215,7 +231,8 @@ class AuctionAwardComplaintSwitchResourceTest(BaseAuctionWebTest):
 
 
 @unittest.skip("option not available")
-class AuctionLotAwardComplaintSwitchResourceTest(AuctionAwardComplaintSwitchResourceTest):
+class AuctionLotAwardComplaintSwitchResourceTest(
+        AuctionAwardComplaintSwitchResourceTest):
     initial_lots = test_lots
 
     def setUp(self):
@@ -234,11 +251,14 @@ class AuctionLotAwardComplaintSwitchResourceTest(AuctionAwardComplaintSwitchReso
 class AuctionDontSwitchSuspendedAuction2ResourceTest(BaseAuctionWebTest):
     initial_bids = test_bids
 
-    test_switch_suspended_auction_to_auction = snitch(switch_suspended_auction_to_auction)
+    test_switch_suspended_auction_to_auction = snitch(
+        switch_suspended_auction_to_auction)
+
 
 @unittest.skip("option not available")
-class AuctionDontSwitchSuspendedAuctionResourceTest(BaseAuctionWebTest,
-                                                    AuctionDontSwitchSuspendedAuctionResourceTestMixin):
+class AuctionDontSwitchSuspendedAuctionResourceTest(
+        BaseAuctionWebTest,
+        AuctionDontSwitchSuspendedAuctionResourceTestMixin):
     initial_status = 'active.auction'
     initial_bids = test_bids
 
@@ -258,7 +278,8 @@ class AuctionDontSwitchSuspendedAuctionResourceTest(BaseAuctionWebTest,
             ]
         }
 
-        response = self.app.post_json('/auctions/{}/auction'.format(self.auction_id), {'data': auction_result})
+        response = self.app.post_json(
+            '/auctions/{}/auction'.format(self.auction_id), {'data': auction_result})
         self.assertEqual(response.status, '200 OK')
         self.assertEqual(response.content_type, 'application/json')
         auction = response.json['data']
@@ -273,10 +294,11 @@ class AuctionDontSwitchSuspendedAuctionResourceTest(BaseAuctionWebTest,
 class AuctionContractSwitchResourceTest(BaseAuctionWebTest,):
     initial_status = 'active.auction'
     initial_bids = test_bids
+
     def setUp(self):
         super(AuctionContractSwitchResourceTest, self).setUp()
         fixtures.create_award(self)
-        self.contract_id = self.award_contract_id # use autocreated contract
+        self.contract_id = self.award_contract_id  # use autocreated contract
 
     test_contract_signing_period_switch_to_complete = snitch(
         contract_signing_period_switch_to_complete
@@ -288,7 +310,8 @@ def suite():
     tests.addTest(unittest.makeSuite(AuctionSwitchQualificationResourceTest))
     tests.addTest(unittest.makeSuite(AuctionSwitchAuctionResourceTest))
     tests.addTest(unittest.makeSuite(AuctionSwitchUnsuccessfulResourceTest))
-    tests.addTest(unittest.makeSuite(AuctionLotSwitchQualificationResourceTest))
+    tests.addTest(unittest.makeSuite(
+        AuctionLotSwitchQualificationResourceTest))
     tests.addTest(unittest.makeSuite(AuctionLotSwitchAuctionResourceTest))
     tests.addTest(unittest.makeSuite(AuctionLotSwitchUnsuccessfulResourceTest))
     tests.addTest(unittest.makeSuite(AuctionAuctionPeriodResourceTest))
@@ -298,9 +321,12 @@ def suite():
     tests.addTest(unittest.makeSuite(AuctionComplaintSwitchResourceTest))
     tests.addTest(unittest.makeSuite(AuctionLotComplaintSwitchResourceTest))
     tests.addTest(unittest.makeSuite(AuctionAwardComplaintSwitchResourceTest))
-    tests.addTest(unittest.makeSuite(AuctionLotAwardComplaintSwitchResourceTest))
-    tests.addTest(unittest.makeSuite(AuctionDontSwitchSuspendedAuction2ResourceTest))
-    tests.addTest(unittest.makeSuite(AuctionDontSwitchSuspendedAuctionResourceTest))
+    tests.addTest(unittest.makeSuite(
+        AuctionLotAwardComplaintSwitchResourceTest))
+    tests.addTest(unittest.makeSuite(
+        AuctionDontSwitchSuspendedAuction2ResourceTest))
+    tests.addTest(unittest.makeSuite(
+        AuctionDontSwitchSuspendedAuctionResourceTest))
     return tests
 
 

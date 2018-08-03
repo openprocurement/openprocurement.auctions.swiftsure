@@ -19,9 +19,7 @@ from openprocurement.auctions.core.tests.blanks.award_blanks import (
     get_auction_award_complaints
 )
 from openprocurement.auctions.core.tests.plugins.awarding.v3_1.tests.award import (
-    AuctionAwardProcessTestMixin,
-    CreateAuctionAwardTestMixin
-)
+    AuctionAwardProcessTestMixin, CreateAuctionAwardTestMixin)
 from openprocurement.auctions.core.utils import (
     get_now, get_related_contract_of_award
 )
@@ -38,7 +36,9 @@ class CreateAuctionAwardTest(BaseAuctionWebTest, CreateAuctionAwardTestMixin):
     initial_bids = test_bids
 
 
-class AuctionAwardProcessTest(BaseAuctionWebTest, AuctionAwardProcessTestMixin):
+class AuctionAwardProcessTest(
+        BaseAuctionWebTest,
+        AuctionAwardProcessTestMixin):
     # initial_data = auction_data
     initial_status = 'active.auction'
     initial_bids = test_bids
@@ -161,7 +161,9 @@ class AuctionAwardProcessTest(BaseAuctionWebTest, AuctionAwardProcessTestMixin):
         self.assertEqual(response.content_type, 'application/json')
         doc_id = response.json["data"]['id']
         self.assertIn(doc_id, response.headers['Location'])
-        self.assertEqual('auction_protocol.pdf', response.json["data"]["title"])
+        self.assertEqual(
+            'auction_protocol.pdf',
+            response.json["data"]["title"])
 
         response = self.app.patch_json(
             '/auctions/{}/awards/{}/documents/{}?acc_token={}'.format(
@@ -187,7 +189,9 @@ class AuctionAwardProcessTest(BaseAuctionWebTest, AuctionAwardProcessTestMixin):
         self.assertEqual(response.content_type, 'application/json')
         doc_id = response.json["data"]['id']
         self.assertIn(doc_id, response.headers['Location'])
-        self.assertEqual('auction_protocol.pdf', response.json["data"]["title"])
+        self.assertEqual(
+            'auction_protocol.pdf',
+            response.json["data"]["title"])
 
         response = self.app.patch_json(
             '/auctions/{}/awards/{}/documents/{}?acc_token={}'.format(
@@ -410,7 +414,8 @@ def suite():
     tests.addTest(unittest.makeSuite(Auction2LotAwardResourceTest))
     tests.addTest(unittest.makeSuite(AuctionLotAwardComplaintResourceTest))
     tests.addTest(unittest.makeSuite(Auction2LotAwardComplaintResourceTest))
-    tests.addTest(unittest.makeSuite(AuctionAwardComplaintDocumentResourceTest))
+    tests.addTest(unittest.makeSuite(
+        AuctionAwardComplaintDocumentResourceTest))
     tests.addTest(unittest.makeSuite(
         Auction2LotAwardComplaintDocumentResourceTest
     ))
