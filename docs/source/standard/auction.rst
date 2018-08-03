@@ -11,7 +11,9 @@ Schema
 ------
 
 :id:
-  string, auto-generated, read-only
+  uuid, auto-generated, read-only
+
+  Internal id of procedure.
   
 :auctionID:
   string, auto-generated, read-only
@@ -39,18 +41,33 @@ Schema
   The identifier of a lot, which is to be privatized, within the Registry.
 
 :title:
-  string, multilingual, read-only
+    string, multilingual, required
+    
+    * Ukrainian by default (required) - Ukrainian title
+    
+    * ``title_en`` (English) - English title
+    
+    * ``title_ru`` (Russian) - Russian title
+    
+    Oprionally can be mentioned in English/Russian.
 
   Originates from `lot.title <http://lotsloki.api-docs.registry.ea2.openprocurement.io/en/latest/standard/Lot.html>`_.
 
   The name of the auction, displayed in listings. 
  
 :description:
-  string, multilingual, read-only
+    string, multilingual, required
+    
+    |ocdsDescription|
+    A description of the goods, services to be provided.
+    
+    * Ukrainian by default - Ukrainian decription
+    
+    * ``decription_en`` (English) - English decription
+    
+    * ``decription_ru`` (Russian) - Russian decription
 
   Originates from `lot.description <http://lotsloki.api-docs.registry.ea2.openprocurement.io/en/latest/standard/Lot.html>`_.
-  
-  Detailed auction description. 
 
 :tenderAttempts:
   integer, read-only
@@ -109,7 +126,7 @@ Schema
 :auctionParameters:
   :ref:`Auction_Parameters`, read-only
 
-   Originates from `auction.auctionParameters <http://lotsloki.api-docs.registry.ea2.openprocurement.io/en/latest/standard/auction.html>`_.
+  Originates from `auction.auctionParameters <http://lotsloki.api-docs.registry.ea2.openprocurement.io/en/latest/standard/auction.html>`_.
 
   The parameters that indicates the major specifications of the procedure.
 
@@ -142,7 +159,7 @@ Schema
 
   Originates from `auction.registrationFee <http://lotsloki.api-docs.registry.ea2.openprocurement.io/en/latest/standard/auction.html>`_.
 
-  The sum of money required to enroll on an official register. The given value is 17.
+  The sum of money required to enroll on an official register.
 
 :bankAccount:
   :ref:`Bank_Account`, read-only
@@ -152,7 +169,7 @@ Schema
   Details which uniquely identify a bank account, and are used when making or receiving a payment.
 
 :items:
-  Array of :ref:`item` objects, read-only
+  Array of :ref:`Items` objects, read-only
 
   Originates from `lot.items <http://lotsloki.api-docs.registry.ea2.openprocurement.io/en/latest/standard/item.html>`_.
   
@@ -162,26 +179,21 @@ Schema
   The goods and services to be purchased, broken into line items wherever possible. Items should not be duplicated, but a quantity of 2 specified instead.
 
 :documents:
-  Array of :ref:`document` objects, optional
+  Array of :ref:`Documents` objects, optional
 
   |ocdsDescription|
   All documents and attachments related to the auction.
 
 :dateModified:
-    string, :ref:`date`, auto-generated
+  string, :ref:`date`, auto-generated
 
-    |ocdsDescription|
-    Date when the auction was last modified
+  |ocdsDescription|
+  Date when the auction was last modified
 
 :questions:
   Array of :ref:`question` objects, optional
 
   Questions to `procuringEntity` and answers to them.
-
-:complaints:
-  Array of :ref:`complaint` objects, optional
-
-  Complaints to the conditions and their resolutions.
 
 :bids:
   Array of :ref:`bid` objects, optional (required for the process to be succsessful)
@@ -223,25 +235,25 @@ Schema
 :status:
   string, required
 
-+-------------------------+--------------------------------------+  
-|        Status           |         Description                  |
-+=========================+======================================+
-| :`pending.activation`:  |  Procedure activation                |
 +-------------------------+--------------------------------------+
-| :`active.tendering`:    |  Tendering period (tendering)        |
-+-------------------------+--------------------------------------+  
-| :`active.auction`:      |  Auction period (auction)            |
-+-------------------------+--------------------------------------+ 
-| :`active.qualification`:|  Winner qualification (qualification)|
-+-------------------------+--------------------------------------+ 
-|  :`active.awarded`:     |  Contract signing                    |
-+-------------------------+--------------------------------------+ 
-|  :`unsuccessful`:       |  Unsuccessful auction (unsuccessful) |
-+-------------------------+--------------------------------------+ 
-|  :`complete`:           |  Complete auction (complete)         |
-+-------------------------+--------------------------------------+ 
-|  :`cancelled`:          | Cancelled auction (cancelled)        |
-+-------------------------+--------------------------------------+ 
+|        Status           |            Description               |
++=========================+======================================+
+| `pending.activation`    | procedure activation                 |
++-------------------------+--------------------------------------+
+| `active.tendering`      | tendering period (tendering)         |
++-------------------------+--------------------------------------+
+| `active.auction`        | auction period (auction)             |
++-------------------------+--------------------------------------+
+| `active.qualification`  | winner qualification (qualification) |
++-------------------------+--------------------------------------+
+| `active.awarded`        | contract signing                     |
++-------------------------+--------------------------------------+
+| `unsuccessful`          | unsuccessful auction (unsuccessful)  |
++-------------------------+--------------------------------------+
+| `complete`              | complete auction (complete)          | 
++-------------------------+--------------------------------------+
+| `cancelled`             | cancelled auction (cancelled)        |
++-------------------------+--------------------------------------+
 
 :enquiryPeriod:
   :ref:`period`, auto-generated, read-only
@@ -318,5 +330,3 @@ Schema
   * 'UA-EDR';
   * 'UA-MFO';
   * 'accountNumber'.
-
-    

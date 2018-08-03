@@ -11,7 +11,9 @@ Schema
 ------
 
 :id:
-    UID, auto-generated
+    uuid, auto-generated, read-only
+
+    Internal identifier of the object within an array.
 
 :reason:
     string, multilingual, required
