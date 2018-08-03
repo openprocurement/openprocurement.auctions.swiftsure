@@ -1,5 +1,8 @@
 .. _tutorial:
 
+Tutorial
+========
+
 Creating auction
 ----------------
 
@@ -240,4 +243,3 @@ And disqualify candidate:
 
 .. include:: qualification/award-pending-unsuccessful.http
   :code:
-

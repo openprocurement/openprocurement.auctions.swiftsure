@@ -3,16 +3,18 @@
 
 .. index:: Document, Attachment, File, Notice, Bidding Documents, Technical Specifications, Evaluation Criteria, Clarifications
 
-.. _Document:
+.. _Documents:
 
-Document
-========
+Documents
+=========
 
 Schema
 ------
 
 :id:
-    string, auto-generated
+    string, auto-generated, read-only
+
+    Internal identifier of the object within an array.
 
 :documentType:
     string, required
@@ -39,8 +41,6 @@ Schema
 
       Information on bidders or participants, their validation documents and any procedural exemptions for which they qualify.
 
-    * `virtualDataRoom` - **Virtual Data Room** (available only for the `dgfFinancialAssets` procedure, see :ref:`fintutorial`)
-
     * `illustration` - **Illustrations**
 
     * `x_PublicAssetCertificate` - **Public Asset Certificate**
@@ -63,14 +63,53 @@ Schema
 
       Goods examination procedure rules / Asset familiarization procedure in data room. Contains information on where and when a given document can be examined offline.
 
+    Possible values for :ref:`bid`
+
+    * `commercialProposal` - **Сommercial proposal**
+
+    Commercial offers of the auction participants.
+
+    * `qualificationDocuments` - **Qualification documents**
+
+    Documents confirming the qualification of the participant.
+
+    * `eligibilityDocuments` - **Eligibility documents**
+
+    Documents confirming the compliance of the participant with the requirements.
+
+    * `financialLicense` - **License** 
+
+    A license that allows you to work with financial documents.
+
+    Possible values for :ref:`cancellation`
+
+    * `cancellationDetails` - **Details of cancellation** 
+
+    Document containing information on the reasons for cancellation.
 
     Possible values for :ref:`award`
 
-
     * `winningBid` - **Winning Bid**
 
-    Possible values for :ref:`contract`
+    Documentation of the winning bid, including, wherever applicable, a full copy of the proposal received.
 
+    * `admissionProtocol` - **Admission Protocol**
+
+    A protocol that allows a contestant to become a winner. Loaded when only one bid was made.
+
+    * `auctionProtocol` - **Auction protocol**
+
+    Auction protocol describes all participants and determines the candidate (participant that has submitted the highest bid proposal during the auction).
+
+    * `rejectionProtocol` - **Rejection Protocol**
+
+    Documents containing the reasons for termination of work with the participant.
+
+    * `act` - **Act**
+
+    Documents containing the reasons for termination of work with the participant.
+
+    Possible values for :ref:`contract`
 
     * `notice` - **Contract notice**
 
@@ -78,24 +117,23 @@ Schema
 
     * `contractSigned` - **Signed Contract**
 
+    A copy of the signed contract. Consider providing both machine-readable (e.g. original PDF, Word or Open Document format files), and a separate document entry for scanned-signed pages where this is required.
+
     * `contractAnnexe` - **Annexes to the Contract**
 
+    Copies of annexes and other supporting documentation related to the contract.
 
-    Possible values for :ref:`bid`
+    * `rejectionProtocol` - **Rejection Protocol**
 
+    Documents containing the reasons for termination of work with the participant.
 
-    * `commercialProposal` - **Сommercial proposal**
+    * `act` - **Act**
 
-    * `qualificationDocuments` - **Qualification documents**
+    Documents containing the reasons for termination of work with the participant.
 
-    * `eligibilityDocuments` - **Eligibility documents**
+    * `approvalProtocol` - **Approval Protocol**
 
-    * `financialLicense` - **License** 
-
-    * `auctionProtocol` - **Auction protocol**
-
-        Auction protocol describes all participants and determines the candidate (participant that has submitted the highest bid proposal during the auction).
-
+    Final document of the privatization body regarding the privatization of the object.
 
 :title:
     string, multilingual, required
@@ -155,4 +193,4 @@ Schema
 :relatedItem:
     string, optional
 
-    ID of related :ref:`item`.
+    Internal ID of related :ref:`item`.

@@ -7,8 +7,6 @@ Type of the given procedure:
 
 * sellout.english 
 
-
-
 Features
 --------
 
