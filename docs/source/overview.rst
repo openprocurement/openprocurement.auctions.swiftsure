@@ -7,8 +7,6 @@ Type of the given procedure:
 
 * sellout.english 
 
-
-
 Features
 --------
 
@@ -62,6 +60,7 @@ Documentation of related packages
 * `OpenProcurement API <http://api-docs.openprocurement.org/en/latest/>`_
 * `Assets Registry <http://assetsbounce.api-docs.registry.ea2.openprocurement.io/en/latest/>`_
 * `Lots Registry <http://lotsloki.api-docs.registry.ea2.openprocurement.io/en/latest/>`_
+* `Contracting <http://ceasefire.api-docs.ea2.openprocurement.io/en/latest/standard/contract.html>`_
 
 API stability
 -------------
@@ -76,7 +75,6 @@ Change log
 ~~~
 
 Released: not released
-
 
 Next steps
 ----------
