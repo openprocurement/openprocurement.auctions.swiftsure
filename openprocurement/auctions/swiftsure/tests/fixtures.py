@@ -53,9 +53,6 @@ def create_award(test_case):
     test_case.award_value = test_case.award['value']
     test_case.award_suppliers = test_case.award['suppliers']
 
-    test_case.set_status('active.qualification')
-
-    test_case.app.authorization = ('Basic', ('token', ''))
     response = test_case.app.post(
         '/auctions/{}/awards/{}/documents?acc_token={}'.format(
             test_case.auction_id,
@@ -89,9 +86,10 @@ def create_award(test_case):
     test_case.assertEqual(response.json["data"]["author"], 'auction_owner')
 
     test_case.app.patch_json(
-        '/auctions/{}/awards/{}'.format(
+        '/auctions/{}/awards/{}?acc_token={}'.format(
             test_case.auction_id,
-            test_case.award_id
+            test_case.award_id,
+            test_case.auction_token
         ),
         {"data": {"status": "active"}}
     )
