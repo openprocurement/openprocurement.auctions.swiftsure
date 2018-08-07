@@ -12,7 +12,11 @@ PARTIAL_MOCK_CONFIG = {
             "swiftsure.migration": None
         },
         "migration": False,
-        "aliases": []
+        "aliases": [],
+        "accreditation": {
+            "create": [3],
+            "edit": [4]
+        }
     }
 }
 

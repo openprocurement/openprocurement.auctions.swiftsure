@@ -143,7 +143,7 @@ class SwiftsureAuction(BaseAuction):
     """
     class Options:
         roles = swiftsure_auction_roles
-    _procedure_type = "swiftsure"
+    _internal_type = "swiftsure"
     awards = ListType(ModelType(Award), default=list())
     # A list of all the companies who entered submissions for the auction.
     bids = ListType(ModelType(Bid), default=list())
@@ -197,9 +197,6 @@ class SwiftsureAuction(BaseAuction):
     contractTerms = ModelType(
         ContractTerms,
         validators=[validate_contract_type])
-
-    create_accreditation = 3
-    edit_accreditation = 4
 
     def __acl__(self):
         return [

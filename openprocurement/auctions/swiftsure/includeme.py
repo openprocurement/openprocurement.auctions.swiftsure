@@ -55,3 +55,6 @@ def includeme(config, plugin_config=None):
 
     LOGGER.info("Included openprocurement.auctions.swiftsure plugin",
                 extra={'MESSAGE_ID': 'included_plugin'})
+
+    # add accreditation level
+    config.registry.accreditation['auction'][SwiftsureAuction._internal_type] = plugin_config['accreditation']
