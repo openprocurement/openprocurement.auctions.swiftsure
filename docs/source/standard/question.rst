@@ -10,7 +10,9 @@ Schema
 ------
 
 :id:
-    UID, auto-generated
+    uuid, auto-generated, read-only
+
+    Internal identifier of the object within an array.
 
 :author:
     :ref:`Organization`, optional
@@ -28,7 +30,7 @@ Schema
     Description of the question.
 
 :date:
-    string, :ref:`date`, auto-generated
+    :ref:`date`, auto-generated, read-only
 
     Date of posting.
 
@@ -38,7 +40,7 @@ Schema
     Answer for the question.
 
 :questionOf:
-    string
+    string, required
 
     Possible values are:
 
@@ -46,6 +48,6 @@ Schema
     * `item`
 
 :relatedItem:
-    string
+    uuid, optional
 
-    ID of related :ref:`item`.
+    Internal ID of related :ref:`item`.

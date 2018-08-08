@@ -5,7 +5,7 @@ Acceleration mode for sandbox
 
 If you want to experiment with auctions, you can use acceleration mode and start your auction name with "TESTING".
 
-Acceleration mode was developed to enable `sellout.endlish` procedure testing in the sandbox and to reduce time frames of this procedure. 
+Acceleration mode was developed to enable procedure testing in the sandbox and to reduce time frames of this procedure. 
 
 To enable acceleration mode you will need to:
     * add additional parameter `mode` with a value ``test``;

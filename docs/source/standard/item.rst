@@ -3,7 +3,7 @@
 
 .. index:: Item, Parameter, Classification, CAV, Unit, registrationDetails
 
-.. _Item:
+.. _Items:
 
 Item
 ====
@@ -14,16 +14,16 @@ Schema
 ------
 
 :id:
-    string, auto-generated, required
+    uuid, auto-generated, required
+
+    Internal identifier for this item.
 
 :description:
     string, multilingual, required
 
     |ocdsDescription|
     A description of the goods, services to be provided.
-    
-    Brief description of property (for ``dgfOtherAssets``) or asset(s) (for ``dgfFinancialAssets``).
-    
+
 :classification:
     :ref:`Classification`, required
 
@@ -54,12 +54,12 @@ Schema
     decimal, required
 
     |ocdsDescription|
-    The number of units required
+    The number of units requiredThe number of units required
 
 :address:
     :ref:`Address`, required
 
-    Address, where property (for ``dgfOtherAssets``) or asset(s) (for ``dgfFinancialAssets``) is located.
+    Address, where item is located.
 
 :location:
     dictionary, optional
@@ -76,8 +76,7 @@ Schema
     `location` usually takes precedence over `address` if both are present.
 
 :registrationDetails:
-    
-    :ref:`Registration Details`, required
+    :ref:`registrationDetails`, required
 
 .. _Classification:
 
@@ -130,7 +129,7 @@ Schema
     UN/CEFACT Recommendation 20 unit code.
 
 :name:
-    string
+    string, optional
 
     |ocdsDescription|
     Name of the unit
@@ -167,5 +166,3 @@ Schema
 
     |ocdsDescription|
     The date on which the document was first published.
-
-    Available for mentioning in status: complete.
