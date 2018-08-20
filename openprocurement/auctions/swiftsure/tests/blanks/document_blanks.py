@@ -79,9 +79,9 @@ def patch_auction_document(self):
         '/auctions/{}/documents/{}?acc_token={}'.format(
             self.auction_id, doc_id, self.auction_token
         ), {"data": {
-        "description": "document description",
-        "documentType": 'notice'
-    }})
+            "description": "document description",
+            "documentType": 'notice'}}
+    )
     self.assertEqual(response.status, '200 OK')
     self.assertEqual(response.content_type, 'application/json')
     self.assertEqual(doc_id, response.json["data"]["id"])
