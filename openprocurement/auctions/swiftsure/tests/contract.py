@@ -58,8 +58,9 @@ class AuctionContractResourceTest(
 
     def upload_contract_document(self, contract, doc_type):
         # Uploading contract document
-        response = self.app.post('/auctions/{}/contracts/{}/documents'.format(
-            self.auction_id, contract['id']), upload_files=[
+        response = self.app.post('/auctions/{}/contracts/{}/documents?acc_token={}'.format(
+            self.auction_id, contract['id'], self.auction_token
+        ), upload_files=[
             ('file', DOCUMENTS[doc_type]['name'], 'content')
         ])
         self.assertEqual(response.status, '201 Created')
@@ -72,8 +73,8 @@ class AuctionContractResourceTest(
 
         # Patching it's documentType to needed one
         response = self.app.patch_json(
-            '/auctions/{}/contracts/{}/documents/{}'.format(
-                self.auction_id, contract['id'], doc_id
+            '/auctions/{}/contracts/{}/documents/{}?acc_token={}'.format(
+                self.auction_id, contract['id'], doc_id, self.auction_token
             ),
             {"data": {
                 "description": DOCUMENTS[doc_type]['description'],

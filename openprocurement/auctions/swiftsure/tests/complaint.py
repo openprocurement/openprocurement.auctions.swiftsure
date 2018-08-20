@@ -23,6 +23,7 @@ class AuctionLotAwardComplaintResourceTest(BaseAuctionWebTest):
     test_create_auction_complaint_lot = snitch(create_auction_complaint_lot)
 
 
+@unittest.skip("option not available")
 class AuctionComplaintDocumentResourceTest(
         BaseAuctionWebTest,
         InsiderAuctionComplaintDocumentResourceTestMixin):
@@ -51,6 +52,7 @@ def suite():
     return tests
 
 
+@unittest.skip("option not available")
 class AuctionComplaintResourceTest(
         BaseAuctionWebTest,
         AuctionComplaintResourceTestMixin):

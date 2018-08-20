@@ -223,8 +223,9 @@ class BaseAuctionWebTest(CoreBaseAuctionWebTest):
                 response.json['data']['status'],
                 'pending.activation')
             self.app.authorization = authorization
-            response = self.app.patch_json('/auctions/{}'.format(self.auction_id),
-                                           {'data': {'status': 'active.tendering'}})
+            response = self.app.patch_json('/auctions/{}?acc_token={}'.format(
+                self.auction_id, self.auction_token
+            ), {'data': {'status': 'active.tendering'}})
             self.assertEqual(response.status, '200 OK')
             self.assertEqual(response.content_type, 'application/json')
             auction = response.json['data']
