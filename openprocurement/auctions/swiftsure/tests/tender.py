@@ -4,7 +4,10 @@ from copy import deepcopy
 
 from openprocurement.auctions.core.tests.base import snitch
 from openprocurement.auctions.core.tests.tender import (
-    AuctionResourceTestMixin, DgfInsiderResourceTestMixin
+    AuctionResourceTestMixin,
+    DgfInsiderResourceTestMixin,
+    ExtractCredentialsMixin
+
 )
 from openprocurement.auctions.core.tests.blanks.tender_blanks import (
     # AuctionTest
@@ -128,11 +131,16 @@ class AuctionProcessTest(BaseAuctionWebTest):
     test_suspended_auction = snitch(suspended_auction)
 
 
+class AuctionExtractCredentialsTest(BaseAuctionWebTest, ExtractCredentialsMixin):
+    pass
+
+
 def suite():
     tests = unittest.TestSuite()
     tests.addTest(unittest.makeSuite(AuctionTest))
     tests.addTest(unittest.makeSuite(AuctionResourceTest))
     tests.addTest(unittest.makeSuite(AuctionProcessTest))
+    suite.addTest(unittest.makeSuite(AuctionExtractCredentialsTest))
     return tests
 
 
