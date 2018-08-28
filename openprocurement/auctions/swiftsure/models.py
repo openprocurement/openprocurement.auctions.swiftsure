@@ -25,7 +25,7 @@ from openprocurement.auctions.core.models import (
     Bid as BaseBid,
     ContractTerms,
     swiftsureCancellation,
-    SwiftsureItem,
+    LokiItem,
     swiftsureDocument,
     swiftsureBidDocument,
     dgfComplaint as Complaint,
@@ -184,7 +184,7 @@ class SwiftsureAuction(BaseAuction):
             validate_lots_uniq,
             validate_not_available])
     items = ListType(
-        ModelType(SwiftsureItem),
+        ModelType(LokiItem),
         default=list(),
         validators=[validate_items_uniq],
         min_size=1)

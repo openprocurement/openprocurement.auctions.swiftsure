@@ -53,6 +53,9 @@ test_auction_data = {
                 "code": u"44617100-9"
             },
             "quantity": 5,
+            "registrationDetails": {
+                "status": "unknown",
+            },
             "address": {
                 "countryName": u"Україна",
                 "postalCode": "79000",
