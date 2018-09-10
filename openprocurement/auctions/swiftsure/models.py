@@ -20,32 +20,34 @@ from openprocurement.auctions.core.includeme import IAwardingNextCheck
 from openprocurement.api.models.schema import (
     SwiftsureProcuringEntity,
 )
-from openprocurement.auctions.core.models import (
-    ListType,
-    ComplaintModelType,
-    IAuction,
+from openprocurement.auctions.core.models.schema import (
     Auction as BaseAuction,
-    Bid as BaseBid,
-    ContractTerms,
-    swiftsureCancellation,
-    LokiItem,
-    swiftsureDocument,
-    swiftsureBidDocument,
-    dgfComplaint as Complaint,
-    Feature,
-    Period,
-    Lot,
-    swiftsure_auction_roles,
-    get_auction,
-    validate_features_uniq,
-    validate_lots_uniq,
-    validate_items_uniq,
-    validate_contract_type,
-    calc_auction_end_time,
-    validate_not_available,
-    Guarantee,
-    BankAccount,
     AuctionParameters as BaseAuctionParameters,
+    BankAccount,
+    Bid as BaseBid,
+    ComplaintModelType,
+    ContractTerms,
+    Feature,
+    Guarantee,
+    IAuction,
+    ListType,
+    LokiItem,
+    Lot,
+    Period,
+    calc_auction_end_time,
+    dgfComplaint as Complaint,
+    get_auction,
+    swiftsureBidDocument,
+    swiftsureCancellation,
+    swiftsureDocument,
+    validate_contract_type,
+    validate_features_uniq,
+    validate_items_uniq,
+    validate_lots_uniq,
+    validate_not_available,
+)
+from openprocurement.auctions.core.models.roles import (
+    swiftsure_auction_roles,
 )
 from openprocurement.auctions.core.plugins.awarding.v3_1.models import (
     Award
@@ -65,7 +67,11 @@ from openprocurement.auctions.core.validation import (
     validate_disallow_dgfPlatformLegalDetails
 )
 
-from openprocurement.auctions.swiftsure.constants import CONTRACT_TYPES
+from openprocurement.auctions.swiftsure.constants import (
+    CONTRACT_TYPES,
+    SWIFTSURE_STATUSES,
+    SWIFTSURE_DEFAULT_STATUS,
+)
 
 
 validate_contract_type = partial(
@@ -162,18 +168,7 @@ class SwiftsureAuction(BaseAuction):
     tenderPeriod = ModelType(Period)
     tenderAttempts = IntType(choices=[1, 2, 3, 4, 5, 6, 7, 8])
     auctionPeriod = ModelType(AuctionAuctionPeriod, required=True, default={})
-    status = StringType(
-        choices=[
-            'draft',
-            'pending.activation',
-            'active.tendering',
-            'active.auction',
-            'active.qualification',
-            'active.awarded',
-            'complete',
-            'cancelled',
-            'unsuccessful'],
-        default='active.tendering')
+    status = StringType(choices=SWIFTSURE_STATUSES, default=SWIFTSURE_DEFAULT_STATUS)
     features = ListType(
         ModelType(Feature),
         validators=[

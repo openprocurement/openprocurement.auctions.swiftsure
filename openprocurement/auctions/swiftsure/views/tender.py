@@ -15,6 +15,10 @@ from openprocurement.auctions.core.views.mixins import AuctionResource
 from openprocurement.auctions.swiftsure.utils import (
     check_status,
 )
+from openprocurement.auctions.swiftsure.constants import (
+    SWIFTSURE_TERMINAL_STATUSES,
+    SWIFTSURE_PRE_TERMINAL_STATUSES,
+)
 
 
 @opresource(
@@ -29,10 +33,15 @@ class AuctionResource(AuctionResource):
     def patch(self):
         self.request.registry.getAdapter(self.context, IAuctionManager).change_auction(self.request)
         auction = self.context
-        if (
+        forbidden_to_patch_in_terminal_statuses = (
             self.request.authenticated_role != 'Administrator'
-            and auction.status in ['complete', 'unsuccessful', 'cancelled']
-        ):
+            and auction.status in SWIFTSURE_TERMINAL_STATUSES
+        )
+        forbidden_to_patch_in_pre_terminal_statuses = (
+            self.request.authenticated_role not in ('convoy', 'Administrator')
+            and auction.status in SWIFTSURE_PRE_TERMINAL_STATUSES
+        )
+        if forbidden_to_patch_in_terminal_statuses or forbidden_to_patch_in_pre_terminal_statuses:
             self.request.errors.add(
                 'body',
                 'data',
