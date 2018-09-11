@@ -17,6 +17,9 @@ from schematics.types.serializable import serializable
 from zope.interface import implementer
 
 from openprocurement.auctions.core.includeme import IAwardingNextCheck
+from openprocurement.api.models.schema import (
+    SwiftsureProcuringEntity,
+)
 from openprocurement.auctions.core.models import (
     ListType,
     ComplaintModelType,
@@ -43,7 +46,6 @@ from openprocurement.auctions.core.models import (
     Guarantee,
     BankAccount,
     AuctionParameters as BaseAuctionParameters,
-    SwiftsureProcuringEntity
 )
 from openprocurement.auctions.core.plugins.awarding.v3_1.models import (
     Award
