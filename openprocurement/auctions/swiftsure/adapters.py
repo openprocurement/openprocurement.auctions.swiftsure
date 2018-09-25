@@ -25,6 +25,7 @@ class AuctionSwiftsureManagerAdapter(AuctionManagerAdapter):
     create_validation = (
         validate_post_auction_status_role,
     )
+    allow_pre_terminal_statuses = False
 
     def _create_auction(self, request):
         auction = request.validated['auction']
