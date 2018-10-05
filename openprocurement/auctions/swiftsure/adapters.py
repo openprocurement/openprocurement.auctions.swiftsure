@@ -19,6 +19,7 @@ class AuctionSwiftsureConfigurator(AuctionConfigurator,
                                    AwardingV3_1ConfiguratorMixin):
     name = 'Auction Swiftsure Configurator'
     model = SwiftsureAuction
+    pending_admission_for_one_bid = True
 
 
 class AuctionSwiftsureManagerAdapter(AuctionManagerAdapter):
