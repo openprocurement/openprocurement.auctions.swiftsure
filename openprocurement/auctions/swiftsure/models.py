@@ -301,7 +301,6 @@ class SwiftsureAuction(BaseAuction):
             if awarding_check is not None:
                 checks.append(awarding_check)
         if self.status.startswith('active'):
-            from openprocurement.auctions.core.utils import calculate_business_date
             for complaint in self.complaints:
                 if complaint.status == 'claim' and complaint.dateSubmitted:
                     checks.append(
