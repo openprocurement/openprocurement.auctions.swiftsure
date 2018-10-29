@@ -6,7 +6,8 @@ from copy import deepcopy
 
 from openprocurement.auctions.core.utils import (
     apply_data_patch,
-    SANDBOX_MODE
+    SANDBOX_MODE,
+    calculate_business_date as cbd,
 )
 
 from openprocurement.auctions.core.tests.base import (
@@ -66,7 +67,7 @@ test_auction_data = {
         }
     ],
     "auctionPeriod": {
-        "startDate": (now.date() + timedelta(days=14)).isoformat()
+        "startDate": cbd(now.date(), timedelta(days=14), None).isoformat()
     },
     "procurementMethodType": DEFAULT_PROCUREMENT_METHOD_TYPE
 }
@@ -273,21 +274,21 @@ class BaseAuctionWebTest(CoreBaseAuctionWebTest):
             data.update({
                 "enquiryPeriod": {
                     "startDate": (now).isoformat(),
-                    "endDate": (now + timedelta(days=7)).isoformat()
+                    "endDate": cbd(now, timedelta(days=7), None).isoformat()
                 },
                 "tenderPeriod": {
                     "startDate": (now).isoformat(),
-                    "endDate": (now + timedelta(days=7)).isoformat()
+                    "endDate": cbd(now, timedelta(days=7), None).isoformat()
                 }
             })
         elif status == 'active.auction':
             data.update({
                 "enquiryPeriod": {
-                    "startDate": (now - timedelta(days=7)).isoformat(),
+                    "startDate": cbd(now, -timedelta(days=7), None).isoformat(),
                     "endDate": (now).isoformat()
                 },
                 "tenderPeriod": {
-                    "startDate": (now - timedelta(days=7)).isoformat(),
+                    "startDate": cbd(now, -timedelta(days=7), None).isoformat(),
                     "endDate": (now).isoformat()
                 },
                 "auctionPeriod": {
@@ -308,15 +309,15 @@ class BaseAuctionWebTest(CoreBaseAuctionWebTest):
         elif status == 'active.qualification':
             data.update({
                 "enquiryPeriod": {
-                    "startDate": (now - timedelta(days=8)).isoformat(),
-                    "endDate": (now - timedelta(days=1)).isoformat()
+                    "startDate": cbd(now, -timedelta(days=8), None).isoformat(),
+                    "endDate": cbd(now, -timedelta(days=1), None).isoformat()
                 },
                 "tenderPeriod": {
-                    "startDate": (now - timedelta(days=8)).isoformat(),
-                    "endDate": (now - timedelta(days=1)).isoformat()
+                    "startDate": cbd(now, -timedelta(days=8), None).isoformat(),
+                    "endDate": cbd(now, -timedelta(days=1), None).isoformat()
                 },
                 "auctionPeriod": {
-                    "startDate": (now - timedelta(days=1)).isoformat(),
+                    "startDate": cbd(now, -timedelta(days=1), None).isoformat(),
                     "endDate": (now).isoformat()
                 },
                 "awardPeriod": {
@@ -328,7 +329,7 @@ class BaseAuctionWebTest(CoreBaseAuctionWebTest):
                     'lots': [
                         {
                             "auctionPeriod": {
-                                "startDate": (now - timedelta(days=1)).isoformat(),
+                                "startDate": cbd(now, -timedelta(days=1), None).isoformat(),
                                 "endDate": (now).isoformat()
                             }
                         }
@@ -338,15 +339,15 @@ class BaseAuctionWebTest(CoreBaseAuctionWebTest):
         elif status == 'active.awarded':
             data.update({
                 "enquiryPeriod": {
-                    "startDate": (now - timedelta(days=8)).isoformat(),
-                    "endDate": (now - timedelta(days=1)).isoformat()
+                    "startDate": cbd(now, -timedelta(days=8), None).isoformat(),
+                    "endDate": cbd(now, -timedelta(days=1), None).isoformat()
                 },
                 "tenderPeriod": {
-                    "startDate": (now - timedelta(days=8)).isoformat(),
-                    "endDate": (now - timedelta(days=1)).isoformat()
+                    "startDate": cbd(now, -timedelta(days=8), None).isoformat(),
+                    "endDate": cbd(now, -timedelta(days=1), None).isoformat()
                 },
                 "auctionPeriod": {
-                    "startDate": (now - timedelta(days=1)).isoformat(),
+                    "startDate": cbd(now, -timedelta(days=1), None).isoformat(),
                     "endDate": (now).isoformat()
                 },
                 "awardPeriod": {
@@ -359,7 +360,7 @@ class BaseAuctionWebTest(CoreBaseAuctionWebTest):
                     'lots': [
                         {
                             "auctionPeriod": {
-                                "startDate": (now - timedelta(days=1)).isoformat(),
+                                "startDate": cbd(now, -timedelta(days=1), None).isoformat(),
                                 "endDate": (now).isoformat()
                             }
                         }
@@ -369,20 +370,20 @@ class BaseAuctionWebTest(CoreBaseAuctionWebTest):
         elif status == 'complete':
             data.update({
                 "enquiryPeriod": {
-                    "startDate": (now - timedelta(days=18)).isoformat(),
-                    "endDate": (now - timedelta(days=11)).isoformat()
+                    "startDate": cbd(now, -timedelta(days=18), None).isoformat(),
+                    "endDate": cbd(now, -timedelta(days=11), None).isoformat()
                 },
                 "tenderPeriod": {
-                    "startDate": (now - timedelta(days=18)).isoformat(),
-                    "endDate": (now - timedelta(days=11)).isoformat()
+                    "startDate": cbd(now, -timedelta(days=18), None).isoformat(),
+                    "endDate": cbd(now, -timedelta(days=11), None).isoformat()
                 },
                 "auctionPeriod": {
-                    "startDate": (now - timedelta(days=11)).isoformat(),
-                    "endDate": (now - timedelta(days=10)).isoformat()
+                    "startDate": cbd(now, -timedelta(days=11), None).isoformat(),
+                    "endDate": cbd(now, -timedelta(days=10), None).isoformat()
                 },
                 "awardPeriod": {
-                    "startDate": (now - timedelta(days=10)).isoformat(),
-                    "endDate": (now - timedelta(days=10)).isoformat()
+                    "startDate": cbd(now, -timedelta(days=10), None).isoformat(),
+                    "endDate": cbd(now, -timedelta(days=10), None).isoformat()
                 }
             })
             if self.initial_lots:
@@ -390,8 +391,8 @@ class BaseAuctionWebTest(CoreBaseAuctionWebTest):
                     'lots': [
                         {
                             "auctionPeriod": {
-                                "startDate": (now - timedelta(days=11)).isoformat(),
-                                "endDate": (now - timedelta(days=10)).isoformat()
+                                "startDate": cbd(now, -timedelta(days=11), None).isoformat(),
+                                "endDate": cbd(now, -timedelta(days=10), None).isoformat()
                             }
                         }
                         for i in self.initial_lots
