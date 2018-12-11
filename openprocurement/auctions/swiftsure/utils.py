@@ -7,11 +7,11 @@ from openprocurement.auctions.core.plugins.contracting.base.utils import (
     check_auction_status
 )
 from openprocurement.auctions.core.utils import (
-    cleanup_bids_for_cancelled_lots, check_complaint_status,
-    remove_draft_bids,
-    context_unpack,
-    get_now,
     TZ,
+    cleanup_bids_for_cancelled_lots, check_complaint_status,
+    get_now,
+    remove_draft_bids,
+    log_auction_status_change
 )
 
 
@@ -54,20 +54,18 @@ def check_status(request):
         for complaint in award.complaints:
             check_complaint_status(request, complaint, now)
     if not auction.lots and auction.status == 'active.tendering' and auction.tenderPeriod.endDate <= now:
-        LOGGER.info('Switched auction {} to {}'.format(auction['id'], 'active.auction'),
-                    extra=context_unpack(request, {'MESSAGE_ID': 'switched_auction_active.auction'}))
         auction.status = 'active.auction'
         remove_draft_bids(request)
         check_bids(request)
-        return
+        log_auction_status_change(request, auction, auction.status)
+        return True
     elif auction.lots and auction.status == 'active.tendering' and auction.tenderPeriod.endDate <= now:
-        LOGGER.info('Switched auction {} to {}'.format(auction['id'], 'active.auction'),
-                    extra=context_unpack(request, {'MESSAGE_ID': 'switched_auction_active.auction'}))
         auction.status = 'active.auction'
         remove_draft_bids(request)
         check_bids(request)
         [setattr(i.auctionPeriod, 'startDate', None) for i in auction.lots if i.numberOfBids < 2 and i.auctionPeriod]
-        return
+        log_auction_status_change(request, auction, auction.status)
+        return True
     elif not auction.lots and auction.status == 'active.awarded':
         standStillEnds = [
             a.complaintPeriod.endDate.astimezone(TZ)
@@ -75,13 +73,13 @@ def check_status(request):
             if a.complaintPeriod.endDate
         ]
         if not standStillEnds:
-            return
+            return True
         standStillEnd = max(standStillEnds)
         if standStillEnd <= now:
             check_auction_status(request)
     elif auction.lots and auction.status in ['active.qualification', 'active.awarded']:
         if any([i['status'] in auction.block_complaint_status and i.relatedLot is None for i in auction.complaints]):
-            return
+            return True
         for lot in auction.lots:
             if lot['status'] != 'active':
                 continue
@@ -96,4 +94,4 @@ def check_status(request):
             standStillEnd = max(standStillEnds)
             if standStillEnd <= now:
                 check_auction_status(request)
-                return
+                return True
