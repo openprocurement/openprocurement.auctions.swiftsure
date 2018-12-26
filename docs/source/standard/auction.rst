@@ -106,7 +106,6 @@ Schema
   The given value is `electronicAuction`.
 
 :submissionMethodDetails:
-  
   string, read-only
   
   Originates from `auction.submissionMethodDetails <http://lotsloki.api-docs.registry.ea2.openprocurement.io/en/latest/standard/auction.html>`_.
@@ -224,7 +223,7 @@ Schema
   Array of :ref:`Contract` objects
 
   |ocdsDescription|
-  Information on contracts signed as part of a process
+  Information on contracts signed as part of a process.
 
 :cancellations:
   Array of :ref:`cancellation` objects, optional

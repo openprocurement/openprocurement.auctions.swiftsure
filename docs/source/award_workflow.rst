@@ -36,15 +36,15 @@ Award Section
 Legend
 """"""
 
- \* admission protocol is downloaded and award is switched to `pending` by the organizer.
+ \* admission protocol is uploaded and award is switched to `pending` by the organizer.
  
- \*\* protocol is downloaded and award is switched to `active` by the organizer.
+ \*\* protocol is uploaded and award is switched to `active` by the organizer.
 
  \*\*\* organizer has decided to disqualify the bidder.
 
- \~ admission protocol is not downloaded and award is not switched to `pending` by the organizer in time.
+ \~ admission protocol is not uploaded and award is not switched to `pending` by the organizer in time.
 
- \~\~ organizer has decided to disqualify the bidder. The approptiate document is downloaded and award is manually switched to `unsuccessful`.
+ \~\~ organizer has decided to disqualify the bidder. The approptiate document is uploaded and award is manually switched to `unsuccessful`.
 
  \~\~\~ organizer switched contract to `cancelled`.
 
@@ -76,7 +76,7 @@ Contract Section
 Legend
 """"""
 
- \* document was downloaded to contract. The contract itself was successfully activated by the organizer.
+ \* document was uploaded to contract. The contract itself was successfully activated by the organizer.
 
  \*\* there was no document uploaded. The organizer refused to activate the contract.
 
@@ -143,7 +143,7 @@ Legend
 
  \* award for winner is always formed in `pending`.
  
- \*\* protocol is downloaded and award is switched to `active` by the organizer.
+ \*\* protocol is uploaded and award is switched to `active` by the organizer.
 
  \*\*\* organizer has decided to disqualify the bidder.
 
@@ -178,7 +178,7 @@ Contract Section
 Legend
 """"""
 
- \* document was downloaded to contract. The contract itself was successfully activated by the organizer.
+ \* document was uploaded to contract. The contract itself was successfully activated by the organizer.
 
  \*\* there was no document uploaded. The organizer refused to activate the contract.
 
@@ -227,7 +227,7 @@ Statuses
     The second highest valid bidder awaits for the qualification of the first highest valid bidder. The former can choose to refuse to wait and withdraw his security deposit.
 
 :cancelled:
-    Terminal status.
+    Terminal status. Rejection protocol or act (`documentType: rejectionProtocol/act`) was uploaded so that the contract could be switched to `cancelled` by the organizer.
 
 :pending:
     :`Award`: Awaiting for the protocol to be uploaded and confirmed by the organizer. The highest valid bidder is able to submit the protocol as well, although it is not sufficient to move to the next status.
@@ -240,5 +240,4 @@ Statuses
     :`Contract`: The document (`documentType: contractSigned`) was downloaded  so that the status of the contract object could be switched to `active` by the organizer.
 
 :unsuccessful:
-    Terminal status.
-
+    Terminal status. Rejection protocol or act (`documentType: rejectionProtocol/act`) was uploaded so that the award could be switched to unsuccessful by the organizer. Or when the contract becomes status cancelled, the status of the award will be `unsuccessful`.
