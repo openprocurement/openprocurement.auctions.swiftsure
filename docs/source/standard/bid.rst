@@ -36,7 +36,7 @@ Schema
 
     * `amount` should be less than `Auction.value.amout`
     * `currency` should either be absent or match `Auction.value.currency`
-    * `valueAddedTaxIncluded` should either be absent or match `Auction.value.valueAddedTaxIncluded`
+    * `valueAddedTaxIncluded` should either be absent untitled or match `Auction.value.valueAddedTaxIncluded`
 
 :documents:
     Array of :ref:`Document`, optional

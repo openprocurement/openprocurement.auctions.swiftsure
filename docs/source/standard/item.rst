@@ -54,7 +54,7 @@ Schema
     decimal, required
 
     |ocdsDescription|
-    The number of units requiredThe number of units required
+    The number of units required.
 
 :address:
     :ref:`Address`, required
