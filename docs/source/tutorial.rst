@@ -134,12 +134,12 @@ See the `Bid.participationUrl` in the response. Similar, but different, URL can 
 1 Submitted Proposal
 --------------------
 
-If only one bid has been registered the procedure automaticaly changes its status to `active.qualification`. The award is being created in `pending.admission` status:
+If only one bid has been registered and `minNumberOfQualifiedBids:1` the procedure automatically changes its status to `active.qualification`. The award is being created in `pending.admission` status:
 
 .. include:: tutorial/get-award.http
    :code:
 
-Pay attention to the admissionPeriod generated. For the process to move forward, you have to upload an admission protocol (`documentType: admissionProtocol`) in time (up to `admissionPeriod.endDate`):
+Pay attention to the `admissionPeriod` generated. For the process to move forward, you have to upload an admission protocol (`documentType: admissionProtocol`) in time (up to `admissionPeriod.endDate`):
 
 .. include:: tutorial/upload-admission-protocol.http
    :code:
@@ -156,7 +156,7 @@ With the document being uploaded you have to switch the award to `pending` statu
 
 You can also reject working with a bidder by uploading a document (`rejectionProtocol` or `act`) and switching the award to `unsuccessful`.
 
-With the award being switched to `pending`, two more periods are being generated. These are `verificationPeriod` & `signingPeriod`:
+With the award being switched to `pending`, two more periods are being generated. These are `verificationPeriod` with the auto-generated duration of 0-10 business days & `signingPeriod` with the auto-generated duration of 40 business days.:
 
 The first thing to be done is `auctionProtocol` uploading:
 
@@ -189,6 +189,7 @@ Setting the correct `documentType`:
    :code:
 
 Note that `dateSigned` has to be mentioned as well.
+`dateSigned` should be no earlier than `signingPeriod.endDate`.
 
 To activate a contract one more POST request should be done:
 
@@ -214,9 +215,9 @@ After the competitive auction two `awards` are created:
 
 There are two more scenarios that can happen after the competitive auction:
  
-* If the two highest bidders have invalid bids (lower than auction starting price + minimal step), the awards will not be created at all, and the qualification procedure will automatically receive the `unsuccessful` status. 
+* If the two highest bidders have invalid bids (lower than auction `starting price + minimal step`), the awards will not be created at all, and the qualification procedure will automatically receive the `unsuccessful` status. 
 
-* If the second highest bidder has a bid that is less than the starting price + minimal step, two awards are created, with one of them receiving a pending status and undergoing the qualification procedure, and the other (with an invalid bid) automatically becoming `unsuccessful`.
+* If the second highest bidder has a bid that is less than the `starting price + minimal step`, two awards are created, with one of them receiving a pending status and undergoing the qualification procedure, and the other (with an invalid bid) automatically becoming `unsuccessful`.
 
 Refusal of waiting by another participant
 -----------------------------------------
@@ -229,7 +230,7 @@ The second candidate (participant that has submitted the second highest valid bi
 Disqualification of a candidate
 -------------------------------
 
-In case of a manual disqualification, the organizer has to upload file with cancellation reason:
+In case of a manual disqualification, the organizer has to upload file with cancellation reason (`documentType: rejectionProtocol/act`):
 
 .. include:: qualification/award-active-unsuccessful-upload.http
   :code:

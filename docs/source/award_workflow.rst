@@ -20,13 +20,11 @@ Award Section
             edge[style=dashed,  arrowhead="vee", label="**"];
             "pending" -> "active";
             node [style=filled, fillcolor=white];
-            edge[style=solid,  arrowhead="vee", label="~", constraint=false];
-            "pending.admission" -> "unsuccessful";
-            edge[style=dashed,  arrowhead="vee", label="~~", constraint=false];
+            edge[style=dashed,  arrowhead="vee", label="~", constraint=false];
             "pending.admission" -> "unsuccessful";
             edge[style=dashed,  arrowhead="vee",  label="***", constraint=false];
             "pending" -> "unsuccessful";
-            edge[style=solid,  arrowhead="vee", label="~~~", constraint=false];
+            edge[style=solid,  arrowhead="vee", label="~~", constraint=false];
             "active" -> "unsuccessful"; 
             label = "Awarding Process";
             color=white
@@ -42,11 +40,9 @@ Legend
 
  \*\*\* organizer has decided to disqualify the bidder.
 
- \~ admission protocol is not downloaded and award is not switched to `pending` by the organizer in time.
+ \~\ organizer has decided to disqualify the bidder. The approptiate document is downloaded and award is manually switched to `unsuccessful`.
 
- \~\~ organizer has decided to disqualify the bidder. The approptiate document is downloaded and award is manually switched to `unsuccessful`.
-
- \~\~\~ organizer switched contract to `cancelled`.
+ \~\~ organizer switched contract to `cancelled`.
 
 Roles
 """""
@@ -76,7 +72,7 @@ Contract Section
 Legend
 """"""
 
- \* document was downloaded to contract. The contract itself was successfully activated by the organizer.
+ \* document (`documentType:contractSigned`) was downloaded to contract. The contract itself was successfully activated by the organizer.
 
  \*\* there was no document uploaded. The organizer refused to activate the contract.
 
@@ -147,7 +143,7 @@ Legend
 
  \*\*\* organizer has decided to disqualify the bidder.
 
- \~\~\~ organizer switched contract to `cancelled`.
+ \~ organizer switched contract to `cancelled`.
 
 Roles
 """""
@@ -178,7 +174,7 @@ Contract Section
 Legend
 """"""
 
- \* document was downloaded to contract. The contract itself was successfully activated by the organizer.
+ \* document (`documentType:contractSigned`) was downloaded to contract. The contract itself was successfully activated by the organizer.
 
  \*\* there was no document uploaded. The organizer refused to activate the contract.
 
@@ -241,4 +237,3 @@ Statuses
 
 :unsuccessful:
     Terminal status.
-

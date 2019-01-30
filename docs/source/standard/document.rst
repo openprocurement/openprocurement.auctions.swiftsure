@@ -111,10 +111,6 @@ Schema
 
     Possible values for :ref:`contract`
 
-    * `notice` - **Contract notice**
-
-      The formal notice that gives details of a contract being signed and valid to start implementation. This may be a link to a downloadable document, to a web page, or to an official gazette in which the notice is contained.
-
     * `contractSigned` - **Signed Contract**
 
     A copy of the signed contract. Consider providing both machine-readable (e.g. original PDF, Word or Open Document format files), and a separate document entry for scanned-signed pages where this is required.
