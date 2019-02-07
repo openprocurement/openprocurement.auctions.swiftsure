@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = '1.1.4'
+VERSION = '1.1.5'
 
 entry_points = {
     'openprocurement.auctions.core.plugins': [
@@ -30,7 +30,7 @@ docs_requires = requires + [
 
 setup(
     name='openprocurement.auctions.swiftsure',
-    version=version,
+    version=VERSION,
     description="",
     long_description=open("README.rst").read() + "\n" + open(os.path.join("docs", "HISTORY.txt")).read(),
     # Get more strings from
