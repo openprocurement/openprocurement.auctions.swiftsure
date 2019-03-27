@@ -36,6 +36,11 @@ from openprocurement.auctions.swiftsure.tests.blanks.auction_blanks import (
     post_auction_auction_lot,
     # AuctionMultipleLotAuctionResourceTest
     post_auction_auction_2_lots,
+    # SwiftsureAuctionBridgePatchPeriod
+    reset_auction_period,
+    set_auction_period
+
+
 )
 
 
@@ -183,6 +188,13 @@ class AuctionSameValueAuctionResourceTestWithRegistry(
     registry = True
 
 
+class SwiftsureAuctionBridgePatchPeriodTest(AuctionAuctionResourceTest):
+    initial_bids = test_bids
+
+    test_set_auction_period = snitch(set_auction_period)
+    test_reset_auction_period = snitch(reset_auction_period)
+
+
 def suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(AuctionAuctionResourceTest))
@@ -196,6 +208,8 @@ def suite():
         AuctionBidInvalidationAuctionResourceTestWithRegistry))
     suite.addTest(unittest.makeSuite(
         AuctionSameValueAuctionResourceTestWithRegistry))
+
+    suite.addTest(unittest.makeSuite(SwiftsureAuctionBridgePatchPeriodTest))
 
     return suite
 
