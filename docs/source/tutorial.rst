@@ -21,7 +21,7 @@ Let's see what listing of auctions reveals us:
 We do see the auction's internal `id` (that can be used to construct full URL `https://lb.api-sandbox.ea2.openprocurement.net/api/2.3/auctions/`) and its `dateModified` datestamp.
 
 Procedure activation
-------------------
+--------------------
 
 The initial version of the procedure comes with `concierge` as an owner, pointing an entity whom the procedure has been originally created by.
 
