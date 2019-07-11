@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 from uuid import uuid4
-from datetime import datetime, timedelta
+from datetime import timedelta
 from copy import deepcopy
 
 from openprocurement.auctions.core.utils import (
