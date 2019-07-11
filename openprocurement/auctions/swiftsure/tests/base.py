@@ -8,6 +8,7 @@ from openprocurement.auctions.core.utils import (
     apply_data_patch,
     SANDBOX_MODE,
     calculate_business_date as cbd,
+    get_now
 )
 
 from openprocurement.auctions.core.tests.base import (
@@ -25,7 +26,7 @@ from openprocurement.auctions.swiftsure.tests.fixtures import PARTIAL_MOCK_CONFI
 from openprocurement.auctions.core.tests.base import MOCK_CONFIG as BASE_MOCK_CONFIG
 from openprocurement.auctions.core.utils import connection_mock_config
 
-now = datetime.now()
+now = get_now()
 test_auction_data = {
     "title": u"футляри до державних нагород",
     "tenderAttempts": 1,
