@@ -791,6 +791,21 @@ def one_valid_bid_auction(self):
     self.assertEqual(response.status, '200 OK')
 
     # set contract as active
+    response = self.app.patch_json(
+        '/auctions/{}/contracts/{}?acc_token={}'.format(
+            self.auction_id, contract_id, owner_token
+        ),
+        {
+            "data": {
+                "value": {
+                    "currency": "UAH",
+                    "amount": 500,
+                    "valueAddedTaxIncluded": True,
+                },
+            }
+        },
+        status=200
+    )
     self.app.patch_json('/auctions/{}/contracts/{}?acc_token={}'.format(
         auction_id, contract_id, owner_token), {"data": {"status": "active"}})
 
@@ -1173,6 +1188,21 @@ def first_bid_auction(self):
     self.assertEqual(response.status, '200 OK')
 
     # sign contract
+    response = self.app.patch_json(
+        '/auctions/{}/contracts/{}?acc_token={}'.format(
+            self.auction_id, contract_id, owner_token
+        ),
+        {
+            "data": {
+                "value": {
+                    "currency": "UAH",
+                    "amount": 500,
+                    "valueAddedTaxIncluded": True,
+                },
+            }
+        },
+        status=200
+    )
     self.app.patch_json('/auctions/{}/contracts/{}?acc_token={}'.format(
         auction_id, contract_id, owner_token), {"data": {"status": "active"}})
     # check status
@@ -1514,6 +1544,21 @@ def suspended_auction(self):
     self.assertEqual(response.status, '200 OK')
 
     # sign contract
+    response = self.app.patch_json(
+        '/auctions/{}/contracts/{}?acc_token={}'.format(
+            self.auction_id, contract_id, owner_token
+        ),
+        {
+            "data": {
+                "value": {
+                    "currency": "UAH",
+                    "amount": 500,
+                    "valueAddedTaxIncluded": True,
+                },
+            }
+        },
+        status=200
+    )
     self.app.patch_json('/auctions/{}/contracts/{}?acc_token={}'.format(
         auction_id, contract_id, owner_token), {"data": {"status": "active"}})
     # check status
